@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="struct_action" kind="struct" language="C++" prot="public">
+    <compoundname>Action</compoundname>
+    <includes refid="fee_8h" local="no">fee.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_action_1a07200a883f79ec67a54e626570a89a33" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long Action::amount</definition>
+        <argsstring></argsstring>
+        <name>amount</name>
+        <qualifiedname>Action::amount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/fee.h" line="21" column="15" bodyfile="include/fee.h" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" prot="public" static="no" mutable="no">
+        <type><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65eff" kindref="member">operation_type</ref></type>
+        <definition>operation_type Action::operation</definition>
+        <argsstring></argsstring>
+        <name>operation</name>
+        <qualifiedname>Action::operation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/fee.h" line="22" column="20" bodyfile="include/fee.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long Action::time</definition>
+        <argsstring></argsstring>
+        <name>time</name>
+        <qualifiedname>Action::time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/fee.h" line="23" column="15" bodyfile="include/fee.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/fee.h" line="20" column="1" bodyfile="include/fee.h" bodystart="20" bodyend="24"/>
+    <listofallmembers>
+      <member refid="struct_action_1a07200a883f79ec67a54e626570a89a33" prot="public" virt="non-virtual"><scope>Action</scope><name>amount</name></member>
+      <member refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" prot="public" virt="non-virtual"><scope>Action</scope><name>operation</name></member>
+      <member refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" prot="public" virt="non-virtual"><scope>Action</scope><name>time</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

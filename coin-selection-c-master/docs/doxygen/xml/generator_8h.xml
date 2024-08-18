@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="generator_8h" kind="file" language="C++">
+    <compoundname>generator.h</compoundname>
+    <includes refid="user_8h" local="yes">user.h</includes>
+    <includes refid="fee_8h" local="yes">fee.h</includes>
+    <includedby refid="main_8c" local="yes">src/main.c</includedby>
+    <incdepgraph>
+      <node id="3">
+        <label>common.h</label>
+        <link refid="common_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>fee.h</label>
+        <link refid="fee_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/generator.h</label>
+        <link refid="generator_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>user.h</label>
+        <link refid="user_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>time.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/generator.h</label>
+        <link refid="generator_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/main.c</label>
+        <link refid="main_8c"/>
+      </node>
+    </invincdepgraph>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="generator_8h_1ace38ef5b8d06d731d95da978e4907c58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>long long</type>
+        <definition>long long rand_range_long</definition>
+        <argsstring>(long long min, long long max)</argsstring>
+        <name>rand_range_long</name>
+        <param>
+          <type>long long</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>long long</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+<para>Generate a random long long integer between min and max, inclusive. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>min</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The minimum value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>max</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The maximum value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A random long long integer between min and max. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/generator.h" line="12" column="11" bodyfile="src/user.c" bodystart="30" bodyend="47" declfile="include/generator.h" declline="12" declcolumn="11"/>
+      </memberdef>
+      <memberdef kind="function" id="generator_8h_1ace13bfa1134fadb12f3c5ebafac80c89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_actions_for_user</definition>
+        <argsstring>(User user, Action **actions, int *size)</argsstring>
+        <name>generate_actions_for_user</name>
+        <param>
+          <type><ref refid="struct_user" kindref="compound">User</ref></type>
+          <declname>user</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_action" kindref="compound">Action</ref> **</type>
+          <declname>actions</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for a given user based on their type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>user</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The user for whom actions are being generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to an array of actions to be generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the size of the actions array. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/generator.h" line="13" column="6" bodyfile="src/generator.c" bodystart="32" bodyend="66" declfile="include/generator.h" declline="13" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="generator_8h_1a312c3bab9752bd1ddeabe8e49ebfbac4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_and_save_actions</definition>
+        <argsstring>(const char *base_dir, int num_users)</argsstring>
+        <name>generate_and_save_actions</name>
+        <param>
+          <type>const char *</type>
+          <declname>base_dir</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_users</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for multiple users and save them to CSV files. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>base_dir</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The base directory where the CSV files will be saved. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>num_users</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of users for whom actions will be generated. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/generator.h" line="14" column="6" bodyfile="src/generator.c" bodystart="74" bodyend="107" declfile="include/generator.h" declline="14" declcolumn="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Created<sp/>by<sp/>Bohdan<sp/>Potuzhnyi<sp/>on<sp/>24.03.2024.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>COIN_SELECTION_C_GENERATOR_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>COIN_SELECTION_C_GENERATOR_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="user_8h" kindref="compound">user.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="fee_8h" kindref="compound">fee.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="generator_8h_1ace38ef5b8d06d731d95da978e4907c58" kindref="member">rand_range_long</ref>(</highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>min,<sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>max);</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="generator_8h_1ace13bfa1134fadb12f3c5ebafac80c89" kindref="member">generate_actions_for_user</ref>(<ref refid="struct_user" kindref="compound">User</ref><sp/>user,<sp/><ref refid="struct_action" kindref="compound">Action</ref><sp/>**actions,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*size);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="generator_8h_1a312c3bab9752bd1ddeabe8e49ebfbac4" kindref="member">generate_and_save_actions</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*base_dir,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>num_users);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//COIN_SELECTION_C_GENERATOR_H</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="include/generator.h"/>
+  </compounddef>
+</doxygen>

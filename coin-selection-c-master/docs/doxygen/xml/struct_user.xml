@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="struct_user" kind="struct" language="C++" prot="public">
+    <compoundname>User</compoundname>
+    <includes refid="user_8h" local="no">user.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_user_1a829fa9c7710707548005c76f41340d77" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* User::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>User::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="25" column="10" bodyfile="include/user.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_user_1a5ba9303794761fdf8ac15fefc0657722" prot="public" static="no" mutable="no">
+        <type><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7" kindref="member">Type</ref></type>
+        <definition>Type User::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>User::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="26" column="10" bodyfile="include/user.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_action" kindref="compound">Action</ref> *</type>
+        <definition>Action* User::actions</definition>
+        <argsstring></argsstring>
+        <name>actions</name>
+        <qualifiedname>User::actions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="27" column="12" bodyfile="include/user.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_wallet" kindref="compound">Wallet</ref></type>
+        <definition>Wallet User::wallet</definition>
+        <argsstring></argsstring>
+        <name>wallet</name>
+        <qualifiedname>User::wallet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="28" column="12" bodyfile="include/user.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>Action</label>
+        <link refid="struct_action"/>
+      </node>
+      <node id="4">
+        <label>Coin</label>
+        <link refid="struct_coin"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>denomination</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>Denomination</label>
+        <link refid="struct_denomination"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>rules</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>Duration</label>
+        <link refid="struct_duration"/>
+      </node>
+      <node id="9">
+        <label>Durations</label>
+        <link refid="struct_durations"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>deposit</edgelabel>
+          <edgelabel>legal</edgelabel>
+          <edgelabel>withdraw</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>Fee</label>
+        <link refid="struct_fee"/>
+      </node>
+      <node id="7">
+        <label>Fees</label>
+        <link refid="struct_fees"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>deposit_fee</edgelabel>
+          <edgelabel>refresh_fee</edgelabel>
+          <edgelabel>refund_fee</edgelabel>
+          <edgelabel>withdraw_fee</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>GlobalFees</label>
+        <link refid="struct_global_fees"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>closing_fee</edgelabel>
+          <edgelabel>wire_fee</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>Rules</label>
+        <link refid="struct_rules"/>
+        <childnode refid="7" relation="usage">
+          <edgelabel>fees</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>durations</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>User</label>
+        <link refid="struct_user"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>actions</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>wallet</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Wallet</label>
+        <link refid="struct_wallet"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>coins</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>global_fees</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/user.h" line="24" column="1" bodyfile="include/user.h" bodystart="24" bodyend="29"/>
+    <listofallmembers>
+      <member refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" prot="public" virt="non-virtual"><scope>User</scope><name>actions</name></member>
+      <member refid="struct_user_1a829fa9c7710707548005c76f41340d77" prot="public" virt="non-virtual"><scope>User</scope><name>name</name></member>
+      <member refid="struct_user_1a5ba9303794761fdf8ac15fefc0657722" prot="public" virt="non-virtual"><scope>User</scope><name>type</name></member>
+      <member refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" prot="public" virt="non-virtual"><scope>User</scope><name>wallet</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

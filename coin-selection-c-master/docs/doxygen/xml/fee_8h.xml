@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="fee_8h" kind="file" language="C++">
+    <compoundname>fee.h</compoundname>
+    <includes refid="common_8h" local="yes">common.h</includes>
+    <includedby refid="coin__selection_8h" local="yes">include/coin_selection.h</includedby>
+    <includedby refid="generator_8h" local="yes">include/generator.h</includedby>
+    <includedby refid="simulation_8h" local="yes">include/simulation.h</includedby>
+    <includedby refid="user_8h" local="yes">include/user.h</includedby>
+    <includedby refid="fee_8c" local="yes">src/fee.c</includedby>
+    <includedby refid="generator_8c" local="yes">src/generator.c</includedby>
+    <includedby refid="main_8c" local="yes">src/main.c</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>common.h</label>
+        <link refid="common_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/fee.h</label>
+        <link refid="fee_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>time.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>include/coin_selection.h</label>
+        <link refid="coin__selection_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/fee.h</label>
+        <link refid="fee_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>include/generator.h</label>
+        <link refid="generator_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>include/simulation.h</label>
+        <link refid="simulation_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>include/user.h</label>
+        <link refid="user_8h"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>src/coin_selection.c</label>
+        <link refid="coin__selection_8c"/>
+      </node>
+      <node id="11">
+        <label>src/fee.c</label>
+        <link refid="fee_8c"/>
+      </node>
+      <node id="7">
+        <label>src/generator.c</label>
+        <link refid="generator_8c"/>
+      </node>
+      <node id="4">
+        <label>src/main.c</label>
+        <link refid="main_8c"/>
+      </node>
+      <node id="5">
+        <label>src/simulation.c</label>
+        <link refid="simulation_8c"/>
+      </node>
+      <node id="10">
+        <label>src/user.c</label>
+        <link refid="user_8c"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="struct_action" prot="public">Action</innerclass>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65eff" prot="public" static="no" strong="no">
+        <type></type>
+        <name>operation_type</name>
+        <enumvalue id="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa42479520571fb6b2e6c7afaa1e5352c8" prot="public">
+          <name>DEPOSIT_OP</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa55976904a78ceeb73196ab4aec9562a7" prot="public">
+          <name>WITHDRAW_OP</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effae502eb7f083711e2333ae27f76c9ea50" prot="public">
+          <name>REFUND_OP</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa60984caa8fd63e44237604975102ccbc" prot="public">
+          <name>REFRESH_OP</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa9f49e0a2300609be0792925a35ecb95a" prot="public">
+          <name>WIRE_OP</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effadabd207d01b3633f664667719db30822" prot="public">
+          <name>CLOSE_OP</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/fee.h" line="11" column="1" bodyfile="include/fee.h" bodystart="11" bodyend="18"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="fee_8h_1a88ccfa80007e2dd7a5efc635c0026f12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>long long</type>
+        <definition>long long calculate_fee</definition>
+        <argsstring>(Coin coin, operation_type operation)</argsstring>
+        <name>calculate_fee</name>
+        <param>
+          <type><ref refid="struct_coin" kindref="compound">Coin</ref></type>
+          <declname>coin</declname>
+        </param>
+        <param>
+          <type><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65eff" kindref="member">operation_type</ref></type>
+          <declname>operation</declname>
+        </param>
+        <briefdescription>
+<para>Calculate the fee for a given coin and operation type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>coin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The coin for which the fee is being calculated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>operation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of operation (e.g., DEPOSIT_OP, WITHDRAW_OP, REFUND_OP, REFRESH_OP). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The total fee in satoshis for the specified operation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/fee.h" line="26" column="11" bodyfile="src/fee.c" bodystart="15" bodyend="39" declfile="include/fee.h" declline="26" declcolumn="11"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Created<sp/>by<sp/>Bohdan<sp/>Potuzhnyi<sp/>and<sp/>Vlada<sp/>Svirsh<sp/>on<sp/>04.03.2024.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>fee.h</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>FEE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FEE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="common_8h" kindref="compound">common.h</ref>&quot;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>Include<sp/>the<sp/>common<sp/>definitions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11" refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65eff" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="12" refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa42479520571fb6b2e6c7afaa1e5352c8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa42479520571fb6b2e6c7afaa1e5352c8" kindref="member">DEPOSIT_OP</ref>,</highlight></codeline>
+<codeline lineno="13" refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa55976904a78ceeb73196ab4aec9562a7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa55976904a78ceeb73196ab4aec9562a7" kindref="member">WITHDRAW_OP</ref>,</highlight></codeline>
+<codeline lineno="14" refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effae502eb7f083711e2333ae27f76c9ea50" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effae502eb7f083711e2333ae27f76c9ea50" kindref="member">REFUND_OP</ref>,</highlight></codeline>
+<codeline lineno="15" refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa60984caa8fd63e44237604975102ccbc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa60984caa8fd63e44237604975102ccbc" kindref="member">REFRESH_OP</ref>,</highlight></codeline>
+<codeline lineno="16" refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa9f49e0a2300609be0792925a35ecb95a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa9f49e0a2300609be0792925a35ecb95a" kindref="member">WIRE_OP</ref>,</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effadabd207d01b3633f664667719db30822" kindref="member">CLOSE_OP</ref></highlight></codeline>
+<codeline lineno="18" refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effadabd207d01b3633f664667719db30822" refkind="member"><highlight class="normal">}<sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65eff" kindref="member">operation_type</ref>;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20" refid="struct_action" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="21" refid="struct_action_1a07200a883f79ec67a54e626570a89a33" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="struct_action_1a07200a883f79ec67a54e626570a89a33" kindref="member">amount</ref>;</highlight></codeline>
+<codeline lineno="22" refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65eff" kindref="member">operation_type</ref><sp/><ref refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" kindref="member">operation</ref>;</highlight></codeline>
+<codeline lineno="23" refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal">}<sp/><ref refid="struct_action" kindref="compound">Action</ref>;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="fee_8h_1a88ccfa80007e2dd7a5efc635c0026f12" kindref="member">calculate_fee</ref>(<ref refid="struct_coin" kindref="compound">Coin</ref><sp/>coin,<sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65eff" kindref="member">operation_type</ref><sp/>operation);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>FEE_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="include/fee.h"/>
+  </compounddef>
+</doxygen>

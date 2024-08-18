@@ -1,0 +1,626 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="user_8h" kind="file" language="C++">
+    <compoundname>user.h</compoundname>
+    <includes refid="common_8h" local="yes">common.h</includes>
+    <includes refid="fee_8h" local="yes">fee.h</includes>
+    <includedby refid="generator_8h" local="yes">include/generator.h</includedby>
+    <includedby refid="simulation_8h" local="yes">include/simulation.h</includedby>
+    <includedby refid="generator_8c" local="yes">src/generator.c</includedby>
+    <includedby refid="main_8c" local="yes">src/main.c</includedby>
+    <includedby refid="user_8c" local="yes">src/user.c</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>common.h</label>
+        <link refid="common_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>fee.h</label>
+        <link refid="fee_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/user.h</label>
+        <link refid="user_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>time.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>include/generator.h</label>
+        <link refid="generator_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>include/simulation.h</label>
+        <link refid="simulation_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/user.h</label>
+        <link refid="user_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>src/generator.c</label>
+        <link refid="generator_8c"/>
+      </node>
+      <node id="3">
+        <label>src/main.c</label>
+        <link refid="main_8c"/>
+      </node>
+      <node id="5">
+        <label>src/simulation.c</label>
+        <link refid="simulation_8c"/>
+      </node>
+      <node id="7">
+        <label>src/user.c</label>
+        <link refid="user_8c"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="struct_user" prot="public">User</innerclass>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7" prot="public" static="no" strong="no">
+        <type></type>
+        <name>Type</name>
+        <enumvalue id="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a65e90109a047c6f58260395f659cd41b" prot="public">
+          <name>STUDENT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a6bee6f3f4ee72dd5f525d131f880fc1d" prot="public">
+          <name>STUDENT_STATIC</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a3a556d3697b410646c8af94e65dc3c46" prot="public">
+          <name>BUSINESS_OWNER</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7ac4f052c838aed2606c4e950240db8eae" prot="public">
+          <name>RETIRED</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a57078948cacdc08828729ef3b49b74cb" prot="public">
+          <name>FAMILY</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a9f3bddd4912d8345c1c8dbf3126a2437" prot="public">
+          <name>FREELANCER</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a3516b66118bba29fd5ccf508cd028dff" prot="public">
+          <name>TEACHER</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7ab8da454da4d1ea6d8a779cd5a2804e77" prot="public">
+          <name>ARTIST</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a281fc1be132a3f44f0bd3258ae4e8f41" prot="public">
+          <name>NUMBER_OF_USERS</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="12" column="1" bodyfile="include/user.h" bodystart="12" bodyend="22"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="user_8h_1a863dcb764fe09eb5c9b5f515c043bd4f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_actions_for_student</definition>
+        <argsstring>(Action **actions, int *size, int days)</argsstring>
+        <name>generate_actions_for_student</name>
+        <param>
+          <type><ref refid="struct_action" kindref="compound">Action</ref> **</type>
+          <declname>actions</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>days</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for a student user type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the array of actions to be generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the size of the actions array. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>days</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of days to simulate actions for. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="31" column="6" bodyfile="src/user.c" bodystart="92" bodyend="145" declfile="include/user.h" declline="31" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="user_8h_1a4c260929a157124e4cfc1ab2b2751ffe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_actions_for_student_static</definition>
+        <argsstring>(Action **actions, int *size, int days)</argsstring>
+        <name>generate_actions_for_student_static</name>
+        <param>
+          <type><ref refid="struct_action" kindref="compound">Action</ref> **</type>
+          <declname>actions</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>days</declname>
+        </param>
+        <briefdescription>
+<para>Generate static actions for a student user type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the array of actions to be generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the size of the actions array. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>days</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of days to simulate actions for. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="32" column="6" bodyfile="src/user.c" bodystart="154" bodyend="214" declfile="include/user.h" declline="32" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="user_8h_1a3eafe93ef067da38fa22adc7adb976e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_actions_for_business_owner</definition>
+        <argsstring>(Action **actions, int *size, int days)</argsstring>
+        <name>generate_actions_for_business_owner</name>
+        <param>
+          <type><ref refid="struct_action" kindref="compound">Action</ref> **</type>
+          <declname>actions</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>days</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for a business owner user type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the array of actions to be generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the size of the actions array. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>days</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of days to simulate actions for. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="33" column="6" bodyfile="src/user.c" bodystart="223" bodyend="282" declfile="include/user.h" declline="33" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="user_8h_1af6c98a9770ce80b4f0265ce5c69112ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_actions_for_retired</definition>
+        <argsstring>(Action **actions, int *size, int days)</argsstring>
+        <name>generate_actions_for_retired</name>
+        <param>
+          <type><ref refid="struct_action" kindref="compound">Action</ref> **</type>
+          <declname>actions</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>days</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for a retired user type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the array of actions to be generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the size of the actions array. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>days</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of days to simulate actions for. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="34" column="6" bodyfile="src/user.c" bodystart="291" bodyend="342" declfile="include/user.h" declline="34" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="user_8h_1a0af743e9e51f0386ffdd49fe9edb8287" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_actions_for_family</definition>
+        <argsstring>(Action **actions, int *size, int days)</argsstring>
+        <name>generate_actions_for_family</name>
+        <param>
+          <type><ref refid="struct_action" kindref="compound">Action</ref> **</type>
+          <declname>actions</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>days</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for a family user type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the array of actions to be generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the size of the actions array. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>days</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of days to simulate actions for. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="35" column="6" bodyfile="src/user.c" bodystart="351" bodyend="409" declfile="include/user.h" declline="35" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="user_8h_1af8eb668e96ee0f34388f631da062429d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_actions_for_freelancer</definition>
+        <argsstring>(Action **actions, int *size, int days)</argsstring>
+        <name>generate_actions_for_freelancer</name>
+        <param>
+          <type><ref refid="struct_action" kindref="compound">Action</ref> **</type>
+          <declname>actions</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>days</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for a freelancer user type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the array of actions to be generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the size of the actions array. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>days</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of days to simulate actions for. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="36" column="6" bodyfile="src/user.c" bodystart="418" bodyend="444" declfile="include/user.h" declline="36" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="user_8h_1a78c9ef795d6b4220ec9bc56bd15c8949" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_actions_for_teacher</definition>
+        <argsstring>(Action **actions, int *size, int days)</argsstring>
+        <name>generate_actions_for_teacher</name>
+        <param>
+          <type><ref refid="struct_action" kindref="compound">Action</ref> **</type>
+          <declname>actions</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>days</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for a teacher user type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the array of actions to be generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the size of the actions array. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>days</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of days to simulate actions for. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="37" column="6" bodyfile="src/user.c" bodystart="453" bodyend="489" declfile="include/user.h" declline="37" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="user_8h_1ac3d7816416812fd8455cddd9a882a05b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_actions_for_artist</definition>
+        <argsstring>(Action **actions, int *size, int days)</argsstring>
+        <name>generate_actions_for_artist</name>
+        <param>
+          <type><ref refid="struct_action" kindref="compound">Action</ref> **</type>
+          <declname>actions</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>days</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for an artist user type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the array of actions to be generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the size of the actions array. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>days</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of days to simulate actions for. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/user.h" line="38" column="6" bodyfile="src/user.c" bodystart="498" bodyend="540" declfile="include/user.h" declline="38" declcolumn="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Created<sp/>by<sp/>Bohdan<sp/>Potuzhnyi<sp/>and<sp/>Vlada<sp/>Svirsh<sp/>on<sp/>13.03.2024.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>user.h</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>USER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>USER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="common_8h" kindref="compound">common.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="fee_8h" kindref="compound">fee.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12" refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="13" refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a65e90109a047c6f58260395f659cd41b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a65e90109a047c6f58260395f659cd41b" kindref="member">STUDENT</ref>,</highlight></codeline>
+<codeline lineno="14" refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a6bee6f3f4ee72dd5f525d131f880fc1d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a6bee6f3f4ee72dd5f525d131f880fc1d" kindref="member">STUDENT_STATIC</ref>,</highlight></codeline>
+<codeline lineno="15" refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a3a556d3697b410646c8af94e65dc3c46" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a3a556d3697b410646c8af94e65dc3c46" kindref="member">BUSINESS_OWNER</ref>,</highlight></codeline>
+<codeline lineno="16" refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7ac4f052c838aed2606c4e950240db8eae" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7ac4f052c838aed2606c4e950240db8eae" kindref="member">RETIRED</ref>,</highlight></codeline>
+<codeline lineno="17" refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a57078948cacdc08828729ef3b49b74cb" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a57078948cacdc08828729ef3b49b74cb" kindref="member">FAMILY</ref>,</highlight></codeline>
+<codeline lineno="18" refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a9f3bddd4912d8345c1c8dbf3126a2437" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a9f3bddd4912d8345c1c8dbf3126a2437" kindref="member">FREELANCER</ref>,</highlight></codeline>
+<codeline lineno="19" refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a3516b66118bba29fd5ccf508cd028dff" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a3516b66118bba29fd5ccf508cd028dff" kindref="member">TEACHER</ref>,</highlight></codeline>
+<codeline lineno="20" refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7ab8da454da4d1ea6d8a779cd5a2804e77" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7ab8da454da4d1ea6d8a779cd5a2804e77" kindref="member">ARTIST</ref>,</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a281fc1be132a3f44f0bd3258ae4e8f41" kindref="member">NUMBER_OF_USERS</ref></highlight></codeline>
+<codeline lineno="22" refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a281fc1be132a3f44f0bd3258ae4e8f41" refkind="member"><highlight class="normal">}<sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7" kindref="member">Type</ref>;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24" refid="struct_user" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="25" refid="struct_user_1a829fa9c7710707548005c76f41340d77" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="struct_user_1a829fa9c7710707548005c76f41340d77" kindref="member">name</ref>;</highlight></codeline>
+<codeline lineno="26" refid="struct_user_1a5ba9303794761fdf8ac15fefc0657722" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7" kindref="member">Type</ref><sp/><ref refid="struct_user_1a5ba9303794761fdf8ac15fefc0657722" kindref="member">type</ref>;</highlight></codeline>
+<codeline lineno="27" refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_action" kindref="compound">Action</ref>*<sp/><ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>;</highlight></codeline>
+<codeline lineno="28" refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_wallet" kindref="compound">Wallet</ref><sp/><ref refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" kindref="member">wallet</ref>;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal">}<sp/><ref refid="struct_user" kindref="compound">User</ref>;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a863dcb764fe09eb5c9b5f515c043bd4f" kindref="member">generate_actions_for_student</ref>(<ref refid="struct_action" kindref="compound">Action</ref><sp/>**actions,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*size,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>days);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a4c260929a157124e4cfc1ab2b2751ffe" kindref="member">generate_actions_for_student_static</ref>(<ref refid="struct_action" kindref="compound">Action</ref><sp/>**actions,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*size,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>days);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a3eafe93ef067da38fa22adc7adb976e3" kindref="member">generate_actions_for_business_owner</ref>(<ref refid="struct_action" kindref="compound">Action</ref><sp/>**actions,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*size,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>days);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="user_8h_1af6c98a9770ce80b4f0265ce5c69112ea" kindref="member">generate_actions_for_retired</ref>(<ref refid="struct_action" kindref="compound">Action</ref><sp/>**actions,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*size,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>days);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a0af743e9e51f0386ffdd49fe9edb8287" kindref="member">generate_actions_for_family</ref>(<ref refid="struct_action" kindref="compound">Action</ref><sp/>**actions,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*size,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>days);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="user_8h_1af8eb668e96ee0f34388f631da062429d" kindref="member">generate_actions_for_freelancer</ref>(<ref refid="struct_action" kindref="compound">Action</ref><sp/>**actions,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*size,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>days);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a78c9ef795d6b4220ec9bc56bd15c8949" kindref="member">generate_actions_for_teacher</ref>(<ref refid="struct_action" kindref="compound">Action</ref><sp/>**actions,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*size,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>days);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="user_8h_1ac3d7816416812fd8455cddd9a882a05b" kindref="member">generate_actions_for_artist</ref>(<ref refid="struct_action" kindref="compound">Action</ref><sp/>**actions,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*size,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>days);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//<sp/>USER_H</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="include/user.h"/>
+  </compounddef>
+</doxygen>

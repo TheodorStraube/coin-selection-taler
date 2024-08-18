@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="struct_rules" kind="struct" language="C++" prot="public">
+    <compoundname>Rules</compoundname>
+    <includes refid="common_8h" local="no">common.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_rules_1aab09e5a79e0b60a591fa27f1d99cb2a1" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Rules::rsa_keysize</definition>
+        <argsstring></argsstring>
+        <name>rsa_keysize</name>
+        <qualifiedname>Rules::rsa_keysize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="39" column="9" bodyfile="include/common.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_rules_1a85c67d0737b73c9a2a35adf3e71f9ddd" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* Rules::cipher</definition>
+        <argsstring></argsstring>
+        <name>cipher</name>
+        <qualifiedname>Rules::cipher</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="40" column="10" bodyfile="include/common.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_rules_1a1dc0e2b254659abe7d8a2fbf54884e95" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_fees" kindref="compound">Fees</ref></type>
+        <definition>Fees Rules::fees</definition>
+        <argsstring></argsstring>
+        <name>fees</name>
+        <qualifiedname>Rules::fees</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="41" column="10" bodyfile="include/common.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_rules_1a17d3fa3d79c077e4c5e94b00c3e240cb" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_durations" kindref="compound">Durations</ref></type>
+        <definition>Durations Rules::durations</definition>
+        <argsstring></argsstring>
+        <name>durations</name>
+        <qualifiedname>Rules::durations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="42" column="15" bodyfile="include/common.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>Duration</label>
+        <link refid="struct_duration"/>
+      </node>
+      <node id="4">
+        <label>Durations</label>
+        <link refid="struct_durations"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>deposit</edgelabel>
+          <edgelabel>legal</edgelabel>
+          <edgelabel>withdraw</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Fee</label>
+        <link refid="struct_fee"/>
+      </node>
+      <node id="2">
+        <label>Fees</label>
+        <link refid="struct_fees"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>deposit_fee</edgelabel>
+          <edgelabel>refresh_fee</edgelabel>
+          <edgelabel>refund_fee</edgelabel>
+          <edgelabel>withdraw_fee</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Rules</label>
+        <link refid="struct_rules"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>fees</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>durations</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/common.h" line="38" column="1" bodyfile="include/common.h" bodystart="38" bodyend="43"/>
+    <listofallmembers>
+      <member refid="struct_rules_1a85c67d0737b73c9a2a35adf3e71f9ddd" prot="public" virt="non-virtual"><scope>Rules</scope><name>cipher</name></member>
+      <member refid="struct_rules_1a17d3fa3d79c077e4c5e94b00c3e240cb" prot="public" virt="non-virtual"><scope>Rules</scope><name>durations</name></member>
+      <member refid="struct_rules_1a1dc0e2b254659abe7d8a2fbf54884e95" prot="public" virt="non-virtual"><scope>Rules</scope><name>fees</name></member>
+      <member refid="struct_rules_1aab09e5a79e0b60a591fa27f1d99cb2a1" prot="public" virt="non-virtual"><scope>Rules</scope><name>rsa_keysize</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

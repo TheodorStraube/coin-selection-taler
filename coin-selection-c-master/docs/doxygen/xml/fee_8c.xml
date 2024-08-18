@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="fee_8c" kind="file" language="C++">
+    <compoundname>fee.c</compoundname>
+    <includes refid="fee_8h" local="yes">fee.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>common.h</label>
+        <link refid="common_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>fee.h</label>
+        <link refid="fee_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/fee.c</label>
+        <link refid="fee_8c"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>time.h</label>
+      </node>
+    </incdepgraph>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="fee_8c_1a88ccfa80007e2dd7a5efc635c0026f12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>long long</type>
+        <definition>long long calculate_fee</definition>
+        <argsstring>(Coin coin, operation_type operation)</argsstring>
+        <name>calculate_fee</name>
+        <param>
+          <type><ref refid="struct_coin" kindref="compound">Coin</ref></type>
+          <declname>coin</declname>
+        </param>
+        <param>
+          <type><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65eff" kindref="member">operation_type</ref></type>
+          <declname>operation</declname>
+        </param>
+        <briefdescription>
+<para>Calculate the fee for a given coin and operation type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>coin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The coin for which the fee is being calculated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>operation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type of operation (e.g., DEPOSIT_OP, WITHDRAW_OP, REFUND_OP, REFRESH_OP). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The total fee in satoshis for the specified operation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/fee.c" line="15" column="11" bodyfile="src/fee.c" bodystart="15" bodyend="39"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Created<sp/>by<sp/>Bohdan<sp/>Potuzhnyi<sp/>and<sp/>Vlada<sp/>Svirsh<sp/>on<sp/>04.03.2024.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>fee.c</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="fee_8h" kindref="compound">fee.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/><ref refid="fee_8c_1a88ccfa80007e2dd7a5efc635c0026f12" kindref="member">calculate_fee</ref>(<ref refid="struct_coin" kindref="compound">Coin</ref><sp/>coin,<sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65eff" kindref="member">operation_type</ref><sp/>operation)<sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_fee" kindref="compound">Fee</ref><sp/>current_fee;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Determine<sp/>the<sp/>appropriate<sp/>fee<sp/>based<sp/>on<sp/>the<sp/>operation<sp/>type</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(operation)<sp/>{</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa42479520571fb6b2e6c7afaa1e5352c8" kindref="member">DEPOSIT_OP</ref>:</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>current_fee<sp/>=<sp/>coin.<ref refid="struct_coin_1ab0c85f7b3d00334d79c11b7d273d140b" kindref="member">denomination</ref>.<ref refid="struct_denomination_1a35d9354ba80e33cf21ae91aad752710f" kindref="member">rules</ref>.<ref refid="struct_rules_1a1dc0e2b254659abe7d8a2fbf54884e95" kindref="member">fees</ref>.<ref refid="struct_fees_1a44c5d55964520b10a298fc10fef86d06" kindref="member">deposit_fee</ref>;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa55976904a78ceeb73196ab4aec9562a7" kindref="member">WITHDRAW_OP</ref>:</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>current_fee<sp/>=<sp/>coin.<ref refid="struct_coin_1ab0c85f7b3d00334d79c11b7d273d140b" kindref="member">denomination</ref>.<ref refid="struct_denomination_1a35d9354ba80e33cf21ae91aad752710f" kindref="member">rules</ref>.<ref refid="struct_rules_1a1dc0e2b254659abe7d8a2fbf54884e95" kindref="member">fees</ref>.<ref refid="struct_fees_1acf25917ea05f4c5593e6fc17c93b85dc" kindref="member">withdraw_fee</ref>;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effae502eb7f083711e2333ae27f76c9ea50" kindref="member">REFUND_OP</ref>:</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>current_fee<sp/>=<sp/>coin.<ref refid="struct_coin_1ab0c85f7b3d00334d79c11b7d273d140b" kindref="member">denomination</ref>.<ref refid="struct_denomination_1a35d9354ba80e33cf21ae91aad752710f" kindref="member">rules</ref>.<ref refid="struct_rules_1a1dc0e2b254659abe7d8a2fbf54884e95" kindref="member">fees</ref>.<ref refid="struct_fees_1a52430b50918884d38d232cbd717eea5e" kindref="member">refund_fee</ref>;</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa60984caa8fd63e44237604975102ccbc" kindref="member">REFRESH_OP</ref>:</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>current_fee<sp/>=<sp/>coin.<ref refid="struct_coin_1ab0c85f7b3d00334d79c11b7d273d140b" kindref="member">denomination</ref>.<ref refid="struct_denomination_1a35d9354ba80e33cf21ae91aad752710f" kindref="member">rules</ref>.<ref refid="struct_rules_1a1dc0e2b254659abe7d8a2fbf54884e95" kindref="member">fees</ref>.<ref refid="struct_fees_1aa907a632d48557e7bd5dcc37ac25ddc0" kindref="member">refresh_fee</ref>;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>current_fee<sp/>=<sp/>coin.<ref refid="struct_coin_1ab0c85f7b3d00334d79c11b7d273d140b" kindref="member">denomination</ref>.<ref refid="struct_denomination_1a35d9354ba80e33cf21ae91aad752710f" kindref="member">rules</ref>.<ref refid="struct_rules_1a1dc0e2b254659abe7d8a2fbf54884e95" kindref="member">fees</ref>.<ref refid="struct_fees_1a44c5d55964520b10a298fc10fef86d06" kindref="member">deposit_fee</ref>;</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>total_fee<sp/>=<sp/>current_fee.<ref refid="struct_fee_1a90d978b7ef183143fae9041924235ba1" kindref="member">fee_satoshis</ref>;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>total_fee;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/fee.c"/>
+  </compounddef>
+</doxygen>

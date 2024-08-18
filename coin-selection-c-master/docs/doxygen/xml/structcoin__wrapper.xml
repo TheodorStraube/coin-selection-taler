@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="structcoin__wrapper" kind="struct" language="C++" prot="public">
+    <compoundname>coin_wrapper</compoundname>
+    <includes refid="coin__selection_8h" local="no">coin_selection.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcoin__wrapper_1a674caa9ea24c44eb3af7ab3cf921a5fa" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_coin" kindref="compound">Coin</ref> *</type>
+        <definition>Coin* coin_wrapper::coin</definition>
+        <argsstring></argsstring>
+        <name>coin</name>
+        <qualifiedname>coin_wrapper::coin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/coin_selection.h" line="26" column="10" bodyfile="include/coin_selection.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcoin__wrapper_1a538e9c8b56fdfcd2356aaf27dc6703db" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double coin_wrapper::score</definition>
+        <argsstring></argsstring>
+        <name>score</name>
+        <qualifiedname>coin_wrapper::score</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/coin_selection.h" line="27" column="12" bodyfile="include/coin_selection.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>Coin</label>
+        <link refid="struct_coin"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>denomination</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Denomination</label>
+        <link refid="struct_denomination"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>rules</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>Duration</label>
+        <link refid="struct_duration"/>
+      </node>
+      <node id="7">
+        <label>Durations</label>
+        <link refid="struct_durations"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>deposit</edgelabel>
+          <edgelabel>legal</edgelabel>
+          <edgelabel>withdraw</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>Fee</label>
+        <link refid="struct_fee"/>
+      </node>
+      <node id="5">
+        <label>Fees</label>
+        <link refid="struct_fees"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>deposit_fee</edgelabel>
+          <edgelabel>refresh_fee</edgelabel>
+          <edgelabel>refund_fee</edgelabel>
+          <edgelabel>withdraw_fee</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Rules</label>
+        <link refid="struct_rules"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>fees</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>durations</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>coin_wrapper</label>
+        <link refid="structcoin__wrapper"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>coin</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/coin_selection.h" line="25" column="1" bodyfile="include/coin_selection.h" bodystart="25" bodyend="28"/>
+    <listofallmembers>
+      <member refid="structcoin__wrapper_1a674caa9ea24c44eb3af7ab3cf921a5fa" prot="public" virt="non-virtual"><scope>coin_wrapper</scope><name>coin</name></member>
+      <member refid="structcoin__wrapper_1a538e9c8b56fdfcd2356aaf27dc6703db" prot="public" virt="non-virtual"><scope>coin_wrapper</scope><name>score</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

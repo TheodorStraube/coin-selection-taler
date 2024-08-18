@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="struct_duration" kind="struct" language="C++" prot="public">
+    <compoundname>Duration</compoundname>
+    <includes refid="common_8h" local="no">common.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_duration_1a3553115b7e06d0480a1d78e9bd01e84e" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long Duration::time</definition>
+        <argsstring></argsstring>
+        <name>time</name>
+        <qualifiedname>Duration::time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="29" column="15" bodyfile="include/common.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/common.h" line="28" column="1" bodyfile="include/common.h" bodystart="28" bodyend="30"/>
+    <listofallmembers>
+      <member refid="struct_duration_1a3553115b7e06d0480a1d78e9bd01e84e" prot="public" virt="non-virtual"><scope>Duration</scope><name>time</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

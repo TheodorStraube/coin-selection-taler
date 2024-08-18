@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="struct_fee" kind="struct" language="C++" prot="public">
+    <compoundname>Fee</compoundname>
+    <includes refid="common_8h" local="no">common.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_fee_1a90d978b7ef183143fae9041924235ba1" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long Fee::fee_satoshis</definition>
+        <argsstring></argsstring>
+        <name>fee_satoshis</name>
+        <qualifiedname>Fee::fee_satoshis</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="12" column="15" bodyfile="include/common.h" bodystart="12" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_fee_1a4ca2c8133ecef8b4e4d943d2eb9c54b5" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Fee::percentage_fee</definition>
+        <argsstring></argsstring>
+        <name>percentage_fee</name>
+        <qualifiedname>Fee::percentage_fee</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="13" column="11" bodyfile="include/common.h" bodystart="13" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/common.h" line="11" column="1" bodyfile="include/common.h" bodystart="11" bodyend="14"/>
+    <listofallmembers>
+      <member refid="struct_fee_1a90d978b7ef183143fae9041924235ba1" prot="public" virt="non-virtual"><scope>Fee</scope><name>fee_satoshis</name></member>
+      <member refid="struct_fee_1a4ca2c8133ecef8b4e4d943d2eb9c54b5" prot="public" virt="non-virtual"><scope>Fee</scope><name>percentage_fee</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

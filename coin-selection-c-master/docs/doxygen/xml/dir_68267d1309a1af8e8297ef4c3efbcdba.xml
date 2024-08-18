@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir">
+    <compoundname>src</compoundname>
+    <innerfile refid="coin__selection_8c">coin_selection.c</innerfile>
+    <innerfile refid="fee_8c">fee.c</innerfile>
+    <innerfile refid="generator_8c">generator.c</innerfile>
+    <innerfile refid="main_8c">main.c</innerfile>
+    <innerfile refid="parser_8c">parser.c</innerfile>
+    <innerfile refid="simulation_8c">simulation.c</innerfile>
+    <innerfile refid="user_8c">user.c</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/"/>
+  </compounddef>
+</doxygen>

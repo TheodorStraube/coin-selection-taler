@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="struct_global_fees" kind="struct" language="C++" prot="public">
+    <compoundname>GlobalFees</compoundname>
+    <includes refid="common_8h" local="no">common.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_global_fees_1a9ad2134af47b1c25d8dbb8138677e4f7" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_fee" kindref="compound">Fee</ref></type>
+        <definition>Fee GlobalFees::wire_fee</definition>
+        <argsstring></argsstring>
+        <name>wire_fee</name>
+        <qualifiedname>GlobalFees::wire_fee</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="24" column="9" bodyfile="include/common.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_global_fees_1abab40fa833a1b4ea2de1018bcdc1e865" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_fee" kindref="compound">Fee</ref></type>
+        <definition>Fee GlobalFees::closing_fee</definition>
+        <argsstring></argsstring>
+        <name>closing_fee</name>
+        <qualifiedname>GlobalFees::closing_fee</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="25" column="9" bodyfile="include/common.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>Fee</label>
+        <link refid="struct_fee"/>
+      </node>
+      <node id="1">
+        <label>GlobalFees</label>
+        <link refid="struct_global_fees"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>closing_fee</edgelabel>
+          <edgelabel>wire_fee</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/common.h" line="23" column="1" bodyfile="include/common.h" bodystart="23" bodyend="26"/>
+    <listofallmembers>
+      <member refid="struct_global_fees_1abab40fa833a1b4ea2de1018bcdc1e865" prot="public" virt="non-virtual"><scope>GlobalFees</scope><name>closing_fee</name></member>
+      <member refid="struct_global_fees_1a9ad2134af47b1c25d8dbb8138677e4f7" prot="public" virt="non-virtual"><scope>GlobalFees</scope><name>wire_fee</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

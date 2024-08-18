@@ -1,0 +1,24 @@
+[
+  {
+    "operation": "exchange-set-global-fee-0",
+    "arguments": {
+      "start_time": {
+        "t_s": 1704067200
+      },
+      "end_time": {
+        "t_s": 1735689600
+      },
+      "history_fee": "BITCOINBTC:0",
+      "account_fee": "BITCOINBTC:0",
+      "purse_fee": "BITCOINBTC:0",
+      "purse_timeout": {
+        "d_us": 360000000000
+      },
+      "history_expiration": {
+        "d_us": 3600000000000
+      },
+      "purse_account_limit": 0,
+      "master_sig": "YHG1T7CQCYQHG0BB7M4XPV4RJ2DMHBN986T369CSWRJBFV6AH50SDVVVDT88XTVX3KHG758D6SC6F7VX05K8CAZEMSK97BCGNK3P438"
+    }
+  }
+]

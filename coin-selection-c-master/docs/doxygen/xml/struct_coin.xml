@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="struct_coin" kind="struct" language="C++" prot="public">
+    <compoundname>Coin</compoundname>
+    <includes refid="common_8h" local="no">common.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_coin_1ae6d0eee70d99d1cdefe9705bed4e2b16" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long Coin::uniqueId</definition>
+        <argsstring></argsstring>
+        <name>uniqueId</name>
+        <qualifiedname>Coin::uniqueId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="52" column="15" bodyfile="include/common.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_coin_1ab0c85f7b3d00334d79c11b7d273d140b" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_denomination" kindref="compound">Denomination</ref></type>
+        <definition>Denomination Coin::denomination</definition>
+        <argsstring></argsstring>
+        <name>denomination</name>
+        <qualifiedname>Coin::denomination</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="53" column="18" bodyfile="include/common.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_coin_1a63abbe6924977c640df75b2f40a950b0" prot="public" static="no" mutable="no">
+        <type>time_t</type>
+        <definition>time_t Coin::creation_timestamp</definition>
+        <argsstring></argsstring>
+        <name>creation_timestamp</name>
+        <qualifiedname>Coin::creation_timestamp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="54" column="12" bodyfile="include/common.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Coin</label>
+        <link refid="struct_coin"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>denomination</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Denomination</label>
+        <link refid="struct_denomination"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>rules</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>Duration</label>
+        <link refid="struct_duration"/>
+      </node>
+      <node id="6">
+        <label>Durations</label>
+        <link refid="struct_durations"/>
+        <childnode refid="7" relation="usage">
+          <edgelabel>deposit</edgelabel>
+          <edgelabel>legal</edgelabel>
+          <edgelabel>withdraw</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>Fee</label>
+        <link refid="struct_fee"/>
+      </node>
+      <node id="4">
+        <label>Fees</label>
+        <link refid="struct_fees"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>deposit_fee</edgelabel>
+          <edgelabel>refresh_fee</edgelabel>
+          <edgelabel>refund_fee</edgelabel>
+          <edgelabel>withdraw_fee</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Rules</label>
+        <link refid="struct_rules"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>fees</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>durations</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/common.h" line="51" column="1" bodyfile="include/common.h" bodystart="51" bodyend="55"/>
+    <listofallmembers>
+      <member refid="struct_coin_1a63abbe6924977c640df75b2f40a950b0" prot="public" virt="non-virtual"><scope>Coin</scope><name>creation_timestamp</name></member>
+      <member refid="struct_coin_1ab0c85f7b3d00334d79c11b7d273d140b" prot="public" virt="non-virtual"><scope>Coin</scope><name>denomination</name></member>
+      <member refid="struct_coin_1ae6d0eee70d99d1cdefe9705bed4e2b16" prot="public" virt="non-virtual"><scope>Coin</scope><name>uniqueId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

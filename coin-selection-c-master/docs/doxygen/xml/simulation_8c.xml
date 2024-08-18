@@ -1,0 +1,329 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="simulation_8c" kind="file" language="C++">
+    <compoundname>simulation.c</compoundname>
+    <includes refid="simulation_8h" local="yes">simulation.h</includes>
+    <includes local="no">stdio.h</includes>
+    <includes local="no">stdlib.h</includes>
+    <includes local="no">math.h</includes>
+    <incdepgraph>
+      <node id="7">
+        <label>coin_selection.h</label>
+        <link refid="coin__selection_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>common.h</label>
+        <link refid="common_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>fee.h</label>
+        <link refid="fee_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>simulation.h</label>
+        <link refid="simulation_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>user.h</label>
+        <link refid="user_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/simulation.c</label>
+        <link refid="simulation_8c"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>math.h</label>
+      </node>
+      <node id="8">
+        <label>stdio.h</label>
+      </node>
+      <node id="9">
+        <label>stdlib.h</label>
+      </node>
+      <node id="4">
+        <label>time.h</label>
+      </node>
+    </incdepgraph>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="simulation_8c_1a1b1405eebeef684e6b7b8a7a29c0b390" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int get_scale</definition>
+        <argsstring>(long long amount)</argsstring>
+        <name>get_scale</name>
+        <param>
+          <type>long long</type>
+          <declname>amount</declname>
+        </param>
+        <briefdescription>
+<para>Get the scale of a given amount. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>amount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The amount to determine the scale for. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The scale of the amount. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/simulation.c" line="15" column="5" bodyfile="src/simulation.c" bodystart="15" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="simulation_8c_1aaa133f689d59c184ad7f88e19180a73c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void simulate_user_actions</definition>
+        <argsstring>(int user_index, User user, Wallet denomination_wallet, int num_actions, strategy strategy)</argsstring>
+        <name>simulate_user_actions</name>
+        <param>
+          <type>int</type>
+          <declname>user_index</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_user" kindref="compound">User</ref></type>
+          <declname>user</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_wallet" kindref="compound">Wallet</ref></type>
+          <declname>denomination_wallet</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_actions</declname>
+        </param>
+        <param>
+          <type><ref refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30c" kindref="member">strategy</ref></type>
+          <declname>strategy</declname>
+        </param>
+        <briefdescription>
+<para>Simulate user actions and write results to a file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>user_index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the user. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>user</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The user structure containing user information. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>denomination_wallet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wallet containing denominations. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>num_actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of actions to simulate. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>strategy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The strategy to use for coin allocation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/simulation.c" line="33" column="6" bodyfile="src/simulation.c" bodystart="33" bodyend="153"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Created<sp/>by<sp/>Bohdan<sp/>Potuzhnyi<sp/>on<sp/>29.04.2024.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="simulation_8h" kindref="compound">simulation.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdlib.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;math.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="simulation_8c_1a1b1405eebeef684e6b7b8a7a29c0b390" kindref="member">get_scale</ref>(</highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>amount)<sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>scale<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(amount<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>amount<sp/>/=<sp/>10;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>scale++;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>scale;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="simulation_8c_1aaa133f689d59c184ad7f88e19180a73c" kindref="member">simulate_user_actions</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>user_index,<sp/><ref refid="struct_user" kindref="compound">User</ref><sp/>user,<sp/><ref refid="struct_wallet" kindref="compound">Wallet</ref><sp/>denomination_wallet,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>num_actions,<sp/><ref refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30c" kindref="member">strategy</ref><sp/><ref refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30c" kindref="member">strategy</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>TypeNames[]<sp/>=<sp/>{</highlight><highlight class="stringliteral">&quot;STUDENT&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;STUDENT_STATIC&quot;</highlight><highlight class="normal">,</highlight><highlight class="stringliteral">&quot;BUSINESS_OWNER&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;RETIRED&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;FAMILY&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;FREELANCER&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;TEACHER&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;ARTIST&quot;</highlight><highlight class="normal">};</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="generator_8c_1ae2c69bb48a9632d475964af6f8f28306" kindref="member">StrategyNames</ref>[]<sp/>=<sp/>{</highlight><highlight class="stringliteral">&quot;MAX_BILLS&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;MIN_BILLS&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;CLOSEST_TO_EXPIRE_MIN_BILLS&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;CLOSEST_TO_EXPIRE_MAX_BILLS&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;RANDOM&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;EVEN_FROM_MIN_TO_MAX&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;EVEN_FROM_MAX_TO_MIN&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;GREEDY_MIN_TO_MAX&quot;</highlight><highlight class="normal">};</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>OperationNames[]<sp/>=<sp/>{</highlight><highlight class="stringliteral">&quot;DEPOSIT_OP&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;WITHDRAW_OP&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;REFUND_OP&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;REFRESH_OP&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;WIRE_OP&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;CLOSE_OP&quot;</highlight><highlight class="normal">};</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>generation_scale<sp/>=<sp/>7;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>wallet_scale<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>denomination_wallet.<ref refid="struct_wallet_1a291291b3fb8c613d4abca33f1729f8b1" kindref="member">num_coins</ref>;<sp/>i++){</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(wallet_scale<sp/>&lt;<sp/>denomination_wallet.<ref refid="struct_wallet_1a2375e4e1b39dc606905825c5fe51cc79" kindref="member">coins</ref>[i].<ref refid="struct_coin_1ab0c85f7b3d00334d79c11b7d273d140b" kindref="member">denomination</ref>.<ref refid="struct_denomination_1a3401e942b5bf04ce804e3194d9ea5b4f" kindref="member">amount</ref>)</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>wallet_scale<sp/>=<sp/>denomination_wallet.<ref refid="struct_wallet_1a2375e4e1b39dc606905825c5fe51cc79" kindref="member">coins</ref>[i].<ref refid="struct_coin_1ab0c85f7b3d00334d79c11b7d273d140b" kindref="member">denomination</ref>.<ref refid="struct_denomination_1a3401e942b5bf04ce804e3194d9ea5b4f" kindref="member">amount</ref>;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>wallet_scale<sp/>=<sp/><ref refid="simulation_8c_1a1b1405eebeef684e6b7b8a7a29c0b390" kindref="member">get_scale</ref>(wallet_scale);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>filename[256];</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>sprintf(filename,<sp/></highlight><highlight class="stringliteral">&quot;../simulation/results/user_%d_strategy_%s.csv&quot;</highlight><highlight class="normal">,<sp/>user_index,<sp/><ref refid="generator_8c_1ae2c69bb48a9632d475964af6f8f28306" kindref="member">StrategyNames</ref>[<ref refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30c" kindref="member">strategy</ref>]);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>FILE<sp/>*fp<sp/>=<sp/>fopen(filename,<sp/></highlight><highlight class="stringliteral">&quot;w&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!fp)<sp/>{</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Failed<sp/>to<sp/>open<sp/>file<sp/>%s<sp/>for<sp/>writing.\n&quot;</highlight><highlight class="normal">,<sp/>filename);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>user.<ref refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" kindref="member">wallet</ref>.<ref refid="struct_wallet_1a291291b3fb8c613d4abca33f1729f8b1" kindref="member">num_coins</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>total_fee<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref><sp/>!=<sp/>NULL<sp/>&amp;&amp;<sp/>num_actions<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(fp,<sp/></highlight><highlight class="stringliteral">&quot;%s,<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>TypeNames[user.<ref refid="struct_user_1a5ba9303794761fdf8ac15fefc0657722" kindref="member">type</ref>],<sp/><ref refid="generator_8c_1ae2c69bb48a9632d475964af6f8f28306" kindref="member">StrategyNames</ref>[<ref refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30c" kindref="member">strategy</ref>]);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>num_actions;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>renew_fee<sp/>=<sp/><ref refid="coin__selection_8c_1ad305e133b0092d3634d69bbe386a00e9" kindref="member">calculate_renew_fee</ref>(user.<ref refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" kindref="member">wallet</ref>,<sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(renew_fee<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(fp,<sp/></highlight><highlight class="stringliteral">&quot;%d_%d,<sp/>%lld,<sp/>%lld,<sp/>%s,<sp/>%lld\n&quot;</highlight><highlight class="normal">,<sp/>user_index,<sp/>i,<sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>,<sp/>0ll,<sp/>OperationNames[<ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa60984caa8fd63e44237604975102ccbc" kindref="member">REFRESH_OP</ref>],<sp/>renew_fee);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>total_fee<sp/>+=<sp/>renew_fee;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>fee_for_action;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>fee_for_change;</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>transaction_amount<sp/>=<sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a07200a883f79ec67a54e626570a89a33" kindref="member">amount</ref>;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(wallet_scale<sp/>&gt;<sp/>generation_scale){</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>transaction_amount<sp/>=<sp/>pow(10,<sp/>wallet_scale<sp/>-<sp/>generation_scale)<sp/>*<sp/>transaction_amount;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(wallet_scale<sp/>&lt;<sp/>generation_scale){</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>transaction_amount<sp/>=<sp/>floor(transaction_amount<sp/>/<sp/>pow(10,<sp/>generation_scale<sp/>-<sp/>wallet_scale));</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" kindref="member">operation</ref><sp/>==<sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa55976904a78ceeb73196ab4aec9562a7" kindref="member">WITHDRAW_OP</ref><sp/>||<sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" kindref="member">operation</ref><sp/>==<sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effae502eb7f083711e2333ae27f76c9ea50" kindref="member">REFUND_OP</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Simulate<sp/>deposit<sp/>or<sp/>refund</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>generatedCoinCount<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_coin" kindref="compound">Coin</ref><sp/>*generatedCoins<sp/>=<sp/><ref refid="coin__selection_8c_1a899a7603e11d48d74d216fbb903b9b39" kindref="member">generate_withdraw_coins</ref>(transaction_amount,</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>,<sp/>denomination_wallet,</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&amp;generatedCoinCount);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(generatedCoins)<sp/>{</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fee_for_action<sp/>=<sp/><ref refid="coin__selection_8c_1aed433e9a660b39e8fef92bb5ce8c58f2" kindref="member">calculate_total_fee</ref>(generatedCoins,<sp/>generatedCoinCount,</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" kindref="member">operation</ref>);</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(fp,<sp/></highlight><highlight class="stringliteral">&quot;%d_%d,<sp/>%lld,<sp/>%lld,<sp/>%s,<sp/>%lld\n&quot;</highlight><highlight class="normal">,<sp/>user_index,<sp/>i,<sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>,<sp/>transaction_amount,</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OperationNames[user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" kindref="member">operation</ref>],<sp/>fee_for_action);</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>total_fee<sp/>+=<sp/>fee_for_action;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="coin__selection_8c_1aa4bd4b6b7bfd44dfece72cf6f6625549" kindref="member">add_coins_to_wallet</ref>(&amp;user.<ref refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" kindref="member">wallet</ref>,<sp/>generatedCoins,<sp/>generatedCoinCount);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" kindref="member">operation</ref><sp/>==<sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa42479520571fb6b2e6c7afaa1e5352c8" kindref="member">DEPOSIT_OP</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Simulate<sp/>withdrawal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>allocatedCoinCount<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>allocatedAmount<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_coin" kindref="compound">Coin</ref><sp/>*allocatedCoins<sp/>=<sp/><ref refid="coin__selection_8c_1a1e922a1415ccc748661b3e56782c24fb" kindref="member">allocate_coins_for_deposit</ref>(user.<ref refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" kindref="member">wallet</ref>,<sp/>transaction_amount,</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30c" kindref="member">strategy</ref>,</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>,<sp/>&amp;allocatedCoinCount,</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&amp;allocatedAmount,<sp/>denomination_wallet);</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(allocatedCoins)<sp/>{</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fee_for_action<sp/>=<sp/><ref refid="coin__selection_8c_1aed433e9a660b39e8fef92bb5ce8c58f2" kindref="member">calculate_total_fee</ref>(allocatedCoins,<sp/>allocatedCoinCount,<sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa42479520571fb6b2e6c7afaa1e5352c8" kindref="member">DEPOSIT_OP</ref>);</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(fp,<sp/></highlight><highlight class="stringliteral">&quot;%d_%d,<sp/>%lld,<sp/>%lld,<sp/>%s,<sp/>%lld\n&quot;</highlight><highlight class="normal">,<sp/>user_index,<sp/>i,<sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>,<sp/>transaction_amount,</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OperationNames[user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" kindref="member">operation</ref>],<sp/>fee_for_action);</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="coin__selection_8c_1a77686703b97d1b382b3960ecb14586b7" kindref="member">remove_selected_coins</ref>(&amp;user.<ref refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" kindref="member">wallet</ref>,<sp/>allocatedCoins,<sp/>allocatedCoinCount);</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>changeAmount<sp/>=<sp/>allocatedAmount<sp/>-<sp/>transaction_amount;<sp/></highlight><highlight class="comment">//<sp/>Assuming<sp/>fees<sp/>are<sp/>subtracted<sp/>from<sp/>the<sp/>withdrawn<sp/>amount</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"></highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(changeAmount<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>changeCoinCount<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_coin" kindref="compound">Coin</ref><sp/>*changeCoins<sp/>=<sp/><ref refid="coin__selection_8c_1a899a7603e11d48d74d216fbb903b9b39" kindref="member">generate_withdraw_coins</ref>(changeAmount,</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>,</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>denomination_wallet,<sp/>&amp;changeCoinCount);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fee_for_change<sp/>=<sp/><ref refid="coin__selection_8c_1aed433e9a660b39e8fef92bb5ce8c58f2" kindref="member">calculate_total_fee</ref>(changeCoins,<sp/>changeCoinCount,<sp/><ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa60984caa8fd63e44237604975102ccbc" kindref="member">REFRESH_OP</ref>);</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(fp,<sp/></highlight><highlight class="stringliteral">&quot;%d_%d,<sp/>%lld,<sp/>%lld,<sp/>%s,<sp/>%lld\n&quot;</highlight><highlight class="normal">,<sp/>user_index,<sp/>i,<sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>,<sp/>transaction_amount,</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OperationNames[<ref refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa60984caa8fd63e44237604975102ccbc" kindref="member">REFRESH_OP</ref>],<sp/>fee_for_change);</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(fp,<sp/></highlight><highlight class="stringliteral">&quot;%d_%d,<sp/>%lld,<sp/>%lld,<sp/>DEPOSIT_REFRESH_OP,<sp/>%lld\n&quot;</highlight><highlight class="normal">,<sp/>user_index,<sp/>i,<sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>,</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>transaction_amount,<sp/>fee_for_action<sp/>+<sp/>fee_for_change);</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(changeCoins)<sp/>{</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="coin__selection_8c_1aa4bd4b6b7bfd44dfece72cf6f6625549" kindref="member">add_coins_to_wallet</ref>(&amp;user.<ref refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" kindref="member">wallet</ref>,<sp/>changeCoins,<sp/>changeCoinCount);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Error<sp/>for<sp/>allocation<sp/>of<sp/>change<sp/>coins\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(fp,<sp/></highlight><highlight class="stringliteral">&quot;%d_%d,<sp/>%lld,<sp/>%lld,<sp/>DEPOSIT_REFRESH_OP,<sp/>%lld\n&quot;</highlight><highlight class="normal">,<sp/>user_index,<sp/>i,<sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[i].<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>,</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>transaction_amount,<sp/>fee_for_action);</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>total_fee<sp/>+=<sp/>fee_for_action;</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Error<sp/>for<sp/>allocation<sp/>of<sp/>coins\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;No<sp/>actions<sp/>generated<sp/>for<sp/>the<sp/>user.\n&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"></highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/>fclose(fp);</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/>free(user.<ref refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" kindref="member">wallet</ref>.<ref refid="struct_wallet_1a2375e4e1b39dc606905825c5fe51cc79" kindref="member">coins</ref>);</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/>free(user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>);</highlight></codeline>
+<codeline lineno="153"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/simulation.c"/>
+  </compounddef>
+</doxygen>

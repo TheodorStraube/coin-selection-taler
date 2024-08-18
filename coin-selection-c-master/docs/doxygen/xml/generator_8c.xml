@@ -1,0 +1,288 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="generator_8c" kind="file" language="C++">
+    <compoundname>generator.c</compoundname>
+    <includes refid="fee_8h" local="yes">fee.h</includes>
+    <includes refid="user_8h" local="yes">user.h</includes>
+    <includes refid="coin__selection_8h" local="yes">coin_selection.h</includes>
+    <includes local="no">time.h</includes>
+    <includes local="no">stdlib.h</includes>
+    <includes local="no">stdio.h</includes>
+    <incdepgraph>
+      <node id="6">
+        <label>coin_selection.h</label>
+        <link refid="coin__selection_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>common.h</label>
+        <link refid="common_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>fee.h</label>
+        <link refid="fee_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>user.h</label>
+        <link refid="user_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/generator.c</label>
+        <link refid="generator_8c"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>stdio.h</label>
+      </node>
+      <node id="7">
+        <label>stdlib.h</label>
+      </node>
+      <node id="4">
+        <label>time.h</label>
+      </node>
+    </incdepgraph>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="generator_8c_1ae2c69bb48a9632d475964af6f8f28306" prot="public" static="no" mutable="no">
+        <type>const char *</type>
+        <definition>const char* StrategyNames[]</definition>
+        <argsstring>[]</argsstring>
+        <name>StrategyNames</name>
+        <initializer>= {
+        &quot;MAX_BILLS&quot;,
+        &quot;MIN_BILLS&quot;,
+        &quot;CLOSEST_TO_EXPIRE_MIN_BILLS&quot;,
+        &quot;CLOSEST_TO_EXPIRE_MAX_BILLS&quot;,
+        &quot;MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED&quot;,
+        &quot;RANDOM&quot;,
+        &quot;EVEN_FROM_MIN_TO_MAX&quot;,
+        &quot;EVEN_FROM_MAX_TO_MIN&quot;,
+        &quot;GREEDY_MIN_TO_MAX&quot;
+}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/generator.c" line="13" column="12" bodyfile="src/generator.c" bodystart="13" bodyend="23"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="generator_8c_1ace13bfa1134fadb12f3c5ebafac80c89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_actions_for_user</definition>
+        <argsstring>(User user, Action **actions, int *size)</argsstring>
+        <name>generate_actions_for_user</name>
+        <param>
+          <type><ref refid="struct_user" kindref="compound">User</ref></type>
+          <declname>user</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_action" kindref="compound">Action</ref> **</type>
+          <declname>actions</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for a given user based on their type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>user</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The user for whom actions are being generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to an array of actions to be generated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer to the size of the actions array. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/generator.c" line="32" column="6" bodyfile="src/generator.c" bodystart="32" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="generator_8c_1a312c3bab9752bd1ddeabe8e49ebfbac4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void generate_and_save_actions</definition>
+        <argsstring>(const char *base_dir, int num_users)</argsstring>
+        <name>generate_and_save_actions</name>
+        <param>
+          <type>const char *</type>
+          <declname>base_dir</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_users</declname>
+        </param>
+        <briefdescription>
+<para>Generate actions for multiple users and save them to CSV files. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>base_dir</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The base directory where the CSV files will be saved. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>num_users</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of users for whom actions will be generated. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/generator.c" line="74" column="6" bodyfile="src/generator.c" bodystart="74" bodyend="107"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Created<sp/>by<sp/>Bohdan<sp/>Potuzhnyi<sp/>on<sp/>14.03.2024.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>generator.c</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="fee_8h" kindref="compound">fee.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="user_8h" kindref="compound">user.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="coin__selection_8h" kindref="compound">coin_selection.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;time.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdlib.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdio.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/><ref refid="generator_8c_1ae2c69bb48a9632d475964af6f8f28306" kindref="member">StrategyNames</ref>[]<sp/>=<sp/>{</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;MAX_BILLS&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;MIN_BILLS&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;CLOSEST_TO_EXPIRE_MIN_BILLS&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;CLOSEST_TO_EXPIRE_MAX_BILLS&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;RANDOM&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;EVEN_FROM_MIN_TO_MAX&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;EVEN_FROM_MAX_TO_MIN&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;GREEDY_MIN_TO_MAX&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="generator_8c_1ace13bfa1134fadb12f3c5ebafac80c89" kindref="member">generate_actions_for_user</ref>(<ref refid="struct_user" kindref="compound">User</ref><sp/>user,<sp/><ref refid="struct_action" kindref="compound">Action</ref><sp/>**actions,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*size)<sp/>{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>daysIn3Years<sp/>=<sp/>360<sp/>*<sp/>3;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(user.<ref refid="struct_user_1a5ba9303794761fdf8ac15fefc0657722" kindref="member">type</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a6bee6f3f4ee72dd5f525d131f880fc1d" kindref="member">STUDENT_STATIC</ref>:</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="user_8c_1a4c260929a157124e4cfc1ab2b2751ffe" kindref="member">generate_actions_for_student_static</ref>(actions,<sp/>size,<sp/>daysIn3Years);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a65e90109a047c6f58260395f659cd41b" kindref="member">STUDENT</ref>:</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="user_8c_1a863dcb764fe09eb5c9b5f515c043bd4f" kindref="member">generate_actions_for_student</ref>(actions,<sp/>size,<sp/>daysIn3Years);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a3a556d3697b410646c8af94e65dc3c46" kindref="member">BUSINESS_OWNER</ref>:</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="user_8c_1a3eafe93ef067da38fa22adc7adb976e3" kindref="member">generate_actions_for_business_owner</ref>(actions,<sp/>size,<sp/>daysIn3Years);</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7ac4f052c838aed2606c4e950240db8eae" kindref="member">RETIRED</ref>:</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="user_8c_1af6c98a9770ce80b4f0265ce5c69112ea" kindref="member">generate_actions_for_retired</ref>(actions,<sp/>size,<sp/>daysIn3Years);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a57078948cacdc08828729ef3b49b74cb" kindref="member">FAMILY</ref>:</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="user_8c_1a0af743e9e51f0386ffdd49fe9edb8287" kindref="member">generate_actions_for_family</ref>(actions,<sp/>size,<sp/>daysIn3Years);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a9f3bddd4912d8345c1c8dbf3126a2437" kindref="member">FREELANCER</ref>:</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="user_8c_1af8eb668e96ee0f34388f631da062429d" kindref="member">generate_actions_for_freelancer</ref>(actions,<sp/>size,<sp/>daysIn3Years);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a3516b66118bba29fd5ccf508cd028dff" kindref="member">TEACHER</ref>:</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="user_8c_1a78c9ef795d6b4220ec9bc56bd15c8949" kindref="member">generate_actions_for_teacher</ref>(actions,<sp/>size,<sp/>daysIn3Years);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7ab8da454da4d1ea6d8a779cd5a2804e77" kindref="member">ARTIST</ref>:</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="user_8c_1ac3d7816416812fd8455cddd9a882a05b" kindref="member">generate_actions_for_artist</ref>(actions,<sp/>size,<sp/>daysIn3Years);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*size<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*actions<sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="66"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="generator_8c_1a312c3bab9752bd1ddeabe8e49ebfbac4" kindref="member">generate_and_save_actions</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*base_dir,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>num_users)<sp/>{</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>user_i<sp/>=<sp/>0;<sp/>user_i<sp/>&lt;<sp/>num_users;<sp/>user_i++)<sp/>{</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_user" kindref="compound">User</ref><sp/>user;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>user_name[50];</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>snprintf(user_name,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(user_name),<sp/></highlight><highlight class="stringliteral">&quot;user%d&quot;</highlight><highlight class="normal">,<sp/>user_i);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>user.<ref refid="struct_user_1a829fa9c7710707548005c76f41340d77" kindref="member">name</ref><sp/>=<sp/>user_name;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>user.<ref refid="struct_user_1a5ba9303794761fdf8ac15fefc0657722" kindref="member">type</ref><sp/>=<sp/>rand()<sp/>%<sp/><ref refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a281fc1be132a3f44f0bd3258ae4e8f41" kindref="member">NUMBER_OF_USERS</ref>;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref><sp/>=<sp/>NULL;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>num_actions<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="generator_8c_1ace13bfa1134fadb12f3c5ebafac80c89" kindref="member">generate_actions_for_user</ref>(user,<sp/>&amp;user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>,<sp/>&amp;num_actions);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>strategy_i<sp/>=<sp/>0;<sp/>strategy_i<sp/>&lt;<sp/><ref refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30ca0eb1d9c4dc453a6ad6f74940fab522c3" kindref="member">NUMBER_OF_STRATEGIES</ref>;<sp/>strategy_i++)<sp/>{</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>filename[256];</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sprintf(filename,<sp/></highlight><highlight class="stringliteral">&quot;%s/user_%d_strategy_%s.csv&quot;</highlight><highlight class="normal">,<sp/>base_dir,<sp/>user_i,<sp/><ref refid="generator_8c_1ae2c69bb48a9632d475964af6f8f28306" kindref="member">StrategyNames</ref>[strategy_i]);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>FILE<sp/>*file<sp/>=<sp/>fopen(filename,<sp/></highlight><highlight class="stringliteral">&quot;w&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(file<sp/>==<sp/>NULL)<sp/>{</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>perror(</highlight><highlight class="stringliteral">&quot;Failed<sp/>to<sp/>open<sp/>file&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">continue</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Writing<sp/>user<sp/>details<sp/>and<sp/>strategy<sp/>at<sp/>the<sp/>top</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(file,<sp/></highlight><highlight class="stringliteral">&quot;%s,%d,%d,%d\n&quot;</highlight><highlight class="normal">,<sp/>user.<ref refid="struct_user_1a829fa9c7710707548005c76f41340d77" kindref="member">name</ref>,<sp/>user.<ref refid="struct_user_1a5ba9303794761fdf8ac15fefc0657722" kindref="member">type</ref>,<sp/>strategy_i,<sp/>user_i);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Writing<sp/>actions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>action_index<sp/>=<sp/>0;<sp/>action_index<sp/>&lt;<sp/>num_actions;<sp/>action_index++)<sp/>{</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_action" kindref="compound">Action</ref><sp/>action<sp/>=<sp/>user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>[action_index];</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(file,<sp/></highlight><highlight class="stringliteral">&quot;%d,%lld,%lld\n&quot;</highlight><highlight class="normal">,<sp/>action.<ref refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" kindref="member">operation</ref>,<sp/>action.<ref refid="struct_action_1a07200a883f79ec67a54e626570a89a33" kindref="member">amount</ref>,<sp/>action.<ref refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kindref="member">time</ref>);</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fclose(file);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>free(user.<ref refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kindref="member">actions</ref>);</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="107"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/generator.c"/>
+  </compounddef>
+</doxygen>

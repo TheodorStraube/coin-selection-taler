@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="struct_fees" kind="struct" language="C++" prot="public">
+    <compoundname>Fees</compoundname>
+    <includes refid="common_8h" local="no">common.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_fees_1a44c5d55964520b10a298fc10fef86d06" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_fee" kindref="compound">Fee</ref></type>
+        <definition>Fee Fees::deposit_fee</definition>
+        <argsstring></argsstring>
+        <name>deposit_fee</name>
+        <qualifiedname>Fees::deposit_fee</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="17" column="9" bodyfile="include/common.h" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_fees_1a52430b50918884d38d232cbd717eea5e" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_fee" kindref="compound">Fee</ref></type>
+        <definition>Fee Fees::refund_fee</definition>
+        <argsstring></argsstring>
+        <name>refund_fee</name>
+        <qualifiedname>Fees::refund_fee</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="18" column="9" bodyfile="include/common.h" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_fees_1acf25917ea05f4c5593e6fc17c93b85dc" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_fee" kindref="compound">Fee</ref></type>
+        <definition>Fee Fees::withdraw_fee</definition>
+        <argsstring></argsstring>
+        <name>withdraw_fee</name>
+        <qualifiedname>Fees::withdraw_fee</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="19" column="9" bodyfile="include/common.h" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_fees_1aa907a632d48557e7bd5dcc37ac25ddc0" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_fee" kindref="compound">Fee</ref></type>
+        <definition>Fee Fees::refresh_fee</definition>
+        <argsstring></argsstring>
+        <name>refresh_fee</name>
+        <qualifiedname>Fees::refresh_fee</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="20" column="9" bodyfile="include/common.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>Fee</label>
+        <link refid="struct_fee"/>
+      </node>
+      <node id="1">
+        <label>Fees</label>
+        <link refid="struct_fees"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>deposit_fee</edgelabel>
+          <edgelabel>refresh_fee</edgelabel>
+          <edgelabel>refund_fee</edgelabel>
+          <edgelabel>withdraw_fee</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/common.h" line="16" column="1" bodyfile="include/common.h" bodystart="16" bodyend="21"/>
+    <listofallmembers>
+      <member refid="struct_fees_1a44c5d55964520b10a298fc10fef86d06" prot="public" virt="non-virtual"><scope>Fees</scope><name>deposit_fee</name></member>
+      <member refid="struct_fees_1aa907a632d48557e7bd5dcc37ac25ddc0" prot="public" virt="non-virtual"><scope>Fees</scope><name>refresh_fee</name></member>
+      <member refid="struct_fees_1a52430b50918884d38d232cbd717eea5e" prot="public" virt="non-virtual"><scope>Fees</scope><name>refund_fee</name></member>
+      <member refid="struct_fees_1acf25917ea05f4c5593e6fc17c93b85dc" prot="public" virt="non-virtual"><scope>Fees</scope><name>withdraw_fee</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="struct_denomination" kind="struct" language="C++" prot="public">
+    <compoundname>Denomination</compoundname>
+    <includes refid="common_8h" local="no">common.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_denomination_1a112d9163c54b55ac4b0cc99da3b38f6f" prot="public" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* Denomination::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>Denomination::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="46" column="10" bodyfile="include/common.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_denomination_1a3401e942b5bf04ce804e3194d9ea5b4f" prot="public" static="no" mutable="no">
+        <type>long long</type>
+        <definition>long long Denomination::amount</definition>
+        <argsstring></argsstring>
+        <name>amount</name>
+        <qualifiedname>Denomination::amount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="47" column="15" bodyfile="include/common.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_denomination_1a35d9354ba80e33cf21ae91aad752710f" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_rules" kindref="compound">Rules</ref></type>
+        <definition>Rules Denomination::rules</definition>
+        <argsstring></argsstring>
+        <name>rules</name>
+        <qualifiedname>Denomination::rules</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/common.h" line="48" column="11" bodyfile="include/common.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Denomination</label>
+        <link refid="struct_denomination"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>rules</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>Duration</label>
+        <link refid="struct_duration"/>
+      </node>
+      <node id="5">
+        <label>Durations</label>
+        <link refid="struct_durations"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>deposit</edgelabel>
+          <edgelabel>legal</edgelabel>
+          <edgelabel>withdraw</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Fee</label>
+        <link refid="struct_fee"/>
+      </node>
+      <node id="3">
+        <label>Fees</label>
+        <link refid="struct_fees"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>deposit_fee</edgelabel>
+          <edgelabel>refresh_fee</edgelabel>
+          <edgelabel>refund_fee</edgelabel>
+          <edgelabel>withdraw_fee</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Rules</label>
+        <link refid="struct_rules"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>fees</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>durations</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/common.h" line="45" column="1" bodyfile="include/common.h" bodystart="45" bodyend="49"/>
+    <listofallmembers>
+      <member refid="struct_denomination_1a3401e942b5bf04ce804e3194d9ea5b4f" prot="public" virt="non-virtual"><scope>Denomination</scope><name>amount</name></member>
+      <member refid="struct_denomination_1a112d9163c54b55ac4b0cc99da3b38f6f" prot="public" virt="non-virtual"><scope>Denomination</scope><name>name</name></member>
+      <member refid="struct_denomination_1a35d9354ba80e33cf21ae91aad752710f" prot="public" virt="non-virtual"><scope>Denomination</scope><name>rules</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

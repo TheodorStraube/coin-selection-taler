@@ -1,0 +1,17 @@
+[
+  {
+    "operation": "exchange-set-wire-fee-0",
+    "arguments": {
+      "wire_method": "bitcoin",
+      "start_time": {
+        "t_s": 1704067200
+      },
+      "end_time": {
+        "t_s": 1735689600
+      },
+      "wire_fee": "BITCOINBTC:0.0002",
+      "closing_fee": "BITCOINBTC:0.0003",
+      "master_sig": "4SQ7VS3TFPFXZ9KV6C6RFY8GEVAVY8RYZGK7HNR7CEVWCHQCR6KJXYGSC0AVEGYQ85AZT2GF6ERD08NHHJY7R204JF818555AEQYG2R"
+    }
+  }
+]

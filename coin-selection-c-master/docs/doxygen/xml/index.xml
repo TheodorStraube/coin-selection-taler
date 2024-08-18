@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.11.0" xml:lang="en-US">
+  <compound refid="struct_action" kind="struct"><name>Action</name>
+    <member refid="struct_action_1a07200a883f79ec67a54e626570a89a33" kind="variable"><name>amount</name></member>
+    <member refid="struct_action_1ad05d63217ec28f41d58843e72ba3c8cc" kind="variable"><name>operation</name></member>
+    <member refid="struct_action_1a56a965d95fa5dae388fab5ac561c3d89" kind="variable"><name>time</name></member>
+  </compound>
+  <compound refid="struct_coin" kind="struct"><name>Coin</name>
+    <member refid="struct_coin_1ae6d0eee70d99d1cdefe9705bed4e2b16" kind="variable"><name>uniqueId</name></member>
+    <member refid="struct_coin_1ab0c85f7b3d00334d79c11b7d273d140b" kind="variable"><name>denomination</name></member>
+    <member refid="struct_coin_1a63abbe6924977c640df75b2f40a950b0" kind="variable"><name>creation_timestamp</name></member>
+  </compound>
+  <compound refid="structcoin__wrapper" kind="struct"><name>coin_wrapper</name>
+    <member refid="structcoin__wrapper_1a674caa9ea24c44eb3af7ab3cf921a5fa" kind="variable"><name>coin</name></member>
+    <member refid="structcoin__wrapper_1a538e9c8b56fdfcd2356aaf27dc6703db" kind="variable"><name>score</name></member>
+  </compound>
+  <compound refid="struct_denomination" kind="struct"><name>Denomination</name>
+    <member refid="struct_denomination_1a112d9163c54b55ac4b0cc99da3b38f6f" kind="variable"><name>name</name></member>
+    <member refid="struct_denomination_1a3401e942b5bf04ce804e3194d9ea5b4f" kind="variable"><name>amount</name></member>
+    <member refid="struct_denomination_1a35d9354ba80e33cf21ae91aad752710f" kind="variable"><name>rules</name></member>
+  </compound>
+  <compound refid="struct_duration" kind="struct"><name>Duration</name>
+    <member refid="struct_duration_1a3553115b7e06d0480a1d78e9bd01e84e" kind="variable"><name>time</name></member>
+  </compound>
+  <compound refid="struct_durations" kind="struct"><name>Durations</name>
+    <member refid="struct_durations_1a3bedff428786edeb6c3af24f5141c087" kind="variable"><name>legal</name></member>
+    <member refid="struct_durations_1a5ed07ad99f37c466794edb9291be5570" kind="variable"><name>deposit</name></member>
+    <member refid="struct_durations_1a58d9b0d9165f2d7df77a4e3276a4c387" kind="variable"><name>withdraw</name></member>
+  </compound>
+  <compound refid="struct_fee" kind="struct"><name>Fee</name>
+    <member refid="struct_fee_1a90d978b7ef183143fae9041924235ba1" kind="variable"><name>fee_satoshis</name></member>
+    <member refid="struct_fee_1a4ca2c8133ecef8b4e4d943d2eb9c54b5" kind="variable"><name>percentage_fee</name></member>
+  </compound>
+  <compound refid="struct_fees" kind="struct"><name>Fees</name>
+    <member refid="struct_fees_1a44c5d55964520b10a298fc10fef86d06" kind="variable"><name>deposit_fee</name></member>
+    <member refid="struct_fees_1a52430b50918884d38d232cbd717eea5e" kind="variable"><name>refund_fee</name></member>
+    <member refid="struct_fees_1acf25917ea05f4c5593e6fc17c93b85dc" kind="variable"><name>withdraw_fee</name></member>
+    <member refid="struct_fees_1aa907a632d48557e7bd5dcc37ac25ddc0" kind="variable"><name>refresh_fee</name></member>
+  </compound>
+  <compound refid="struct_global_fees" kind="struct"><name>GlobalFees</name>
+    <member refid="struct_global_fees_1a9ad2134af47b1c25d8dbb8138677e4f7" kind="variable"><name>wire_fee</name></member>
+    <member refid="struct_global_fees_1abab40fa833a1b4ea2de1018bcdc1e865" kind="variable"><name>closing_fee</name></member>
+  </compound>
+  <compound refid="struct_rules" kind="struct"><name>Rules</name>
+    <member refid="struct_rules_1aab09e5a79e0b60a591fa27f1d99cb2a1" kind="variable"><name>rsa_keysize</name></member>
+    <member refid="struct_rules_1a85c67d0737b73c9a2a35adf3e71f9ddd" kind="variable"><name>cipher</name></member>
+    <member refid="struct_rules_1a1dc0e2b254659abe7d8a2fbf54884e95" kind="variable"><name>fees</name></member>
+    <member refid="struct_rules_1a17d3fa3d79c077e4c5e94b00c3e240cb" kind="variable"><name>durations</name></member>
+  </compound>
+  <compound refid="struct_thread_args" kind="struct"><name>ThreadArgs</name>
+    <member refid="struct_thread_args_1a1593fa4ed6db5a41dafdc72d5947051a" kind="variable"><name>filepath</name></member>
+    <member refid="struct_thread_args_1ab057b012055d3a72fc6c124166f1f197" kind="variable"><name>denomination_wallet</name></member>
+  </compound>
+  <compound refid="struct_user" kind="struct"><name>User</name>
+    <member refid="struct_user_1a829fa9c7710707548005c76f41340d77" kind="variable"><name>name</name></member>
+    <member refid="struct_user_1a5ba9303794761fdf8ac15fefc0657722" kind="variable"><name>type</name></member>
+    <member refid="struct_user_1a25e9f9dbd5139953f11eda3548d6c953" kind="variable"><name>actions</name></member>
+    <member refid="struct_user_1adeeb7b90c0a02ab44b0c6accbe5144a2" kind="variable"><name>wallet</name></member>
+  </compound>
+  <compound refid="struct_wallet" kind="struct"><name>Wallet</name>
+    <member refid="struct_wallet_1a2375e4e1b39dc606905825c5fe51cc79" kind="variable"><name>coins</name></member>
+    <member refid="struct_wallet_1a291291b3fb8c613d4abca33f1729f8b1" kind="variable"><name>num_coins</name></member>
+    <member refid="struct_wallet_1acf08684c9cd3bb60343348b184941fde" kind="variable"><name>global_fees</name></member>
+  </compound>
+  <compound refid="coin__selection_8h" kind="file"><name>coin_selection.h</name>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30c" kind="enum"><name>strategy</name></member>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30ca425025383afc09235dbc608bc8e78ec6" kind="enumvalue"><name>MAX_BILLS</name></member>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30ca62755b4a54145fdfc1f47da1a319bd8b" kind="enumvalue"><name>MIN_BILLS</name></member>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30ca0671b2aeba566639374b4debb566daf2" kind="enumvalue"><name>CLOSEST_TO_EXPIRE_MIN_BILLS</name></member>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30ca6a57d650f8ecffdfca51e44cab7658c0" kind="enumvalue"><name>CLOSEST_TO_EXPIRE_MAX_BILLS</name></member>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30cab8649294ac33872ee9b958124ec59d36" kind="enumvalue"><name>MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED</name></member>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30caa2b65445a3a16f164c5e811064d75726" kind="enumvalue"><name>RANDOM</name></member>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30ca1cc82b8275eb97ef4ca5ca363b196d48" kind="enumvalue"><name>EVEN_FROM_MIN_TO_MAX</name></member>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30ca03c85980db0e0a2a38e3ec9c7cb22779" kind="enumvalue"><name>EVEN_FROM_MAX_TO_MIN</name></member>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30ca0b6a925c502e31e62898190767bc7c56" kind="enumvalue"><name>GREEDY_MIN_TO_MAX</name></member>
+    <member refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30ca0eb1d9c4dc453a6ad6f74940fab522c3" kind="enumvalue"><name>NUMBER_OF_STRATEGIES</name></member>
+    <member refid="coin__selection_8h_1a1e922a1415ccc748661b3e56782c24fb" kind="function"><name>allocate_coins_for_deposit</name></member>
+    <member refid="coin__selection_8h_1a77686703b97d1b382b3960ecb14586b7" kind="function"><name>remove_selected_coins</name></member>
+    <member refid="coin__selection_8h_1aa4bd4b6b7bfd44dfece72cf6f6625549" kind="function"><name>add_coins_to_wallet</name></member>
+    <member refid="coin__selection_8h_1aed433e9a660b39e8fef92bb5ce8c58f2" kind="function"><name>calculate_total_fee</name></member>
+    <member refid="coin__selection_8h_1ad305e133b0092d3634d69bbe386a00e9" kind="function"><name>calculate_renew_fee</name></member>
+    <member refid="coin__selection_8h_1a899a7603e11d48d74d216fbb903b9b39" kind="function"><name>generate_withdraw_coins</name></member>
+  </compound>
+  <compound refid="common_8h" kind="file"><name>common.h</name>
+  </compound>
+  <compound refid="fee_8h" kind="file"><name>fee.h</name>
+    <member refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65eff" kind="enum"><name>operation_type</name></member>
+    <member refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa42479520571fb6b2e6c7afaa1e5352c8" kind="enumvalue"><name>DEPOSIT_OP</name></member>
+    <member refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa55976904a78ceeb73196ab4aec9562a7" kind="enumvalue"><name>WITHDRAW_OP</name></member>
+    <member refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effae502eb7f083711e2333ae27f76c9ea50" kind="enumvalue"><name>REFUND_OP</name></member>
+    <member refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa60984caa8fd63e44237604975102ccbc" kind="enumvalue"><name>REFRESH_OP</name></member>
+    <member refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effa9f49e0a2300609be0792925a35ecb95a" kind="enumvalue"><name>WIRE_OP</name></member>
+    <member refid="fee_8h_1ad99e62941c8e4b13e5fc45ecaaf65effadabd207d01b3633f664667719db30822" kind="enumvalue"><name>CLOSE_OP</name></member>
+    <member refid="fee_8h_1a88ccfa80007e2dd7a5efc635c0026f12" kind="function"><name>calculate_fee</name></member>
+  </compound>
+  <compound refid="generator_8h" kind="file"><name>generator.h</name>
+    <member refid="generator_8h_1ace38ef5b8d06d731d95da978e4907c58" kind="function"><name>rand_range_long</name></member>
+    <member refid="generator_8h_1ace13bfa1134fadb12f3c5ebafac80c89" kind="function"><name>generate_actions_for_user</name></member>
+    <member refid="generator_8h_1a312c3bab9752bd1ddeabe8e49ebfbac4" kind="function"><name>generate_and_save_actions</name></member>
+  </compound>
+  <compound refid="parser_8h" kind="file"><name>parser.h</name>
+    <member refid="parser_8h_1afab008579c9a802502ff76b5513a683a" kind="function"><name>parse_wallet_config</name></member>
+    <member refid="parser_8h_1a33ff24ad8d978b5528499f10d4e6c735" kind="function"><name>parse_wallet_config_json</name></member>
+    <member refid="parser_8h_1a8ea2d3113834c1fff63719b4e4693a4c" kind="function"><name>time_to_seconds</name></member>
+  </compound>
+  <compound refid="simulation_8h" kind="file"><name>simulation.h</name>
+    <member refid="simulation_8h_1aaa133f689d59c184ad7f88e19180a73c" kind="function"><name>simulate_user_actions</name></member>
+  </compound>
+  <compound refid="user_8h" kind="file"><name>user.h</name>
+    <member refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7" kind="enum"><name>Type</name></member>
+    <member refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a65e90109a047c6f58260395f659cd41b" kind="enumvalue"><name>STUDENT</name></member>
+    <member refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a6bee6f3f4ee72dd5f525d131f880fc1d" kind="enumvalue"><name>STUDENT_STATIC</name></member>
+    <member refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a3a556d3697b410646c8af94e65dc3c46" kind="enumvalue"><name>BUSINESS_OWNER</name></member>
+    <member refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7ac4f052c838aed2606c4e950240db8eae" kind="enumvalue"><name>RETIRED</name></member>
+    <member refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a57078948cacdc08828729ef3b49b74cb" kind="enumvalue"><name>FAMILY</name></member>
+    <member refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a9f3bddd4912d8345c1c8dbf3126a2437" kind="enumvalue"><name>FREELANCER</name></member>
+    <member refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a3516b66118bba29fd5ccf508cd028dff" kind="enumvalue"><name>TEACHER</name></member>
+    <member refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7ab8da454da4d1ea6d8a779cd5a2804e77" kind="enumvalue"><name>ARTIST</name></member>
+    <member refid="user_8h_1a1d1cfd8ffb84e947f82999c682b666a7a281fc1be132a3f44f0bd3258ae4e8f41" kind="enumvalue"><name>NUMBER_OF_USERS</name></member>
+    <member refid="user_8h_1a863dcb764fe09eb5c9b5f515c043bd4f" kind="function"><name>generate_actions_for_student</name></member>
+    <member refid="user_8h_1a4c260929a157124e4cfc1ab2b2751ffe" kind="function"><name>generate_actions_for_student_static</name></member>
+    <member refid="user_8h_1a3eafe93ef067da38fa22adc7adb976e3" kind="function"><name>generate_actions_for_business_owner</name></member>
+    <member refid="user_8h_1af6c98a9770ce80b4f0265ce5c69112ea" kind="function"><name>generate_actions_for_retired</name></member>
+    <member refid="user_8h_1a0af743e9e51f0386ffdd49fe9edb8287" kind="function"><name>generate_actions_for_family</name></member>
+    <member refid="user_8h_1af8eb668e96ee0f34388f631da062429d" kind="function"><name>generate_actions_for_freelancer</name></member>
+    <member refid="user_8h_1a78c9ef795d6b4220ec9bc56bd15c8949" kind="function"><name>generate_actions_for_teacher</name></member>
+    <member refid="user_8h_1ac3d7816416812fd8455cddd9a882a05b" kind="function"><name>generate_actions_for_artist</name></member>
+  </compound>
+  <compound refid="coin__selection_8c" kind="file"><name>coin_selection.c</name>
+    <member refid="coin__selection_8c_1ad508a0e09b59802d933734aff8873139" kind="variable"><name>nextUniqueId</name></member>
+    <member refid="coin__selection_8c_1aa15dad029d7f70212e3a59f82f91134a" kind="function"><name>calculate_coin_score</name></member>
+    <member refid="coin__selection_8c_1ac592f091005f002e7c5fae79f992a9ac" kind="function"><name>compare_creation_time_asc</name></member>
+    <member refid="coin__selection_8c_1a626327e657784c8ceb4651f040da4cd7" kind="function"><name>compare_denomination_asc</name></member>
+    <member refid="coin__selection_8c_1a1036a502dd36b9da8a2a87565214344a" kind="function"><name>compare_denomination_desc_ll</name></member>
+    <member refid="coin__selection_8c_1a88214f45e402c7ca47ebffdf63986758" kind="function"><name>compare_coin_wrappers</name></member>
+    <member refid="coin__selection_8c_1a482817dace668eb4de382025bd19b25c" kind="function"><name>compare_coins_desc</name></member>
+    <member refid="coin__selection_8c_1a1de7ca87597054898bfec1d59040986e" kind="function"><name>compare_coins_asc</name></member>
+    <member refid="coin__selection_8c_1a5294e9ef80c94f22c1a7c5eae1a070d9" kind="function"><name>allocate_max_bills</name></member>
+    <member refid="coin__selection_8c_1abdc4e7e106dc926fa4be52552c5eec36" kind="function"><name>allocate_min_bills</name></member>
+    <member refid="coin__selection_8c_1a5f97bd7e44047737281197553d7b1617" kind="function"><name>compare_expiry_time_amount</name></member>
+    <member refid="coin__selection_8c_1a680808da9814f743a26fbd7b17f80b47" kind="function"><name>allocate_closest_to_expire_min_bills</name></member>
+    <member refid="coin__selection_8c_1a150fa1372a0466187c3b1899128a49b1" kind="function"><name>compare_expiry_time_amount_reverse</name></member>
+    <member refid="coin__selection_8c_1a777a127f8296cd032a8fc72b922b9f66" kind="function"><name>allocate_closest_to_expire_max_bills</name></member>
+    <member refid="coin__selection_8c_1af0fe808096de76ae283886fc352d685d" kind="function"><name>allocate_random_bills</name></member>
+    <member refid="coin__selection_8c_1ad6cc266b9413050bd1f68baba8439221" kind="function"><name>allocate_max_bills_time_to_expire_weighted</name></member>
+    <member refid="coin__selection_8c_1a1f7d8aad3ce82e856749ff9842b28743" kind="function"><name>allocate_coins_even_from_min_to_max</name></member>
+    <member refid="coin__selection_8c_1ae2c762869bfa90ebfe4b622be712dfef" kind="function"><name>allocate_coins_even_from_max_to_min</name></member>
+    <member refid="coin__selection_8c_1aefae3ee8d71fbba6abec7fdc18ecccf2" kind="function"><name>allocate_coins_greedy_min_to_max</name></member>
+    <member refid="coin__selection_8c_1a1e922a1415ccc748661b3e56782c24fb" kind="function"><name>allocate_coins_for_deposit</name></member>
+    <member refid="coin__selection_8c_1a75184a818bb804a53c156d113c6879c0" kind="function"><name>compare_denomination_desc</name></member>
+    <member refid="coin__selection_8c_1a899a7603e11d48d74d216fbb903b9b39" kind="function"><name>generate_withdraw_coins</name></member>
+    <member refid="coin__selection_8c_1aa4bd4b6b7bfd44dfece72cf6f6625549" kind="function"><name>add_coins_to_wallet</name></member>
+    <member refid="coin__selection_8c_1a77686703b97d1b382b3960ecb14586b7" kind="function"><name>remove_selected_coins</name></member>
+    <member refid="coin__selection_8c_1aed433e9a660b39e8fef92bb5ce8c58f2" kind="function"><name>calculate_total_fee</name></member>
+    <member refid="coin__selection_8c_1ad305e133b0092d3634d69bbe386a00e9" kind="function"><name>calculate_renew_fee</name></member>
+  </compound>
+  <compound refid="fee_8c" kind="file"><name>fee.c</name>
+    <member refid="fee_8c_1a88ccfa80007e2dd7a5efc635c0026f12" kind="function"><name>calculate_fee</name></member>
+  </compound>
+  <compound refid="generator_8c" kind="file"><name>generator.c</name>
+    <member refid="generator_8c_1ae2c69bb48a9632d475964af6f8f28306" kind="variable"><name>StrategyNames</name></member>
+    <member refid="generator_8c_1ace13bfa1134fadb12f3c5ebafac80c89" kind="function"><name>generate_actions_for_user</name></member>
+    <member refid="generator_8c_1a312c3bab9752bd1ddeabe8e49ebfbac4" kind="function"><name>generate_and_save_actions</name></member>
+  </compound>
+  <compound refid="main_8c" kind="file"><name>main.c</name>
+    <member refid="main_8c_1a8b5173357adb02a86c027316e0acdfa0" kind="define"><name>MAX_THREADS</name></member>
+    <member refid="main_8c_1ae5947dba4048acd3bf0b609cc1377d86" kind="define"><name>USER_NAME_MAX_LENGTH</name></member>
+    <member refid="main_8c_1af4994f9a596e6e5b30491a58cbf07f44" kind="define"><name>SEMAPHORE_NAME</name></member>
+    <member refid="main_8c_1a7797f53c8b5ff07cfb56d1a0d1bb42af" kind="variable"><name>semaphore</name></member>
+    <member refid="main_8c_1ac4bef3984b07b68ad586b3109e528f47" kind="variable"><name>total_files</name></member>
+    <member refid="main_8c_1aa32cbd8deb9f85ba3a9b1810163080cc" kind="variable"><name>processed_files</name></member>
+    <member refid="main_8c_1ad20e89e0c86aa812dc3a8e2fb7b5777b" kind="variable"><name>start_time</name></member>
+    <member refid="main_8c_1adb4d35502910ed2345043500a5a52f59" kind="function"><name>update_progress</name></member>
+    <member refid="main_8c_1a309b922d137c4797f2d53760d8258319" kind="function"><name>count_files_in_directory</name></member>
+    <member refid="main_8c_1a1cd7402f55b1cf690217cf755767f746" kind="function"><name>clear_directory</name></member>
+    <member refid="main_8c_1a98358ad2346ec19f79a334556f628711" kind="function"><name>simulate_actions_from_file</name></member>
+    <member refid="main_8c_1a6ac9570fad24030ea7da53044f1d4951" kind="function"><name>thread_function</name></member>
+    <member refid="main_8c_1a72ffc7e91caee9de5ceeca65ee5d18f7" kind="function"><name>load_and_simulate_actions</name></member>
+    <member refid="main_8c_1a633b4a4cf7b19081107ddf04a5dc03b7" kind="function"><name>check_and_prepare_directory</name></member>
+    <member refid="main_8c_1a0ddf1224851353fc92bfbff6f499fa97" kind="function"><name>main</name></member>
+  </compound>
+  <compound refid="parser_8c" kind="file"><name>parser.c</name>
+    <member refid="parser_8c_1af0f2173e3b202ddf5756531b4471dcb2" kind="define"><name>MAX_LINE_LENGTH</name></member>
+    <member refid="parser_8c_1aaff00949216b5ffd1ce66cbeb00bc753" kind="define"><name>MAX_SECTIONS</name></member>
+    <member refid="parser_8c_1aa8bad2cd89820cdaf2a7f26392774014" kind="define"><name>MAX_BLOCK_SIZE</name></member>
+    <member refid="parser_8c_1a8ea2d3113834c1fff63719b4e4693a4c" kind="function"><name>time_to_seconds</name></member>
+    <member refid="parser_8c_1a14d326782f4f0623be0fc15b9957229c" kind="function"><name>parse_number</name></member>
+    <member refid="parser_8c_1abff58decf4919821527339856b7d8960" kind="function"><name>trim_whitespace</name></member>
+    <member refid="parser_8c_1a011ce3c94234d60f48f6e52507b443fd" kind="function"><name>parse_currency_name</name></member>
+    <member refid="parser_8c_1a28c62906d264c051b4d8bf51a991ffb5" kind="function"><name>parse_coin_block</name></member>
+    <member refid="parser_8c_1ad292b034677f851c759c67c01d33e46e" kind="function"><name>read_file_into_string</name></member>
+    <member refid="parser_8c_1afab008579c9a802502ff76b5513a683a" kind="function"><name>parse_wallet_config</name></member>
+    <member refid="parser_8c_1a103ee20f9f161fb4b99e1e88fd186bc0" kind="function"><name>parse_wallet_config_json</name></member>
+  </compound>
+  <compound refid="simulation_8c" kind="file"><name>simulation.c</name>
+    <member refid="simulation_8c_1a1b1405eebeef684e6b7b8a7a29c0b390" kind="function"><name>get_scale</name></member>
+    <member refid="simulation_8c_1aaa133f689d59c184ad7f88e19180a73c" kind="function"><name>simulate_user_actions</name></member>
+  </compound>
+  <compound refid="user_8c" kind="file"><name>user.c</name>
+    <member refid="user_8c_1a1ab0d52a5f583e6f915a9dba47c951dd" kind="function"><name>rand_range</name></member>
+    <member refid="user_8c_1ace38ef5b8d06d731d95da978e4907c58" kind="function"><name>rand_range_long</name></member>
+    <member refid="user_8c_1abdd29c08f8722fbf65fd87aae280374a" kind="function"><name>generate_normal_ll</name></member>
+    <member refid="user_8c_1a863dcb764fe09eb5c9b5f515c043bd4f" kind="function"><name>generate_actions_for_student</name></member>
+    <member refid="user_8c_1a4c260929a157124e4cfc1ab2b2751ffe" kind="function"><name>generate_actions_for_student_static</name></member>
+    <member refid="user_8c_1a3eafe93ef067da38fa22adc7adb976e3" kind="function"><name>generate_actions_for_business_owner</name></member>
+    <member refid="user_8c_1af6c98a9770ce80b4f0265ce5c69112ea" kind="function"><name>generate_actions_for_retired</name></member>
+    <member refid="user_8c_1a0af743e9e51f0386ffdd49fe9edb8287" kind="function"><name>generate_actions_for_family</name></member>
+    <member refid="user_8c_1af8eb668e96ee0f34388f631da062429d" kind="function"><name>generate_actions_for_freelancer</name></member>
+    <member refid="user_8c_1a78c9ef795d6b4220ec9bc56bd15c8949" kind="function"><name>generate_actions_for_teacher</name></member>
+    <member refid="user_8c_1ac3d7816416812fd8455cddd9a882a05b" kind="function"><name>generate_actions_for_artist</name></member>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+  <compound refid="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir"><name>src</name>
+  </compound>
+</doxygenindex>

@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.11.0" xml:lang="en-US">
+  <compounddef id="simulation_8h" kind="file" language="C++">
+    <compoundname>simulation.h</compoundname>
+    <includes refid="common_8h" local="yes">common.h</includes>
+    <includes refid="fee_8h" local="yes">fee.h</includes>
+    <includes refid="user_8h" local="yes">user.h</includes>
+    <includes refid="coin__selection_8h" local="yes">coin_selection.h</includes>
+    <includedby refid="main_8c" local="yes">src/main.c</includedby>
+    <includedby refid="simulation_8c" local="yes">src/simulation.c</includedby>
+    <incdepgraph>
+      <node id="6">
+        <label>coin_selection.h</label>
+        <link refid="coin__selection_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>common.h</label>
+        <link refid="common_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>fee.h</label>
+        <link refid="fee_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>include/simulation.h</label>
+        <link refid="simulation_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>user.h</label>
+        <link refid="user_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>time.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>include/simulation.h</label>
+        <link refid="simulation_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/main.c</label>
+        <link refid="main_8c"/>
+      </node>
+      <node id="3">
+        <label>src/simulation.c</label>
+        <link refid="simulation_8c"/>
+      </node>
+    </invincdepgraph>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="simulation_8h_1aaa133f689d59c184ad7f88e19180a73c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void simulate_user_actions</definition>
+        <argsstring>(int user_index, User user, Wallet denomination_wallet, int num_actions, strategy strategy)</argsstring>
+        <name>simulate_user_actions</name>
+        <param>
+          <type>int</type>
+          <declname>user_index</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_user" kindref="compound">User</ref></type>
+          <declname>user</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_wallet" kindref="compound">Wallet</ref></type>
+          <declname>denomination_wallet</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_actions</declname>
+        </param>
+        <param>
+          <type><ref refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30c" kindref="member">strategy</ref></type>
+          <declname>strategy</declname>
+        </param>
+        <briefdescription>
+<para>Simulate user actions and write results to a file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>user_index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the user. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>user</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The user structure containing user information. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>denomination_wallet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wallet containing denominations. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>num_actions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of actions to simulate. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>strategy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The strategy to use for coin allocation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/simulation.h" line="13" column="6" bodyfile="src/simulation.c" bodystart="33" bodyend="153" declfile="include/simulation.h" declline="13" declcolumn="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Created<sp/>by<sp/>Bohdan<sp/>Potuzhnyi<sp/>on<sp/>29.04.2024.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>COIN_SELECTION_C_SIMULATION_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>COIN_SELECTION_C_SIMULATION_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="common_8h" kindref="compound">common.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="fee_8h" kindref="compound">fee.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="user_8h" kindref="compound">user.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="coin__selection_8h" kindref="compound">coin_selection.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="simulation_8h_1aaa133f689d59c184ad7f88e19180a73c" kindref="member">simulate_user_actions</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>user_index,<sp/><ref refid="struct_user" kindref="compound">User</ref><sp/>user,<sp/><ref refid="struct_wallet" kindref="compound">Wallet</ref><sp/>denomination_wallet,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>num_actions,<sp/><ref refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30c" kindref="member">strategy</ref><sp/><ref refid="coin__selection_8h_1ab621d71bb2cf38b09419ef3a5047e30c" kindref="member">strategy</ref>);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//COIN_SELECTION_C_SIMULATION_H</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="include/simulation.h"/>
+  </compounddef>
+</doxygen>
