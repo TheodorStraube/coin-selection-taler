@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include "cjson/cjson.h"
+#include "cjson/cJSON.h"
 
 // Define constants for file reading
 #define MAX_LINE_LENGTH 1024

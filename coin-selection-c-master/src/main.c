@@ -13,7 +13,7 @@
 #include "common.h"
 #include "generator.h"
 #include "simulation.h"
-#include "../src/cjson/cjson.h"
+#include "../src/cjson/cJSON.h"
 
 #define MAX_THREADS 8
 #define USER_NAME_MAX_LENGTH 50
