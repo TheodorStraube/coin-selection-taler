@@ -137,7 +137,9 @@ void simulate_user_actions(int user_index, User user, Wallet denomination_wallet
                     }
                     total_fee += fee_for_action;
                 } else {
-                    printf("Error for allocation of coins\n");
+                    char error[1024];
+                    sprintf(error, "No coins allocated. %d coins for denomination %d. [%s]", user.wallet.num_coins, transaction_amount, StrategyNames[strategy]);
+                    printf("%s\n", error);
                 }
             }
         }
