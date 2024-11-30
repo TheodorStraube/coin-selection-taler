@@ -872,6 +872,9 @@ Coin* allocate_coins_greedy_min_to_max(Wallet wallet, long long amount, int* num
  * @return An array of allocated coins.
  */
 Coin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strategy, long long time, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
+    if (!wallet.num_coins || !amount) { // if wallet is empty or amount 0, return
+        return NULL;
+    }
     switch (strategy) {
         case MAX_BILLS:
             return allocate_max_bills(wallet, amount, num_allocated_coins, allocated_amount);
@@ -912,9 +915,8 @@ int compare_denomination_desc(const void *a, const void *b) {
 }
 
 /**
- * @brief Generate coins for withdrawal from the wallet.
+ * @brief Generate coins for withdrawal.
  *
- * @param wallet The wallet containing the coins.
  * @param amount The target amount to withdraw.
  * @param time The current time in seconds.
  * @param default_wallet The wallet containing the default coins for generation.
@@ -922,6 +924,9 @@ int compare_denomination_desc(const void *a, const void *b) {
  * @return An array of generated coins.
  */
 Coin* generate_withdraw_coins(long long amount, long long time, Wallet default_wallet, int *num_coins) {
+    if (!amount || !default_wallet.num_coins) { // if amount is 0, return
+        return NULL;
+    }
     // Temporary array for storing pointers to unique denominations in the default wallet
     Coin **uniqueDenominations = malloc(sizeof(Coin*) * default_wallet.num_coins);
     int numUnique = 0;
