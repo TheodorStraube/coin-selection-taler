@@ -159,7 +159,7 @@ char* parse_currency_name(const char* config_data) {
 
         // Copy the line into a temporary buffer
         size_t line_length = line_end - line_start;
-        char* line_buffer = malloc(line_length + 1);
+        char* line_buffer = static_cast<char *>(malloc(line_length + 1));
         strncpy(line_buffer, line_start, line_length);
         line_buffer[line_length] = '\0';
 
@@ -266,7 +266,7 @@ static char* read_file_into_string(const char* filename) {
             if (bufsize == -1) { /* Error */ }
 
             // Allocate our buffer to that size
-            buffer = malloc(sizeof(char) * (bufsize + 1));
+            buffer = static_cast<char *>(malloc(sizeof(char) * (bufsize + 1)));
 
             // Go back to the start of the file
             if (fseek(file, 0L, SEEK_SET) != 0) { /* Error */ }
@@ -293,7 +293,7 @@ static char* read_file_into_string(const char* filename) {
  */
 Wallet parse_wallet_config(const char* config_path) {
     Wallet wallet;
-    wallet.coins = malloc(sizeof(Coin) * MAX_SECTIONS); // Allocate space for coins
+    wallet.coins = static_cast<Coin *>(malloc(sizeof(Coin) * MAX_SECTIONS)); // Allocate space for coins
     wallet.num_coins = 0; // Start with zero coins
     if (!wallet.coins) {
         // Memory allocation failed
@@ -392,7 +392,7 @@ Wallet parse_wallet_config_json(const char* filename) {
 
     Wallet wallet;
     wallet.num_coins = 0;
-    wallet.coins = malloc(sizeof(Coin) * MAX_SECTIONS);
+    wallet.coins = static_cast<Coin *>(malloc(sizeof(Coin) * MAX_SECTIONS));
 
     cJSON *denominations = cJSON_GetObjectItemCaseSensitive(json, "denominations");
     cJSON *denom;

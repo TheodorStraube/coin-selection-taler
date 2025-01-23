@@ -156,7 +156,7 @@ void generate_actions_for_student_static(Action **actions, int *size, int days){
     const long long secondsPerDay = 3600 * 24;
     long long accountBalance = 0;
 
-    *actions = malloc(sizeof(Action) * days * 10); // Allocate enough space considering maximum possible actions per day
+    *actions = static_cast<Action *>(malloc(sizeof(Action) * days * 10)); // Allocate enough space considering maximum possible actions per day
     *size = 0;
 
     for (int day = 1; day <= days; day++) {
@@ -420,7 +420,7 @@ void generate_actions_for_freelancer(Action **actions, int *size, int days) {
     const long long secondsPerDay = 86400;
     long long accountBalance = 500000; // Start with some initial balance
 
-    *actions = malloc(sizeof(Action) * days * 4); // Less frequent transactions than a business owner
+    *actions = static_cast<Action *>(malloc(sizeof(Action) * days * 4)); // Less frequent transactions than a business owner
     *size = 0;
 
     for (int day = 1; day <= days; day++) {

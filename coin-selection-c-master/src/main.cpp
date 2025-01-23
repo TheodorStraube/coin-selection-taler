@@ -113,7 +113,7 @@ void simulate_actions_from_file(const char *filepath, Wallet denomination_wallet
     }
 
     // Allocate memory for actions based on line count minus one for the user info line
-    Action *actions = malloc(sizeof(Action) * (line_count - 1));
+    Action *actions = static_cast<Action *>(malloc(sizeof(Action) * (line_count - 1)));
     if (!actions) {
         perror("Memory allocation failed");
         fclose(file);
@@ -130,7 +130,7 @@ void simulate_actions_from_file(const char *filepath, Wallet denomination_wallet
     }
 
     User user;
-    user.name = malloc(USER_NAME_MAX_LENGTH);
+    user.name = static_cast<char *>(malloc(USER_NAME_MAX_LENGTH));
     int user_index, strategy;
     sscanf(buffer, "%[^,],%d,%d,%d", user.name, &user.type, &strategy, &user_index);
 
@@ -144,7 +144,7 @@ void simulate_actions_from_file(const char *filepath, Wallet denomination_wallet
     fclose(file);
 
     user.actions = actions;
-    simulate_user_actions(user_index, user, denomination_wallet, num_actions, strategy);
+    simulate_user_actions(user_index, user, denomination_wallet, num_actions, static_cast<::strategy>(strategy));
 }
 
 /**
@@ -196,7 +196,7 @@ void load_and_simulate_actions(const char *base_dir, Wallet denomination_wallet)
             sem_wait(semaphore);
             pthread_t thread;
 
-            ThreadArgs* args = malloc(sizeof(ThreadArgs));
+            ThreadArgs* args = static_cast<ThreadArgs *>(malloc(sizeof(ThreadArgs)));
             if (args == NULL) {
                 perror("Failed to allocate memory for thread args");
                 continue;

@@ -136,7 +136,7 @@ int compare_coins_asc(const void *a, const void *b) {
  * @return An array of allocated coins.
  */
 Coin* allocate_max_bills(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount) {
-    Coin* coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
+    Coin* coinsCopy = static_cast<Coin *>(malloc(sizeof(Coin) * wallet.num_coins));
     if (coinsCopy == NULL) return NULL;
     for (int i = 0; i < wallet.num_coins; i++) {
         coinsCopy[i] = wallet.coins[i];
@@ -155,7 +155,7 @@ Coin* allocate_max_bills(Wallet wallet, long long amount, int* num_allocated_coi
     *allocated_amount = amount_collected;
 
     // Allocate memory for selected coins
-    Coin *selectedCoins = malloc(sizeof(Coin) * selectedCount);
+    Coin *selectedCoins = static_cast<Coin *>(malloc(sizeof(Coin) * selectedCount));
     if (selectedCoins == NULL) {
         free(coinsCopy);
         return NULL;
@@ -181,7 +181,7 @@ Coin* allocate_max_bills(Wallet wallet, long long amount, int* num_allocated_coi
  * @return An array of allocated coins.
  */
 Coin* allocate_min_bills(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount) {
-    Coin* coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
+    Coin* coinsCopy = static_cast<Coin *>(malloc(sizeof(Coin) * wallet.num_coins));
     if (coinsCopy == NULL) return NULL;
     for (int i = 0; i < wallet.num_coins; i++) {
         coinsCopy[i] = wallet.coins[i];
@@ -200,7 +200,7 @@ Coin* allocate_min_bills(Wallet wallet, long long amount, int* num_allocated_coi
     *allocated_amount = amount_collected;
 
     // Allocate memory for selected coins
-    Coin *selectedCoins = malloc(sizeof(Coin) * selectedCount);
+    Coin *selectedCoins = static_cast<Coin *>(malloc(sizeof(Coin) * selectedCount));
     if (selectedCoins == NULL) {
         free(coinsCopy);
         return NULL; // Allocation failed
@@ -252,7 +252,7 @@ int compare_expiry_time_amount(const void *a, const void *b) {
  */
 Coin* allocate_closest_to_expire_min_bills(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount) {
     // Allocate memory to copy coins
-    Coin *coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
+    Coin *coinsCopy = static_cast<Coin *>(malloc(sizeof(Coin) * wallet.num_coins));
     if (coinsCopy == NULL) return NULL; // Check if malloc failed
 
     // Copy coins from the wallet
@@ -278,7 +278,7 @@ Coin* allocate_closest_to_expire_min_bills(Wallet wallet, long long amount, int*
     *allocated_amount = amount_collected;
 
     // Allocate memory for selected coins
-    Coin *selectedCoins = malloc(sizeof(Coin) * selectedCount);
+    Coin *selectedCoins = static_cast<Coin *>(malloc(sizeof(Coin) * selectedCount));
     if (selectedCoins == NULL) {
         free(coinsCopy);
         return NULL; // Allocation failed
@@ -330,7 +330,7 @@ int compare_expiry_time_amount_reverse(const void *a, const void *b) {
  */
 Coin* allocate_closest_to_expire_max_bills(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount) {
     // Allocate memory to copy coins
-    Coin *coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
+    Coin *coinsCopy = static_cast<Coin *>(malloc(sizeof(Coin) * wallet.num_coins));
     if (coinsCopy == NULL) return NULL; // Check if malloc failed
 
     // Copy coins from the wallet
@@ -356,7 +356,7 @@ Coin* allocate_closest_to_expire_max_bills(Wallet wallet, long long amount, int*
     *allocated_amount = amount_collected;
 
     // Allocate memory for selected coins
-    Coin *selectedCoins = malloc(sizeof(Coin) * selectedCount);
+    Coin *selectedCoins = static_cast<Coin *>(malloc(sizeof(Coin) * selectedCount));
     if (selectedCoins == NULL) {
         free(coinsCopy);
         return NULL; // Allocation failed
@@ -385,7 +385,7 @@ Coin* allocate_closest_to_expire_max_bills(Wallet wallet, long long amount, int*
 Coin* allocate_random_bills(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount) {
 
     // Create an array of indices representing the coins
-    int *indices = malloc(sizeof(int) * wallet.num_coins);
+    int *indices = static_cast<int *>(malloc(sizeof(int) * wallet.num_coins));
     if (indices == NULL) return NULL; // Check if malloc failed for indices
 
     for (int i = 0; i < wallet.num_coins; i++) {
@@ -393,7 +393,7 @@ Coin* allocate_random_bills(Wallet wallet, long long amount, int* num_allocated_
     }
 
     long long amount_collected = 0;
-    Coin *selectedCoins = malloc(sizeof(Coin) * wallet.num_coins); // Allocate memory to store potentially all coins
+    Coin *selectedCoins = static_cast<Coin *>(malloc(sizeof(Coin) * wallet.num_coins)); // Allocate memory to store potentially all coins
     if (selectedCoins == NULL) {
         free(indices);
         return NULL; // Allocation failed
@@ -420,7 +420,7 @@ Coin* allocate_random_bills(Wallet wallet, long long amount, int* num_allocated_
     *allocated_amount = amount_collected;
 
     // Resize the selectedCoins array to the actual number of selected coins
-    Coin *finalSelectedCoins = realloc(selectedCoins, sizeof(Coin) * selectedCount);
+    Coin *finalSelectedCoins = static_cast<Coin *>(realloc(selectedCoins, sizeof(Coin) * selectedCount));
     if (finalSelectedCoins == NULL) {
         free(indices);
         free(selectedCoins);
@@ -507,11 +507,11 @@ Coin* allocate_coins_even_from_min_to_max(Wallet wallet, long long amount, int* 
 
     // Allocate memory for the 2D array
     int num_denominations = denomination_wallet.num_coins;
-    long long **denom_array = malloc(2 * sizeof(long long *));
+    long long **denom_array = static_cast<long long **>(malloc(2 * sizeof(long long *)));
     if (denom_array == NULL) return NULL; // Check if malloc failed
 
-    denom_array[0] = malloc(num_denominations * sizeof(long long)); // For denominations
-    denom_array[1] = malloc(num_denominations * sizeof(long long)); // For quantities
+    denom_array[0] = static_cast<long long *>(malloc(num_denominations * sizeof(long long))); // For denominations
+    denom_array[1] = static_cast<long long *>(malloc(num_denominations * sizeof(long long))); // For quantities
     if (denom_array[0] == NULL || denom_array[1] == NULL) {
         free(denom_array[0]);
         free(denom_array[1]);
@@ -539,7 +539,7 @@ Coin* allocate_coins_even_from_min_to_max(Wallet wallet, long long amount, int* 
     }
 
     // Allocate memory for selected coins
-    Coin* selectedCoins = malloc(sizeof(Coin) * wallet.num_coins);
+    Coin* selectedCoins = static_cast<Coin *>(malloc(sizeof(Coin) * wallet.num_coins));
     if (selectedCoins == NULL) {
         free(denom_array[0]);
         free(denom_array[1]);
@@ -549,7 +549,7 @@ Coin* allocate_coins_even_from_min_to_max(Wallet wallet, long long amount, int* 
 
     long long amount_collected = 0;
     int selectedCount = 0;
-    int *selectedFlags = malloc(sizeof(int) * wallet.num_coins); // Flags to mark selected coins
+    int *selectedFlags = static_cast<int *>(malloc(sizeof(int) * wallet.num_coins)); // Flags to mark selected coins
     if (selectedFlags == NULL) {
         free(selectedCoins);
         free(denom_array[0]);
@@ -590,7 +590,7 @@ Coin* allocate_coins_even_from_min_to_max(Wallet wallet, long long amount, int* 
     *num_allocated_coins = selectedCount;
 
     // Resize the selectedCoins array to the actual number of selected coins
-    Coin *finalSelectedCoins = realloc(selectedCoins, sizeof(Coin) * selectedCount);
+    Coin *finalSelectedCoins = static_cast<Coin *>(realloc(selectedCoins, sizeof(Coin) * selectedCount));
     if (finalSelectedCoins == NULL) {
         // If realloc failed, free original block and return NULL
         free(selectedCoins);
@@ -627,11 +627,11 @@ Coin* allocate_coins_even_from_max_to_min(Wallet wallet, long long amount, int* 
 
     // Allocate memory for the 2D array
     int num_denominations = denomination_wallet.num_coins;
-    long long **denom_array = malloc(2 * sizeof(long long *));
+    long long **denom_array = static_cast<long long **>(malloc(2 * sizeof(long long *)));
     if (denom_array == NULL) return NULL; // Check if malloc failed
 
-    denom_array[0] = malloc(num_denominations * sizeof(long long)); // For denominations
-    denom_array[1] = malloc(num_denominations * sizeof(long long)); // For quantities
+    denom_array[0] = static_cast<long long *>(malloc(num_denominations * sizeof(long long))); // For denominations
+    denom_array[1] = static_cast<long long *>(malloc(num_denominations * sizeof(long long))); // For quantities
     if (denom_array[0] == NULL || denom_array[1] == NULL) {
         free(denom_array[0]);
         free(denom_array[1]);
@@ -659,7 +659,7 @@ Coin* allocate_coins_even_from_max_to_min(Wallet wallet, long long amount, int* 
     }
 
     // Allocate memory for selected coins
-    Coin* selectedCoins = malloc(sizeof(Coin) * wallet.num_coins);
+    Coin* selectedCoins = static_cast<Coin *>(malloc(sizeof(Coin) * wallet.num_coins));
     if (selectedCoins == NULL) {
         free(denom_array[0]);
         free(denom_array[1]);
@@ -669,7 +669,7 @@ Coin* allocate_coins_even_from_max_to_min(Wallet wallet, long long amount, int* 
 
     long long amount_collected = 0;
     int selectedCount = 0;
-    int *selectedFlags = malloc(sizeof(int) * wallet.num_coins); // Flags to mark selected coins
+    int *selectedFlags = static_cast<int *>(malloc(sizeof(int) * wallet.num_coins)); // Flags to mark selected coins
     if (selectedFlags == NULL) {
         free(selectedCoins);
         free(denom_array[0]);
@@ -710,7 +710,7 @@ Coin* allocate_coins_even_from_max_to_min(Wallet wallet, long long amount, int* 
     *num_allocated_coins = selectedCount;
 
     // Resize the selectedCoins array to the actual number of selected coins
-    Coin *finalSelectedCoins = realloc(selectedCoins, sizeof(Coin) * selectedCount);
+    Coin *finalSelectedCoins = static_cast<Coin *>(realloc(selectedCoins, sizeof(Coin) * selectedCount));
     if (finalSelectedCoins == NULL) {
         // If realloc failed, free original block and return NULL
         free(selectedCoins);
@@ -746,11 +746,11 @@ Coin* allocate_coins_greedy_min_to_max(Wallet wallet, long long amount, int* num
 
     // Allocate memory for the 2D array
     int num_denominations = denomination_wallet.num_coins;
-    long long **denom_array = malloc(2 * sizeof(long long *));
+    long long **denom_array = static_cast<long long **>(malloc(2 * sizeof(long long *)));
     if (denom_array == NULL) return NULL; // Check if malloc failed
 
-    denom_array[0] = malloc(num_denominations * sizeof(long long)); // For denominations
-    denom_array[1] = malloc(num_denominations * sizeof(long long)); // For quantities
+    denom_array[0] = static_cast<long long *>(malloc(num_denominations * sizeof(long long))); // For denominations
+    denom_array[1] = static_cast<long long *>(malloc(num_denominations * sizeof(long long))); // For quantities
     if (denom_array[0] == NULL || denom_array[1] == NULL) {
         free(denom_array[0]);
         free(denom_array[1]);
@@ -778,7 +778,7 @@ Coin* allocate_coins_greedy_min_to_max(Wallet wallet, long long amount, int* num
     }
 
     // Allocate memory for selected coins
-    Coin* selectedCoins = malloc(sizeof(Coin) * wallet.num_coins);
+    Coin* selectedCoins = static_cast<Coin *>(malloc(sizeof(Coin) * wallet.num_coins));
     if (selectedCoins == NULL) {
         free(denom_array[0]);
         free(denom_array[1]);
@@ -788,7 +788,7 @@ Coin* allocate_coins_greedy_min_to_max(Wallet wallet, long long amount, int* num
 
     long long amount_collected = 0;
     int selectedCount = 0;
-    int *selectedFlags = malloc(sizeof(int) * wallet.num_coins); // Flags to mark selected coins
+    int *selectedFlags = static_cast<int *>(malloc(sizeof(int) * wallet.num_coins)); // Flags to mark selected coins
     if (selectedFlags == NULL) {
         free(selectedCoins);
         free(denom_array[0]);
@@ -838,7 +838,7 @@ Coin* allocate_coins_greedy_min_to_max(Wallet wallet, long long amount, int* num
     *num_allocated_coins = selectedCount;
 
     // Resize the selectedCoins array to the actual number of selected coins
-    Coin *finalSelectedCoins = realloc(selectedCoins, sizeof(Coin) * selectedCount);
+    Coin *finalSelectedCoins = static_cast<Coin *>(realloc(selectedCoins, sizeof(Coin) * selectedCount));
     if (finalSelectedCoins == NULL) {
         // If realloc failed, free original block and return NULL
         free(selectedCoins);
@@ -928,7 +928,7 @@ Coin* generate_withdraw_coins(long long amount, long long time, Wallet default_w
         return NULL;
     }
     // Temporary array for storing pointers to unique denominations in the default wallet
-    Coin **uniqueDenominations = malloc(sizeof(Coin*) * default_wallet.num_coins);
+    Coin **uniqueDenominations = static_cast<Coin **>(malloc(sizeof(Coin*) * default_wallet.num_coins));
     int numUnique = 0;
 
     // Extract unique denominations (this example assumes all coins in default_wallet are unique)
@@ -939,7 +939,7 @@ Coin* generate_withdraw_coins(long long amount, long long time, Wallet default_w
     // Sort denominations in descending order
     qsort(uniqueDenominations, numUnique, sizeof(Coin*), compare_denomination_desc);
 
-    Coin *generatedCoins = malloc(sizeof(Coin) * numUnique); // In worst case, we use one of each denomination
+    Coin *generatedCoins = static_cast<Coin *>(malloc(sizeof(Coin) * numUnique)); // In worst case, we use one of each denomination
     if (!generatedCoins) {
         free(uniqueDenominations);
         return NULL; // Allocation failed
@@ -967,7 +967,7 @@ Coin* generate_withdraw_coins(long long amount, long long time, Wallet default_w
     }
 
     // Optionally resize the generatedCoins array to the exact number of generated coins
-    Coin *resizedGeneratedCoins = realloc(generatedCoins, sizeof(Coin) * generatedCount);
+    Coin *resizedGeneratedCoins = static_cast<Coin *>(realloc(generatedCoins, sizeof(Coin) * generatedCount));
     if (!resizedGeneratedCoins) {
         free(generatedCoins);
         return NULL; // Handle realloc failure (though this should be rare)

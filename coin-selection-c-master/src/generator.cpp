@@ -77,7 +77,7 @@ void generate_and_save_actions(const char *base_dir, int num_users) {
         char user_name[50];
         snprintf(user_name, sizeof(user_name), "user%d", user_i);
         user.name = user_name;
-        user.type = rand() % NUMBER_OF_USERS;
+        user.type = static_cast<Type>(rand() % NUMBER_OF_USERS);
         user.actions = NULL;
         int num_actions = 0;
         generate_actions_for_user(user, &user.actions, &num_actions);
