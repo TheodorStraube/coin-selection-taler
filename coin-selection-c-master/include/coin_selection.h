@@ -19,6 +19,7 @@ typedef enum {
     EVEN_FROM_MIN_TO_MAX,
     EVEN_FROM_MAX_TO_MIN,
     GREEDY_MIN_TO_MAX,
+    CUSTOM_EXTERNAL,
     NUMBER_OF_STRATEGIES
 } strategy;
 
