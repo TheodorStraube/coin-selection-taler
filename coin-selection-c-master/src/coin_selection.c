@@ -3,12 +3,57 @@
 // coin_selection.c
 //
 
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "coin_selection.h"
 
+
 /// Global variable to generate unique IDs for coins
 static long long nextUniqueId = 1;
+
+static PyObject *pName, *pModule, *pFunc, *pValue, *kwargs;
+
+int checkOrLoadPython() {
+
+    PyStatus status;
+
+    PyConfig config;
+
+    if(pName != NULL){
+        return 1;
+    }
+
+    PyConfig_InitPythonConfig(&config);
+
+    status = Py_InitializeFromConfig(&config);
+    if (PyStatus_Exception(status)) {
+        printf("init error");
+        return 0;
+    }
+    PyConfig_Clear(&config);
+    
+    pName = PyUnicode_FromString("main");
+    /* Error checking of pName left out */
+
+    pModule = PyImport_Import(pName);
+    Py_DECREF(pName);
+
+    if (pModule != NULL) {
+        pFunc = PyObject_GetAttrString(pModule, "process_call");
+        if (!pFunc || !PyCallable_Check(pFunc)) {
+            printf("Failed to load Python");
+            return 0;
+        }
+        return 1;        
+    }
+    return 0;
+}
 
 /**
  * @brief Calculate the score of a coin based on its expiration time and denomination.
@@ -858,6 +903,106 @@ Coin* allocate_coins_greedy_min_to_max(Wallet wallet, long long amount, int* num
     return finalSelectedCoins;
 }
 
+PyObject* encodeFee(Fee fee){
+    return Py_BuildValue("(L,f)", fee.fee_satoshis, fee.percentage_fee); 
+}
+
+PyObject* encodeFees(Fees fees){
+    return Py_BuildValue("(O,O,O,O)",
+            encodeFee(fees.deposit_fee),
+            encodeFee(fees.refund_fee),
+            encodeFee(fees.withdraw_fee),
+            encodeFee(fees.refresh_fee)
+            );   
+}
+PyObject* encodeDurations(Durations durations){
+   return Py_BuildValue("(L,L,L)", durations.legal.time, durations.deposit.time, durations.withdraw.time); 
+}
+
+PyObject* encodeRules(Rules rules){
+   return Py_BuildValue("(i,s,O,O)", rules.rsa_keysize, rules.cipher, encodeFees(rules.fees), encodeDurations(rules.durations)); 
+}
+
+PyObject* encodeDenomination(Denomination denom){
+   return Py_BuildValue("(s,L,O)", denom.name, denom.amount, encodeRules(denom.rules)); 
+}
+
+PyObject* encodeCoin(Coin coin){
+    return Py_BuildValue("(L,O,L)", coin.uniqueId, encodeDenomination(coin.denomination), coin.creation_timestamp);
+}
+
+PyObject* encodeGlobalFees(GlobalFees global_fees){
+    return Py_BuildValue("(O,O)", encodeFee(global_fees.wire_fee), encodeFee(global_fees.closing_fee)); 
+}
+
+PyObject* encodeWallet(Wallet wallet){
+    // Coin* coins
+    // int num_coins
+    // GlobalFees globalFees
+    PyObject *walletObj, *coins, *globalFees;
+
+    walletObj = PyDict_New();
+    coins = PyList_New(0);
+
+    for(int i = 0;i < wallet.num_coins;++i){
+        PyObject *coin = encodeCoin(wallet.coins[i]);
+        PyList_Append(coins, coin);
+    }
+    PyDict_SetItemString(walletObj, "coins", coins);
+    PyDict_SetItemString(walletObj, "global_fees", encodeGlobalFees(wallet.global_fees));
+    return walletObj; 
+}
+
+inline long min(long a, long b) { return (a < b) ? a : b; }
+
+Coin* allocate_call_external(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
+
+    PyObject *pValue, *kwargs, *pAmount;
+    if (checkOrLoadPython()) {
+        
+        kwargs = PyDict_New();
+        
+        pAmount = PyLong_FromLong(amount);
+
+        printf("coins: %i\n", wallet.num_coins);
+
+        PyDict_SetItemString(kwargs, "amount", pAmount);
+        PyDict_SetItemString(kwargs, "wallet", encodeWallet(wallet));
+        pValue = PyObject_CallOneArg(pFunc, kwargs);
+
+        PyErr_Print();
+        Py_DECREF(kwargs);
+        Py_DECREF(pAmount);
+         
+        // Allocate memory for selected coins
+        Coin *selectedCoins = malloc(sizeof(Coin) * PyList_Size(pValue));
+        if (selectedCoins == NULL) {
+            return NULL; // Allocation failed
+        }
+        
+        long long totalAmount = 0;
+        // Copy selected coins
+        for (int k = 0; k < PyList_Size(pValue); k++) {
+            long coinAmount = wallet.coins[PyLong_AsInt(PyList_GetItem(pValue, k))].denomination.amount;
+            printf("index %i selected for %i\n", PyLong_AsInt(PyList_GetItem(pValue, k)), coinAmount);
+            selectedCoins[k] = wallet.coins[PyLong_AsInt(PyList_GetItem(pValue, k))];
+            totalAmount += coinAmount;
+        }
+        *allocated_amount = min(totalAmount, amount);
+        *num_allocated_coins = PyList_Size(pValue);
+
+        if (pValue != NULL) {
+            Py_DECREF(pValue);
+        }else {
+            printf("NULL result\n"); 
+        }
+        return selectedCoins;
+    }else {
+        printf("Python didnt load :/\n");
+        return NULL;    
+    }
+    return NULL;
+}
 
 /**
  * @brief Allocate coins from the wallet according to the specified strategy.
@@ -872,6 +1017,7 @@ Coin* allocate_coins_greedy_min_to_max(Wallet wallet, long long amount, int* num
  * @return An array of allocated coins.
  */
 Coin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strategy, long long time, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
+
     if (!wallet.num_coins || !amount) { // if wallet is empty or amount 0, return
         return NULL;
     }
@@ -894,6 +1040,8 @@ Coin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strat
             return allocate_coins_even_from_max_to_min(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
         case GREEDY_MIN_TO_MAX:
             return allocate_coins_greedy_min_to_max(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
+        case CUSTOM_EXTERNAL:
+            return allocate_call_external(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
         default:
             return allocate_random_bills(wallet, amount, num_allocated_coins, allocated_amount);
     }

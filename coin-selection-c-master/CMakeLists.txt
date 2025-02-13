@@ -11,11 +11,17 @@ set(CMAKE_C_FLAGS_DEBUG "-O0 -g -Wall -Wextra -lm")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall -Wextra -lm")
 
 # Include the header files
+include_directories(/usr/include/python3.13)
 include_directories(include)
 include_directories(external/cjson)
 
 # Add cJSON source files to the build
 set(CJSON_SOURCE_FILES src/cjson/cJSON.c)
+
+# Python specific config
+set(PYTHONPATH "../python")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -lpython3.13")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -lpython3.13")
 
 # Define the sources for the main executable
 set(PROJECT_SOURCE_FILES

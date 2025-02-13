@@ -1,3 +1,6 @@
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
@@ -240,8 +243,96 @@ void check_and_prepare_directory(const char *dir_path) {
     }
 }
 
+int init_python(){
+    PyStatus status;
+
+    printf("init_python\n");
+
+    PyConfig config;
+    PyConfig_InitPythonConfig(&config);
+
+    status = Py_InitializeFromConfig(&config);
+    if (PyStatus_Exception(status)) {
+        return 1;
+    }
+    PyConfig_Clear(&config);
+    
+    PyObject *pName, *pModule, *pFunc, *pValue, *kwargs;
+
+    pName = PyUnicode_FromString("main");
+    /* Error checking of pName left out */
+
+    pModule = PyImport_Import(pName);
+    Py_DECREF(pName);
+
+    if (pModule != NULL) {
+        pFunc = PyObject_GetAttrString(pModule, "process_call");
+        if (pFunc && PyCallable_Check(pFunc)) {
+            printf("found function");
+            kwargs = PyDict_New();
+
+            PyObject *value = PyLong_FromLong(13);
+            PyDict_SetItemString(kwargs, "amount", value);
+            pValue = PyObject_CallOneArg(pFunc, kwargs);
+            Py_DECREF(kwargs);
+            if (pValue != NULL) {
+                printf("Result of call: %ld\n", PyLong_AsLong(pValue));
+                Py_DECREF(pValue);
+            }else {
+                
+            }
+        }else {printf("func error");}
+    }else {
+        printf("init error");
+        PyErr_PrintEx(1);
+    }
+    
+
+    return 0;
+}
+int checkOrLoadPytho() {
+    PyObject *pName, *pModule, *pFunc, *pValue, *kwargs;
+
+    PyStatus status;
+
+    PyConfig config;
+
+    if(pName != NULL){
+        printf("name not null");
+        return 1;
+    }
+    PyConfig_InitPythonConfig(&config);
+
+    status = Py_InitializeFromConfig(&config);
+    if (PyStatus_Exception(status)) {
+        printf("init error");
+        return 0;
+    }
+    PyConfig_Clear(&config);
+    
+    pName = PyUnicode_FromString("main");
+    /* Error checking of pName left out */
+
+    pModule = PyImport_Import(pName);
+    Py_DECREF(pName);
+
+    printf("hier\n");
+    if (pModule != NULL) {
+        pFunc = PyObject_GetAttrString(pModule, "process_call");
+        if (!pFunc || !PyCallable_Check(pFunc)) {
+            printf("Failed to load Python");
+            return 0;
+        }
+        printf("reached\n");
+        pValue = PyObject_CallOneArg(pFunc, kwargs);
+        return 1;        
+    }
+    printf("ier\n");
+    return 0;
+}
+
 int main(int argc, char *argv[]) {
-    int num_users = 10;
+    int num_users = 1;
 
     if (argc > 1) {
         num_users = atoi(argv[1]);
@@ -250,8 +341,12 @@ int main(int argc, char *argv[]) {
             num_users = 100;
         }
     }
-
+    
+    //init_python();
+    //checkOrLoadPytho();
+    //return 0;
     srand(21);
+
 
     check_and_prepare_directory("../simulation");
     check_and_prepare_directory("../simulation/users");
@@ -297,6 +392,7 @@ int main(int argc, char *argv[]) {
 
     // Load and simulate actions from the generated files
     load_and_simulate_actions("../simulation/users", denomination_wallet);
+    PyObject *pValue, *pAmount, *kwargs;
 
     // Close and unlink the semaphore
     sem_close(semaphore);

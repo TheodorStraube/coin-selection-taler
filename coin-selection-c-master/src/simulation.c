@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "simulation.h"
 /**
  * @brief Get the scale of a given amount.
  *
@@ -32,7 +33,7 @@ int get_scale(long long amount) {
  */
 void simulate_user_actions(int user_index, User user, Wallet denomination_wallet, int num_actions, strategy strategy) {
     const char* TypeNames[] = {"STUDENT", "STUDENT_STATIC","BUSINESS_OWNER", "RETIRED", "FAMILY", "FREELANCER", "TEACHER", "ARTIST"};
-    const char* StrategyNames[] = {"MAX_BILLS", "MIN_BILLS", "CLOSEST_TO_EXPIRE_MIN_BILLS", "CLOSEST_TO_EXPIRE_MAX_BILLS", "MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED", "RANDOM", "EVEN_FROM_MIN_TO_MAX", "EVEN_FROM_MAX_TO_MIN", "GREEDY_MIN_TO_MAX"};
+    const char* StrategyNames[] = {"MAX_BILLS", "MIN_BILLS", "CLOSEST_TO_EXPIRE_MIN_BILLS", "CLOSEST_TO_EXPIRE_MAX_BILLS", "MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED", "RANDOM", "EVEN_FROM_MIN_TO_MAX", "EVEN_FROM_MAX_TO_MIN", "GREEDY_MIN_TO_MAX", "CALL_EXTERNAL"};
     const char* OperationNames[] = {"DEPOSIT_OP", "WITHDRAW_OP", "REFUND_OP", "REFRESH_OP", "WIRE_OP", "CLOSE_OP"};
 
     const int generation_scale = 7;
@@ -105,6 +106,8 @@ void simulate_user_actions(int user_index, User user, Wallet denomination_wallet
                                                                   &allocatedAmount, denomination_wallet);
 
                 if (allocatedCoins) {
+                    
+
                     fee_for_action = calculate_total_fee(allocatedCoins, allocatedCoinCount, DEPOSIT_OP);
 
                     fprintf(fp, "%d_%d, %lld, %lld, %s, %lld\n", user_index, i, user.actions[i].time, transaction_amount,
@@ -125,7 +128,6 @@ void simulate_user_actions(int user_index, User user, Wallet denomination_wallet
 
                         fprintf(fp, "%d_%d, %lld, %lld, DEPOSIT_REFRESH_OP, %lld\n", user_index, i, user.actions[i].time,
                                 transaction_amount, fee_for_action + fee_for_change);
-
                         if (changeCoins) {
                             add_coins_to_wallet(&user.wallet, changeCoins, changeCoinCount);
                         } else {
