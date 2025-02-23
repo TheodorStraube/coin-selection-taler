@@ -33,7 +33,7 @@ int get_scale(long long amount) {
  */
 void simulate_user_actions(int user_index, User user, Wallet denomination_wallet, int num_actions, strategy strategy) {
     const char* TypeNames[] = {"STUDENT", "STUDENT_STATIC","BUSINESS_OWNER", "RETIRED", "FAMILY", "FREELANCER", "TEACHER", "ARTIST"};
-    const char* StrategyNames[] = {"MAX_BILLS", "MIN_BILLS", "CLOSEST_TO_EXPIRE_MIN_BILLS", "CLOSEST_TO_EXPIRE_MAX_BILLS", "MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED", "RANDOM", "EVEN_FROM_MIN_TO_MAX", "EVEN_FROM_MAX_TO_MIN", "GREEDY_MIN_TO_MAX", "CALL_EXTERNAL"};
+    const char* StrategyNames[] = {"MAX_BILLS", "MIN_BILLS", "CLOSEST_TO_EXPIRE_MIN_BILLS", "CLOSEST_TO_EXPIRE_MAX_BILLS", "MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED", "RANDOM", "EVEN_FROM_MIN_TO_MAX", "EVEN_FROM_MAX_TO_MIN", "GREEDY_MIN_TO_MAX", "CALL_EXTERNAL", "CUSTOM_EXTERNAL_REFRESH"};
     const char* OperationNames[] = {"DEPOSIT_OP", "WITHDRAW_OP", "REFUND_OP", "REFRESH_OP", "WIRE_OP", "CLOSE_OP"};
 
     const int generation_scale = 7;
