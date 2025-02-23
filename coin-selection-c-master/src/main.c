@@ -162,10 +162,10 @@ void* thread_function(void* arg) {
 
     sem_post(semaphore);
 
-    // Remove file after processing
-    if (remove(args->filepath) != 0) {
-        perror("Failed to delete processed file");
-    }
+    // Remove file after processing - Why? Files would be deleted at the start of next execution anyway
+    //if (remove(args->filepath) != 0) {
+    //    perror("Failed to delete processed file");
+    //}
 
     free(arg);
     __sync_fetch_and_add(&processed_files, 1);
@@ -392,7 +392,6 @@ int main(int argc, char *argv[]) {
 
     // Load and simulate actions from the generated files
     load_and_simulate_actions("../simulation/users", denomination_wallet);
-    PyObject *pValue, *pAmount, *kwargs;
 
     // Close and unlink the semaphore
     sem_close(semaphore);

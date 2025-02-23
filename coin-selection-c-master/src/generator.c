@@ -20,6 +20,7 @@ const char* StrategyNames[] = {
         "EVEN_FROM_MIN_TO_MAX",
         "EVEN_FROM_MAX_TO_MIN",
         "GREEDY_MIN_TO_MAX",
+        "CUSTOM_EXTERNAL_REFRESH",
         "CALL_EXTERNAL"
 };
 

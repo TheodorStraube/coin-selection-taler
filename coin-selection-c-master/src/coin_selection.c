@@ -17,7 +17,7 @@
 /// Global variable to generate unique IDs for coins
 static long long nextUniqueId = 1;
 
-static PyObject *pName, *pModule, *pFunc, *pValue, *kwargs;
+static PyObject *pName, *pModule, *pFunc, *pValue, *kwargs, *pFuncRefresh, *pValueRefresh, *kwargsRefresh;
 
 int checkOrLoadPython() {
 
@@ -26,6 +26,7 @@ int checkOrLoadPython() {
     PyConfig config;
 
     if(pName != NULL){
+        printf("init name error/n");
         return 1;
     }
 
@@ -33,7 +34,8 @@ int checkOrLoadPython() {
 
     status = Py_InitializeFromConfig(&config);
     if (PyStatus_Exception(status)) {
-        printf("init error");
+        PyErr_Print();
+        printf("init error/n");
         return 0;
     }
     PyConfig_Clear(&config);
@@ -47,9 +49,15 @@ int checkOrLoadPython() {
     if (pModule != NULL) {
         pFunc = PyObject_GetAttrString(pModule, "process_call");
         if (!pFunc || !PyCallable_Check(pFunc)) {
-            printf("Failed to load Python");
+            printf("Failed to load Python/n");
             return 0;
         }
+        pFuncRefresh = PyObject_GetAttrString(pModule, "process_call_refresh");
+        if (!pFuncRefresh || !PyCallable_Check(pFuncRefresh)) {
+            printf("Failed to load Refresh Function/n");
+            return 0;
+        }
+        printf("init module error/n");
         return 1;        
     }
     return 0;
@@ -953,7 +961,6 @@ PyObject* encodeWallet(Wallet wallet){
     return walletObj; 
 }
 
-inline long min(long a, long b) { return (a < b) ? a : b; }
 
 Coin* allocate_call_external(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
 
@@ -964,7 +971,7 @@ Coin* allocate_call_external(Wallet wallet, long long amount, int* num_allocated
         
         pAmount = PyLong_FromLong(amount);
 
-        printf("coins: %i\n", wallet.num_coins);
+        //printf("coins: %i\n", wallet.num_coins);
 
         PyDict_SetItemString(kwargs, "amount", pAmount);
         PyDict_SetItemString(kwargs, "wallet", encodeWallet(wallet));
@@ -984,11 +991,11 @@ Coin* allocate_call_external(Wallet wallet, long long amount, int* num_allocated
         // Copy selected coins
         for (int k = 0; k < PyList_Size(pValue); k++) {
             long coinAmount = wallet.coins[PyLong_AsInt(PyList_GetItem(pValue, k))].denomination.amount;
-            printf("index %i selected for %i\n", PyLong_AsInt(PyList_GetItem(pValue, k)), coinAmount);
+            //printf("index %i selected for %i\n", PyLong_AsInt(PyList_GetItem(pValue, k)), coinAmount);
             selectedCoins[k] = wallet.coins[PyLong_AsInt(PyList_GetItem(pValue, k))];
             totalAmount += coinAmount;
         }
-        *allocated_amount = min(totalAmount, amount);
+        *allocated_amount = totalAmount;
         *num_allocated_coins = PyList_Size(pValue);
 
         if (pValue != NULL) {
@@ -1001,6 +1008,10 @@ Coin* allocate_call_external(Wallet wallet, long long amount, int* num_allocated
         printf("Python didnt load :/\n");
         return NULL;    
     }
+    return NULL;
+}
+
+Coin* allocate_call_external_refresh(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
     return NULL;
 }
 
@@ -1021,6 +1032,7 @@ Coin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strat
     if (!wallet.num_coins || !amount) { // if wallet is empty or amount 0, return
         return NULL;
     }
+
     switch (strategy) {
         case MAX_BILLS:
             return allocate_max_bills(wallet, amount, num_allocated_coins, allocated_amount);
@@ -1042,6 +1054,8 @@ Coin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strat
             return allocate_coins_greedy_min_to_max(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
         case CUSTOM_EXTERNAL:
             return allocate_call_external(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
+        case CUSTOM_EXTERNAL_REFRESH:
+            return allocate_call_external_refresh(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
         default:
             return allocate_random_bills(wallet, amount, num_allocated_coins, allocated_amount);
     }
