@@ -26,7 +26,6 @@ int checkOrLoadPython() {
     PyConfig config;
 
     if(pName != NULL){
-        printf("init name error/n");
         return 1;
     }
 
@@ -57,7 +56,6 @@ int checkOrLoadPython() {
             printf("Failed to load Refresh Function/n");
             return 0;
         }
-        printf("init module error/n");
         return 1;        
     }
     return 0;
