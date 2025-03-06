@@ -92,6 +92,27 @@ double calculate_coin_score(Coin *coin, long long currentTime, long long maxDeno
 }
 
 /**
+ * mount desc, deposit fee asc, denomPub asc
+ */
+int compare_wallet_core(const void *a, const void *b) {
+    Coin *coinA = (Coin *)a;
+    Coin *coinB = (Coin *)b;
+    int result = (coinB->denomination.amount - coinA->denomination.amount);
+    
+    if (result != 0){
+        return result;
+    }
+
+    result = (coinB->denomination.rules.fees.deposit_fee.fee_satoshis - coinA->denomination.rules.fees.deposit_fee.fee_satoshis);
+
+    if (result != 0) {
+        return result;
+    }
+
+    return coinA->uniqueId < coinB ->uniqueId; 
+}
+
+/**
  * @brief Comparison function for sorting coins by creation timestamp in ascending order.
  *
  * @param a Pointer to the first coin.
@@ -1009,8 +1030,41 @@ Coin* allocate_call_external(Wallet wallet, long long amount, int* num_allocated
     return NULL;
 }
 
-Coin* allocate_call_external_refresh(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
-    return NULL;
+Coin* allocate_wallet_core(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
+    Coin* coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
+    if (coinsCopy == NULL) return NULL;
+    for (int i = 0; i < wallet.num_coins; i++) {
+        coinsCopy[i] = wallet.coins[i];
+    }
+
+    // Sort coins in descending order based on their amount
+    qsort(coinsCopy, wallet.num_coins, sizeof(Coin), compare_wallet_core);
+
+    long long amount_collected = 0;
+    int selectedCount = 0;
+    for (int j = 0; j < wallet.num_coins && amount_collected < amount; j++) {
+        amount_collected += coinsCopy[j].denomination.amount;
+        selectedCount++;
+    }
+
+    *allocated_amount = amount_collected;
+
+    // Allocate memory for selected coins
+    Coin *selectedCoins = malloc(sizeof(Coin) * selectedCount);
+    if (selectedCoins == NULL) {
+        free(coinsCopy);
+        return NULL; // Allocation failed
+    }
+
+    // Copy selected coins
+    for (int k = 0; k < selectedCount; k++) {
+        selectedCoins[k] = coinsCopy[k];
+    }
+
+    *num_allocated_coins = selectedCount; // Update the number of allocated coins
+
+    free(coinsCopy);
+    return selectedCoins;
 }
 
 /**
@@ -1052,8 +1106,8 @@ Coin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strat
             return allocate_coins_greedy_min_to_max(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
         case CUSTOM_EXTERNAL:
             return allocate_call_external(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
-        case CUSTOM_EXTERNAL_REFRESH:
-            return allocate_call_external_refresh(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
+        case WALLET_CORE:
+            return allocate_wallet_core(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
         default:
             return allocate_random_bills(wallet, amount, num_allocated_coins, allocated_amount);
     }
