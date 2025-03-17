@@ -1,7 +1,8 @@
 /saved-fees
 /saved-fees-updated
-/simulation/results/
-/simulation/users/
+/simulation/
 /cmake-build-debug
 /build
+__pycache__/
+/.cache
 .idea

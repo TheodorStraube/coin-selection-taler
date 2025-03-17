@@ -7,6 +7,9 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
+# For IDE
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set(CMAKE_C_FLAGS_DEBUG "-O0 -g -Wall -Wextra -lm")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall -Wextra -lm")
 
