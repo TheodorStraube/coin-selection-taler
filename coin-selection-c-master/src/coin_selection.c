@@ -1033,6 +1033,7 @@ Coin* allocate_call_external(Wallet wallet, long long amount, int* num_allocated
 Coin* allocate_wallet_core(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
     Coin* coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
     if (coinsCopy == NULL) return NULL;
+
     for (int i = 0; i < wallet.num_coins; i++) {
         coinsCopy[i] = wallet.coins[i];
     }
@@ -1043,6 +1044,11 @@ Coin* allocate_wallet_core(Wallet wallet, long long amount, int* num_allocated_c
     long long amount_collected = 0;
     int selectedCount = 0;
     for (int j = 0; j < wallet.num_coins && amount_collected < amount; j++) {
+
+        if(coinsCopy[j].denomination.amount < coinsCopy[j].denomination.rules.fees.deposit_fee) {
+            continue;
+        }
+
         amount_collected += coinsCopy[j].denomination.amount;
         selectedCount++;
     }
