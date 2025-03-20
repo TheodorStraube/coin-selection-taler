@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include "coin_selection.h"
 
+#define min(i, j) (((i) < (j)) ? (i) : (j))
+#define max(i, j) (((i) > (j)) ? (i) : (j))
 
 /// Global variable to generate unique IDs for coins
 static long long nextUniqueId = 1;
@@ -34,7 +36,7 @@ int checkOrLoadPython() {
     status = Py_InitializeFromConfig(&config);
     if (PyStatus_Exception(status)) {
         PyErr_Print();
-        printf("init error/n");
+        printf("init error\n");
         return 0;
     }
     PyConfig_Clear(&config);
@@ -48,16 +50,18 @@ int checkOrLoadPython() {
     if (pModule != NULL) {
         pFunc = PyObject_GetAttrString(pModule, "process_call");
         if (!pFunc || !PyCallable_Check(pFunc)) {
-            printf("Failed to load Python/n");
+            printf("Failed to load Python\n");
             return 0;
         }
         pFuncRefresh = PyObject_GetAttrString(pModule, "process_call_refresh");
         if (!pFuncRefresh || !PyCallable_Check(pFuncRefresh)) {
-            printf("Failed to load Refresh Function/n");
+            printf("Failed to load Refresh Function\n");
             return 0;
         }
         return 1;        
     }
+
+        PyErr_Print();
     return 0;
 }
 
@@ -109,7 +113,7 @@ int compare_wallet_core(const void *a, const void *b) {
         return result;
     }
 
-    return coinA->uniqueId < coinB ->uniqueId; 
+    return coinA -> uniqueId < coinB -> uniqueId; 
 }
 
 /**
@@ -1030,6 +1034,7 @@ Coin* allocate_call_external(Wallet wallet, long long amount, int* num_allocated
     return NULL;
 }
 
+
 Coin* allocate_wallet_core(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
     Coin* coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
     if (coinsCopy == NULL) return NULL;
@@ -1041,37 +1046,65 @@ Coin* allocate_wallet_core(Wallet wallet, long long amount, int* num_allocated_c
     // Sort coins in descending order based on their amount
     qsort(coinsCopy, wallet.num_coins, sizeof(Coin), compare_wallet_core);
 
-    long long amount_collected = 0;
-    int selectedCount = 0;
-    for (int j = 0; j < wallet.num_coins && amount_collected < amount; j++) {
-
-        if(coinsCopy[j].denomination.amount < coinsCopy[j].denomination.rules.fees.deposit_fee) {
-            continue;
-        }
-
-        amount_collected += coinsCopy[j].denomination.amount;
-        selectedCount++;
-    }
-
-    *allocated_amount = amount_collected;
-
-    // Allocate memory for selected coins
-    Coin *selectedCoins = malloc(sizeof(Coin) * selectedCount);
+    long long payRemaining = amount;
+    Coin* selectedCoins = malloc(sizeof(Coin) * wallet.num_coins);
     if (selectedCoins == NULL) {
         free(coinsCopy);
         return NULL; // Allocation failed
     }
 
-    // Copy selected coins
-    for (int k = 0; k < selectedCount; k++) {
-        selectedCoins[k] = coinsCopy[k];
+    //printf("START\n min: %ld, max: %ld", coinsCopy[0].denomination.amount, coinsCopy[wallet.num_coins - 1].denomination.amount);
+
+    int i = 0;
+
+    for (; i < wallet.num_coins && payRemaining > 0; i++) {
+
+        Coin coin = coinsCopy[i]; 
+
+        if(coin.denomination.amount < coin.denomination.rules.fees.deposit_fee.fee_satoshis) {
+            continue;
+        }
+
+        // TODO: allowance
+        payRemaining += coin.denomination.rules.fees.deposit_fee.fee_satoshis;
+
+        //printf("%i\tPayremaining %i\t\nCoinvalue %i\t\n", i, payRemaining, coin.denomination.rules.fees.deposit_fee.fee_satoshis);
+        // TODO: wenn fees beachtet werden
+        //long long coinSpend = max(min(payRemaining, coin.denomination.amount), coin.denomination.rules.fees.deposit_fee.fee_satoshis);
+        long long coinSpend = coin.denomination.amount;
+
+        payRemaining -= coinSpend;
+
+        selectedCoins[i] = coin;
+
+        //printf("%i\tPayremaining %i\tCoinSPend %i\n\n", i, payRemaining, coinSpend);
     }
 
-    *num_allocated_coins = selectedCount; // Update the number of allocated coins
+    if (payRemaining > 0) {
+        free(selectedCoins);
+        return NULL;
+    }
+
+    *allocated_amount = amount - payRemaining;
+    *num_allocated_coins = i; // Update the number of allocated coins
+
+    // Resize the selectedCoins array to the actual number of selected coins
+    Coin *finalSelectedCoins = realloc(selectedCoins, sizeof(Coin) * i);
+    if (finalSelectedCoins == NULL) {
+        // If realloc failed, free original block and return NULL
+        free(selectedCoins);
+        return NULL;
+    }
+
+    // Copy selected coins
+    for (int k = 0; k < i; k++) {
+        selectedCoins[k] = coinsCopy[k];
+    }
 
     free(coinsCopy);
     return selectedCoins;
 }
+
 
 /**
  * @brief Allocate coins from the wallet according to the specified strategy.
