@@ -806,6 +806,124 @@ Coin* allocate_coins_even_from_max_to_min(Wallet wallet, long long amount, int* 
     return finalSelectedCoins;
 }
 
+Coin* allocate_coins_greedy_min_to_max_fixed(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
+    // Sort coins in the wallet by their creation timestamp in ascending order
+    qsort(wallet.coins, wallet.num_coins, sizeof(Coin), compare_creation_time_asc);
+
+    // Allocate memory for the 2D array
+    int num_denominations = denomination_wallet.num_coins;
+    long long **denom_array = malloc(2 * sizeof(long long *));
+    if (denom_array == NULL) return NULL; // Check if malloc failed
+
+    denom_array[0] = malloc(num_denominations * sizeof(long long)); // For denominations
+    denom_array[1] = malloc(num_denominations * sizeof(long long)); // For quantities
+    if (denom_array[0] == NULL || denom_array[1] == NULL) {
+        free(denom_array[0]);
+        free(denom_array[1]);
+        free(denom_array);
+        return NULL; // Check if malloc failed
+    }
+
+    // Initialize the denominations from the denomination wallet
+    for (int i = 0; i < num_denominations; i++) {
+        denom_array[0][i] = denomination_wallet.coins[i].denomination.amount;
+        denom_array[1][i] = 0; // Initialize quantity to zero
+    }
+
+    // Sort the denominations in ascending order
+    qsort(denom_array[0], num_denominations, sizeof(long long), compare_denomination_desc_ll);
+
+    // Update the quantity array with the actual quantities of the denominations from the wallet
+    for (int i = 0; i < wallet.num_coins; i++) {
+        for (int j = 0; j < num_denominations; j++) {
+            if (wallet.coins[i].denomination.amount == denom_array[0][j]) {
+                denom_array[1][j]++;
+                break;
+            }
+        }
+    }
+
+    // Allocate memory for selected coins
+    Coin* selectedCoins = malloc(sizeof(Coin) * wallet.num_coins);
+    if (selectedCoins == NULL) {
+        free(denom_array[0]);
+        free(denom_array[1]);
+        free(denom_array);
+        return NULL; // Allocation failed
+    }
+
+    long long amount_collected = 0;
+    int selectedCount = 0;
+    int *selectedFlags = malloc(sizeof(int) * wallet.num_coins); // Flags to mark selected coins
+    if (selectedFlags == NULL) {
+        free(selectedCoins);
+        free(denom_array[0]);
+        free(denom_array[1]);
+        free(denom_array);
+        return NULL;
+    }
+    for (int i = 0; i < wallet.num_coins; i++) {
+        selectedFlags[i] = 0; // Mark all coins as not selected
+    }
+
+    int first = 1;
+
+    // Greedy selection algorithm
+    while (amount_collected < amount) {
+        long long closestAmount = 0;
+        int closestIndex = -1;
+
+        // Find the coin that brings us closest to the target amount without exceeding it
+        for (int i = 0; i < wallet.num_coins; i++) {
+            if (selectedFlags[i] == 0) {
+                if(first){
+                    closestAmount = wallet.coins[i].denomination.amount;
+                    closestIndex = i;
+                    first = 0;
+                }
+                long long tempAmount = amount_collected + wallet.coins[i].denomination.amount;
+                if (tempAmount <= amount && tempAmount > closestAmount) {
+                    closestAmount = tempAmount;
+                    closestIndex = i;
+                }
+            }
+        }
+
+        // If no coin can be added without exceeding the target, break the loop
+        if (closestIndex == -1) {
+            break;
+        }
+
+        // Select the coin and update the amount collected
+        selectedCoins[selectedCount++] = wallet.coins[closestIndex];
+        amount_collected = closestAmount;
+        selectedFlags[closestIndex] = 1;
+    }
+
+    *allocated_amount = amount_collected;
+    *num_allocated_coins = selectedCount;
+
+    // Resize the selectedCoins array to the actual number of selected coins
+    Coin *finalSelectedCoins = realloc(selectedCoins, sizeof(Coin) * selectedCount);
+    if (finalSelectedCoins == NULL) {
+        // If realloc failed, free original block and return NULL
+        free(selectedCoins);
+        free(denom_array[0]);
+        free(denom_array[1]);
+        free(denom_array);
+        free(selectedFlags);
+        return NULL;
+    }
+
+    // Clean up
+    free(denom_array[0]);
+    free(denom_array[1]);
+    free(denom_array);
+    free(selectedFlags);
+
+    return finalSelectedCoins;
+}
+
 /**
  * @brief Allocate coins from the wallet using a greedy algorithm from the smallest to the largest denomination.
  *
@@ -893,6 +1011,124 @@ Coin* allocate_coins_greedy_min_to_max(Wallet wallet, long long amount, int* num
                 }
                 long long tempAmount = amount_collected + wallet.coins[i].denomination.amount;
                 if (tempAmount <= amount && tempAmount > closestAmount) {
+                    closestAmount = tempAmount;
+                    closestIndex = i;
+                }
+            }
+        }
+
+        // If no coin can be added without exceeding the target, break the loop
+        if (closestIndex == -1) {
+            break;
+        }
+
+        // Select the coin and update the amount collected
+        selectedCoins[selectedCount++] = wallet.coins[closestIndex];
+        amount_collected = closestAmount;
+        selectedFlags[closestIndex] = 1;
+    }
+
+    *allocated_amount = amount_collected;
+    *num_allocated_coins = selectedCount;
+
+    // Resize the selectedCoins array to the actual number of selected coins
+    Coin *finalSelectedCoins = realloc(selectedCoins, sizeof(Coin) * selectedCount);
+    if (finalSelectedCoins == NULL) {
+        // If realloc failed, free original block and return NULL
+        free(selectedCoins);
+        free(denom_array[0]);
+        free(denom_array[1]);
+        free(denom_array);
+        free(selectedFlags);
+        return NULL;
+    }
+
+    // Clean up
+    free(denom_array[0]);
+    free(denom_array[1]);
+    free(denom_array);
+    free(selectedFlags);
+
+    return finalSelectedCoins;
+}
+
+Coin* allocate_coins_greedy_min_to_max_fix(Wallet wallet, long long amount, int* num_allocated_coins, long long* allocated_amount, Wallet denomination_wallet){
+    // Sort coins in the wallet by their creation timestamp in ascending order
+    qsort(wallet.coins, wallet.num_coins, sizeof(Coin), compare_creation_time_asc);
+
+    // Allocate memory for the 2D array
+    int num_denominations = denomination_wallet.num_coins;
+    long long **denom_array = malloc(2 * sizeof(long long *));
+    if (denom_array == NULL) return NULL; // Check if malloc failed
+
+    denom_array[0] = malloc(num_denominations * sizeof(long long)); // For denominations
+    denom_array[1] = malloc(num_denominations * sizeof(long long)); // For quantities
+    if (denom_array[0] == NULL || denom_array[1] == NULL) {
+        free(denom_array[0]);
+        free(denom_array[1]);
+        free(denom_array);
+        return NULL; // Check if malloc failed
+    }
+
+    // Initialize the denominations from the denomination wallet
+    for (int i = 0; i < num_denominations; i++) {
+        denom_array[0][i] = denomination_wallet.coins[i].denomination.amount;
+        denom_array[1][i] = 0; // Initialize quantity to zero
+    }
+
+    // Sort the denominations in ascending order
+    qsort(denom_array[0], num_denominations, sizeof(long long), compare_denomination_desc_ll);
+
+    // Update the quantity array with the actual quantities of the denominations from the wallet
+    for (int i = 0; i < wallet.num_coins; i++) {
+        for (int j = 0; j < num_denominations; j++) {
+            if (wallet.coins[i].denomination.amount == denom_array[0][j]) {
+                denom_array[1][j]++;
+                break;
+            }
+        }
+    }
+
+    // Allocate memory for selected coins
+    Coin* selectedCoins = malloc(sizeof(Coin) * wallet.num_coins);
+    if (selectedCoins == NULL) {
+        free(denom_array[0]);
+        free(denom_array[1]);
+        free(denom_array);
+        return NULL; // Allocation failed
+    }
+
+    long long amount_collected = 0;
+    int selectedCount = 0;
+    int *selectedFlags = malloc(sizeof(int) * wallet.num_coins); // Flags to mark selected coins
+    if (selectedFlags == NULL) {
+        free(selectedCoins);
+        free(denom_array[0]);
+        free(denom_array[1]);
+        free(denom_array);
+        return NULL;
+    }
+    for (int i = 0; i < wallet.num_coins; i++) {
+        selectedFlags[i] = 0; // Mark all coins as not selected
+    }
+
+    int first = 1;
+
+    // Greedy selection algorithm
+    while (amount_collected < amount) {
+        long long closestAmount = 0;
+        int closestIndex = -1;
+
+        // Find the coin that brings us closest to the target amount without exceeding it
+        for (int i = 0; i < wallet.num_coins; i++) {
+            if (selectedFlags[i] == 0) {
+                if(first){
+                    closestAmount = wallet.coins[i].denomination.amount;
+                    closestIndex = i;
+                    first = 0;
+                }
+                long long tempAmount = amount_collected + wallet.coins[i].denomination.amount;
+                if (tempAmount > closestAmount) {
                     closestAmount = tempAmount;
                     closestIndex = i;
                 }
@@ -1143,6 +1379,8 @@ Coin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strat
             return allocate_coins_even_from_max_to_min(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
         case GREEDY_MIN_TO_MAX:
             return allocate_coins_greedy_min_to_max(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
+        case GREEDY_MIN_TO_MAX_FIX:
+            return allocate_coins_greedy_min_to_max_fix(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
         case CUSTOM_EXTERNAL:
             return allocate_call_external(wallet, amount, num_allocated_coins, allocated_amount, denomination_wallet);
         case WALLET_CORE:
