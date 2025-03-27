@@ -14,11 +14,8 @@ def balance(df: pd.DataFrame, strategy_colors: dict):
     by_file = preselection.groupby(["FileName"])
 
     for (filename, file_df), ax in zip(by_file, axes):
-        print(filename)
         user = file_df["UserType"].iloc[0]
-        print(file_df.describe()) 
-        print()
-        
+
         strategy = file_df['Strategy'].iloc[0]  # Strategy is the same for all rows of this user
         if strategy not in strategy_colors:
             continue
@@ -49,10 +46,7 @@ def coin_count(df: pd.DataFrame, strategy_colors: dict):
     by_file = preselection.groupby(["FileName"])
 
     for (filename, file_df), ax in zip(by_file, axes):
-        print(filename)
         user = file_df["UserType"].iloc[0]
-        print(file_df.describe()) 
-        print()
         
         strategy = file_df['Strategy'].iloc[0]  # Strategy is the same for all rows of this user
         if strategy not in strategy_colors:
