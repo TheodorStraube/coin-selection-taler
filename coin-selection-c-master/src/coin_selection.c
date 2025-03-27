@@ -1465,7 +1465,7 @@ Coin* generate_withdraw_coins(long long amount, long long time, Wallet default_w
     }
 
     *num_coins = generatedCount;
-
+    
     return resizedGeneratedCoins;
 }
 
