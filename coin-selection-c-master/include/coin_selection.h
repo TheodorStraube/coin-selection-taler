@@ -30,7 +30,7 @@ typedef struct {
     double score;
 } coin_wrapper;
 
-Coin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strategy, long long time, int *num_allocated_coins, long long *allocated_amount, Wallet denomination_wallet);
+PartialCoin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strategy, long long time, int *num_allocated_coins, long long *allocated_amount, Wallet denomination_wallet);
 
 void remove_selected_coins(Wallet* wallet, Coin* coins, int num_coins);
 

@@ -1,7 +1,4 @@
-rm -r build
-mkdir build
+export PYTHONPATH="../python"
 cd build
-cmake ..
-make
 ./coin_selection_c
 cd ..
