@@ -90,7 +90,7 @@ void simulate_user_actions(int user_index, User user,
       long long renew_fee =
           calculate_renew_fee(user.wallet, user.actions[i].time);
       if (renew_fee > 0) {
-        fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %lld\n", user_index, i,
+        fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
                 user.actions[i].time, 0ll, OperationNames[REFRESH_OP],
                 renew_fee, user.wallet.num_coins);
         total_fee += renew_fee;
@@ -132,7 +132,7 @@ void simulate_user_actions(int user_index, User user,
         // Simulate withdrawal
         int allocatedCoinCount = 0;
         long long allocatedAmount = 0;
-        Coin *allocatedCoins = allocate_coins_for_deposit(
+        PartialCoin *allocatedCoins = allocate_coins_for_deposit(
             user.wallet, transaction_amount, strategy, user.actions[i].time,
             &allocatedCoinCount, &allocatedAmount, denomination_wallet);
 
@@ -144,32 +144,14 @@ void simulate_user_actions(int user_index, User user,
                   StrategyNames[strategy]);
           printf("%s\n", error);
         } else {
-          fee_for_action = calculate_total_fee(allocatedCoins,
+          fee_for_action = calculate_total_fee_part(allocatedCoins,
                                                allocatedCoinCount, DEPOSIT_OP);
 
-          if (fee_for_action > 1000) {
-            printf(
-                "OVER 1000!!! time [%i] strategy [%s] for amount: %ld / %ld\n",
-                user.actions[i].time, StrategyNames[strategy],
-                transaction_amount, allocatedAmount);
-          }
-
-          if (!covers_amount(allocatedCoins, allocatedCoinCount,
-                             transaction_amount)) {
-            char error[1024];
-            sprintf(
-                error,
-                "Allocated coins incorrect. %d coins for denomination %d. [%s]",
-                user.wallet.num_coins, transaction_amount,
-                StrategyNames[strategy]);
-            printf("%s\n", error);
-          } else {
-
-            fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %lld\n", user_index, i,
+            fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
                     user.actions[i].time, transaction_amount,
                     OperationNames[user.actions[i].operation], fee_for_action, user.wallet.num_coins);
 
-            remove_selected_coins(&user.wallet, allocatedCoins,
+            remove_coins(&user.wallet, allocatedCoins,
                                   allocatedCoinCount);
             long long changeAmount =
                 allocatedAmount -
@@ -203,7 +185,6 @@ void simulate_user_actions(int user_index, User user,
             }
             total_fee += fee_for_action;
           }
-        }
       }
     }
   } else {

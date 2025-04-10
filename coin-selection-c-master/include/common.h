@@ -65,4 +65,19 @@ typedef struct {
     Wallet denomination_wallet;
 } ThreadArgs;
 
+typedef struct {
+    long long amount;
+    Coin coin;
+} PartialCoin; 
+
+typedef struct {
+    long long instructed_amount;
+    long long effective_amount;
+
+    long long deposit_fee_sum;
+    long long refresh_fee_sum;
+
+    int valid;
+} FeeTab;
+
 #endif //COMMON_H
