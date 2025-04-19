@@ -405,6 +405,7 @@ Wallet parse_wallet_config_json(const char* filename) {
         // Parse various fields from each denomination
         cJSON *value = cJSON_GetObjectItemCaseSensitive(denom, "value");
         coin.denomination.amount = parse_number(value->valuestring);
+        coin.amount = parse_number(value->valuestring);
 
         cJSON *fee_withdraw = cJSON_GetObjectItemCaseSensitive(denom, "fee_withdraw");
         coin.denomination.rules.fees.withdraw_fee.fee_satoshis = parse_number(fee_withdraw->valuestring);

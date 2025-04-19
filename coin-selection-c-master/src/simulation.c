@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "coin_selection.h"
 #include "simulation.h"
 /**
  * @brief Get the scale of a given amount.
@@ -87,6 +88,7 @@ void simulate_user_actions(int user_index, User user,
     fprintf(fp, "%s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
 
     for (int i = 0; i < num_actions; i++) {
+
       long long renew_fee =
           calculate_renew_fee(user.wallet, user.actions[i].time);
       if (renew_fee > 0) {
@@ -116,14 +118,14 @@ void simulate_user_actions(int user_index, User user,
         Coin *generatedCoins =
             generate_withdraw_coins(transaction_amount, user.actions[i].time,
                                     denomination_wallet, &generatedCoinCount);
-
         if (generatedCoins) {
           fee_for_action = calculate_total_fee(
               generatedCoins, generatedCoinCount, user.actions[i].operation);
 
-          fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %lld\n", user_index, i,
+          fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
                   user.actions[i].time, transaction_amount,
-                  OperationNames[user.actions[i].operation], fee_for_action, user.wallet.num_coins);
+                  OperationNames[user.actions[i].operation], fee_for_action,
+                  user.wallet.num_coins);
 
           total_fee += fee_for_action;
           add_coins_to_wallet(&user.wallet, generatedCoins, generatedCoinCount);
@@ -132,59 +134,63 @@ void simulate_user_actions(int user_index, User user,
         // Simulate withdrawal
         int allocatedCoinCount = 0;
         long long allocatedAmount = 0;
-        PartialCoin *allocatedCoins = allocate_coins_for_deposit(
+        Coin *allocatedCoins = allocate_coins_for_deposit(
             user.wallet, transaction_amount, strategy, user.actions[i].time,
             &allocatedCoinCount, &allocatedAmount, denomination_wallet);
 
         if (!allocatedCoins) {
           char error[1024];
           sprintf(error,
-                  "No coins allocated. %d coins for denomination %d. [%s]",
+                  "No coins allocated. %d coins for denomination %lld. [%s]",
                   user.wallet.num_coins, transaction_amount,
                   StrategyNames[strategy]);
           printf("%s\n", error);
         } else {
-          fee_for_action = calculate_total_fee_part(allocatedCoins,
+          fee_for_action = calculate_total_fee(allocatedCoins,
                                                allocatedCoinCount, DEPOSIT_OP);
+
+          fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
+                  user.actions[i].time, transaction_amount,
+                  OperationNames[user.actions[i].operation], fee_for_action,
+                  user.wallet.num_coins);
+
+          remove_selected_coins(&user.wallet, allocatedCoins,
+                                allocatedCoinCount);
+
+          long long changeAmount =
+              allocatedAmount -
+              transaction_amount; // Assuming fees are subtracted from the
+                                  // withdrawn amount
+
+          if (changeAmount > 0) {
+            int changeCoinCount = 0;
+            Coin *changeCoins =
+                generate_withdraw_coins(changeAmount, user.actions[i].time,
+                                        denomination_wallet, &changeCoinCount);
+            fee_for_change =
+                calculate_total_fee(changeCoins, changeCoinCount, REFRESH_OP);
 
             fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
                     user.actions[i].time, transaction_amount,
-                    OperationNames[user.actions[i].operation], fee_for_action, user.wallet.num_coins);
+                    OperationNames[REFRESH_OP], fee_for_change,
+                    user.wallet.num_coins);
 
-            remove_coins(&user.wallet, allocatedCoins,
-                                  allocatedCoinCount);
-            long long changeAmount =
-                allocatedAmount -
-                transaction_amount; // Assuming fees are subtracted from the
-                                    // withdrawn amount
-
-            if (changeAmount > 0) {
-              int changeCoinCount = 0;
-              Coin *changeCoins = generate_withdraw_coins(
-                  changeAmount, user.actions[i].time, denomination_wallet,
-                  &changeCoinCount);
-              fee_for_change =
-                  calculate_total_fee(changeCoins, changeCoinCount, REFRESH_OP);
-
-              fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %lld\n", user_index, i,
-                      user.actions[i].time, transaction_amount,
-                      OperationNames[REFRESH_OP], fee_for_change, user.wallet.num_coins);
-
-              fprintf(fp, "%d_%d, %lld, %lld, DEPOSIT_REFRESH_OP, %lld, %lld\n",
-                      user_index, i, user.actions[i].time, transaction_amount,
-                      fee_for_action + fee_for_change, user.wallet.num_coins + changeCoinCount);
-              if (changeCoins) {
-                add_coins_to_wallet(&user.wallet, changeCoins, changeCoinCount);
-              } else {
-                printf("Error for allocation of change coins\n");
-              }
+            fprintf(fp, "%d_%d, %lld, %lld, DEPOSIT_REFRESH_OP, %lld, %d\n",
+                    user_index, i, user.actions[i].time, transaction_amount,
+                    fee_for_action + fee_for_change,
+                    user.wallet.num_coins + changeCoinCount);
+            if (changeCoins) {
+              add_coins_to_wallet(&user.wallet, changeCoins, changeCoinCount);
             } else {
-              fprintf(fp, "%d_%d, %lld, %lld, DEPOSIT_REFRESH_OP, %lld, %lld\n",
-                      user_index, i, user.actions[i].time, transaction_amount,
-                      fee_for_action, user.wallet.num_coins);
+              printf("Error for allocation of change coins\n");
             }
-            total_fee += fee_for_action;
+          } else {
+            fprintf(fp, "%d_%d, %lld, %lld, DEPOSIT_REFRESH_OP, %lld, %d\n",
+                    user_index, i, user.actions[i].time, transaction_amount,
+                    fee_for_action, user.wallet.num_coins);
           }
+          total_fee += fee_for_action;
+        }
       }
     }
   } else {

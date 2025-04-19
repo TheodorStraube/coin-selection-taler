@@ -148,6 +148,7 @@ void simulate_actions_from_file(const char *filepath, Wallet denomination_wallet
 
     user.actions = actions;
     simulate_user_actions(user_index, user, denomination_wallet, num_actions, strategy);
+    free(user.name);
 }
 
 /**
@@ -167,6 +168,7 @@ void* thread_function(void* arg) {
     //    perror("Failed to delete processed file");
     //}
 
+    free(args->filepath);
     free(arg);
     __sync_fetch_and_add(&processed_files, 1);
     update_progress();
@@ -207,6 +209,9 @@ void load_and_simulate_actions(const char *base_dir, Wallet denomination_wallet)
 
             args->filepath = strdup(filepath);
             args->denomination_wallet = denomination_wallet;
+
+            // thread_function(args);
+            
 
             if (pthread_create(&thread, NULL, thread_function, args) != 0) {
                 perror("Failed to create thread");
