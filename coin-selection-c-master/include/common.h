@@ -52,6 +52,7 @@ typedef struct {
     long long uniqueId;
     Denomination denomination;
     time_t creation_timestamp;
+    long long amount;
 } Coin;
 
 typedef struct {

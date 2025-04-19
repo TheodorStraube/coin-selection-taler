@@ -36,6 +36,7 @@ class Denomination:
 class Coin:
     unique_id: int
     denomination: Denomination
+    amount: int
 
 
 @dataclass
@@ -58,8 +59,8 @@ def parse_denomination(name, amount, rules_data) -> Denomination:
     return Denomination(name, amount, parse_rules(*rules_data))
 
 
-def parse_coin(unique_id, denomination_data, creation_time) -> Coin:
-    return Coin(unique_id, parse_denomination(*denomination_data))
+def parse_coin(unique_id, denomination_data, creation_time, amount) -> Coin:
+    return Coin(unique_id, parse_denomination(*denomination_data), amount)
 
 
 def parse_wallet(wallet_data) -> Wallet:

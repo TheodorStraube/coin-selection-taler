@@ -30,7 +30,7 @@ typedef struct {
     double score;
 } coin_wrapper;
 
-PartialCoin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strategy, long long time, int *num_allocated_coins, long long *allocated_amount, Wallet denomination_wallet);
+Coin* allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strategy, long long time, int *num_allocated_coins, long long *allocated_amount, Wallet denomination_wallet);
 
 void remove_selected_coins(Wallet* wallet, Coin* coins, int num_coins);
 
@@ -42,5 +42,6 @@ long long calculate_renew_fee(Wallet wallet, long long time);
 
 Coin* generate_withdraw_coins(long long amount, long long time, Wallet default_wallet, int *num_coins);
 
+void pprint(Coin* coin, int nr);
 
 #endif //COIN_SELECTION_H
