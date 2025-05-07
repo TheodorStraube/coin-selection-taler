@@ -81,4 +81,10 @@ typedef struct {
     int valid;
 } FeeTab;
 
+typedef struct {
+    Coin* coins;
+    int coin_count;
+    FeeTab tab;
+} CoinSelectionResult;
+
 #endif //COMMON_H
