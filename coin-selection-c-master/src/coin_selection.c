@@ -3,7 +3,8 @@
 // coin_selection.c
 //
 
-#include <string.h>
+#include "common.h"
+#include <sched.h>
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
@@ -224,16 +225,18 @@ int compare_coins_asc(const void *a, const void *b) {
 }
 
 // returns amount plus (deposit & refresh)fees for this coin to be spend
-long long amount_using_this(long long amount, Coin *coin){
-    if (amount == coin->denomination.amount) {
-        return amount + coin->denomination.rules.fees.deposit_fee.fee_satoshis;
-    }
-    return amount + coin->denomination.rules.fees.deposit_fee.fee_satoshis + coin->denomination.rules.fees.deposit_fee.fee_satoshis;
+long long amount_using_this(long long amount, Coin *coin) {
+  if (amount == coin->denomination.amount) {
+    return amount + coin->denomination.rules.fees.deposit_fee.fee_satoshis;
+  }
+  return amount + coin->denomination.rules.fees.deposit_fee.fee_satoshis +
+         coin->denomination.rules.fees.deposit_fee.fee_satoshis;
 }
 
-// returns the amount that a merchant would receive spending the whole coin 
+// returns the amount that a merchant would receive spending the whole coin
 long long effective_amount(Coin *coin) {
-     return coin->denomination.amount - coin->denomination.rules.fees.deposit_fee.fee_satoshis;
+  return coin->denomination.amount -
+         coin->denomination.rules.fees.deposit_fee.fee_satoshis;
 }
 
 /**
@@ -246,8 +249,7 @@ long long effective_amount(Coin *coin) {
  * @return An array of allocated coins.
  */
 Coin *allocate_max_bills(Wallet wallet, long long amount,
-                         int *num_allocated_coins,
-                         long long *allocated_amount) {
+                         int *num_allocated_coins) {
   Coin *coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
   if (coinsCopy == NULL)
     return NULL;
@@ -265,8 +267,6 @@ Coin *allocate_max_bills(Wallet wallet, long long amount,
     selectedCount++;
   }
 
-  *allocated_amount = amount_collected;
-
   // Allocate memory for selected coins
   Coin *selectedCoins = malloc(sizeof(Coin) * selectedCount);
   if (selectedCoins == NULL) {
@@ -278,15 +278,18 @@ Coin *allocate_max_bills(Wallet wallet, long long amount,
   long long effective;
   long long partial_amount;
   for (int k = 0; k < selectedCount; k++) {
-      Coin *coin_k = &coinsCopy[k];
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        selectedCoins[k] = *coin_k;
+    Coin *coin_k = &coinsCopy[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    selectedCoins[k] = *coin_k;
   }
 
   *num_allocated_coins = selectedCount;
@@ -305,8 +308,7 @@ Coin *allocate_max_bills(Wallet wallet, long long amount,
  * @return An array of allocated coins.
  */
 Coin *allocate_min_bills(Wallet wallet, long long amount,
-                         int *num_allocated_coins,
-                         long long *allocated_amount) {
+                         int *num_allocated_coins) {
   Coin *coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
   if (coinsCopy == NULL)
     return NULL;
@@ -324,8 +326,6 @@ Coin *allocate_min_bills(Wallet wallet, long long amount,
     selectedCount++;
   }
 
-  *allocated_amount = amount_collected;
-
   // Allocate memory for selected coins
   Coin *selectedCoins = malloc(sizeof(Coin) * selectedCount);
   if (selectedCoins == NULL) {
@@ -338,15 +338,18 @@ Coin *allocate_min_bills(Wallet wallet, long long amount,
   long long effective;
   long long partial_amount;
   for (int k = 0; k < selectedCount; k++) {
-      Coin *coin_k = &coinsCopy[k];
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        selectedCoins[k] = *coin_k;
+    Coin *coin_k = &coinsCopy[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    selectedCoins[k] = *coin_k;
   }
 
   *num_allocated_coins = selectedCount; // Update the number of allocated coins
@@ -399,8 +402,7 @@ int compare_expiry_time_amount(const void *a, const void *b) {
  * @return An array of allocated coins.
  */
 Coin *allocate_closest_to_expire_min_bills(Wallet wallet, long long amount,
-                                           int *num_allocated_coins,
-                                           long long *allocated_amount) {
+                                           int *num_allocated_coins) {
   // Allocate memory to copy coins
   Coin *coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
   if (coinsCopy == NULL)
@@ -426,8 +428,6 @@ Coin *allocate_closest_to_expire_min_bills(Wallet wallet, long long amount,
     }
   }
 
-  *allocated_amount = amount_collected;
-
   // Allocate memory for selected coins
   Coin *selectedCoins = malloc(sizeof(Coin) * selectedCount);
   if (selectedCoins == NULL) {
@@ -440,15 +440,18 @@ Coin *allocate_closest_to_expire_min_bills(Wallet wallet, long long amount,
   long long effective;
   long long partial_amount;
   for (int k = 0; k < selectedCount; k++) {
-      Coin *coin_k = &coinsCopy[k];
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        selectedCoins[k] = *coin_k;
+    Coin *coin_k = &coinsCopy[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    selectedCoins[k] = *coin_k;
   }
 
   *num_allocated_coins = selectedCount; // Update the number of allocated coins
@@ -502,8 +505,7 @@ int compare_expiry_time_amount_reverse(const void *a, const void *b) {
  * @return An array of allocated coins.
  */
 Coin *allocate_closest_to_expire_max_bills(Wallet wallet, long long amount,
-                                           int *num_allocated_coins,
-                                           long long *allocated_amount) {
+                                           int *num_allocated_coins) {
   // Allocate memory to copy coins
   Coin *coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
   if (coinsCopy == NULL)
@@ -530,8 +532,6 @@ Coin *allocate_closest_to_expire_max_bills(Wallet wallet, long long amount,
     }
   }
 
-  *allocated_amount = amount_collected;
-
   // Allocate memory for selected coins
   Coin *selectedCoins = malloc(sizeof(Coin) * selectedCount);
   if (selectedCoins == NULL) {
@@ -544,15 +544,18 @@ Coin *allocate_closest_to_expire_max_bills(Wallet wallet, long long amount,
   long long effective;
   long long partial_amount;
   for (int k = 0; k < selectedCount; k++) {
-      Coin *coin_k = &coinsCopy[k];
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        selectedCoins[k] = *coin_k;
+    Coin *coin_k = &coinsCopy[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    selectedCoins[k] = *coin_k;
   }
 
   *num_allocated_coins = selectedCount; // Update the number of allocated coins
@@ -572,8 +575,7 @@ Coin *allocate_closest_to_expire_max_bills(Wallet wallet, long long amount,
  * @return An array of allocated coins.
  */
 Coin *allocate_random_bills(Wallet wallet, long long amount,
-                            int *num_allocated_coins,
-                            long long *allocated_amount) {
+                            int *num_allocated_coins, unsigned int *seed) {
 
   // Create an array of indices representing the coins
   int *indices = malloc(sizeof(int) * wallet.num_coins);
@@ -598,7 +600,7 @@ Coin *allocate_random_bills(Wallet wallet, long long amount,
 
   while (amount_collected < amount && remainingCoins > 0) {
     int randIndex =
-        rand() %
+        rand_r(seed) %
         remainingCoins; // Pick a random index from the remaining indices
     int selectedCoinIndex = indices[randIndex];
 
@@ -613,12 +615,10 @@ Coin *allocate_random_bills(Wallet wallet, long long amount,
     remainingCoins--;
   }
 
-  *allocated_amount = amount_collected;
-
   // Allocate memory for selected coins
   Coin *finalSelectedCoins = malloc(sizeof(Coin) * selectedCount);
   if (selectedCoins == NULL) {
-      free(indices);
+    free(indices);
     return NULL; // Allocation failed
   }
 
@@ -627,15 +627,18 @@ Coin *allocate_random_bills(Wallet wallet, long long amount,
   long long effective;
   long long partial_amount;
   for (int k = 0; k < selectedCount; k++) {
-      Coin *coin_k = &selectedCoins[k];
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        finalSelectedCoins[k] = *coin_k;
+    Coin *coin_k = &selectedCoins[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    finalSelectedCoins[k] = *coin_k;
   }
   *num_allocated_coins = selectedCount;
 
@@ -657,7 +660,6 @@ Coin *allocate_random_bills(Wallet wallet, long long amount,
 Coin *allocate_max_bills_time_to_expire_weighted(Wallet wallet,
                                                  long long amount,
                                                  int *num_allocated_coins,
-                                                 long long *allocated_amount,
                                                  long long currentTime) {
   coin_wrapper *wrappers =
       (coin_wrapper *)malloc(sizeof(coin_wrapper) * wallet.num_coins);
@@ -689,10 +691,11 @@ Coin *allocate_max_bills_time_to_expire_weighted(Wallet wallet,
 
   // Allocate and select coins based on sorted wrappers until the desired amount
   // is reached
-  *allocated_amount = 0;
+
   *num_allocated_coins = 0;
-  for (int i = 0; i < wallet.num_coins && *allocated_amount < amount; ++i) {
-    *allocated_amount += wrappers[i].coin->denomination.amount;
+  long long allocated_amount = 0;
+  for (int i = 0; i < wallet.num_coins && allocated_amount < amount; ++i) {
+    allocated_amount += wrappers[i].coin->denomination.amount;
     (*num_allocated_coins)++;
   }
 
@@ -708,15 +711,18 @@ Coin *allocate_max_bills_time_to_expire_weighted(Wallet wallet,
   long long effective;
   long long partial_amount;
   for (int k = 0; k < *num_allocated_coins; k++) {
-      Coin *coin_k = wrappers[k].coin;
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        selectedCoins[k] = *coin_k;
+    Coin *coin_k = wrappers[k].coin;
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    selectedCoins[k] = *coin_k;
   }
 
   free(wrappers);
@@ -737,7 +743,6 @@ Coin *allocate_max_bills_time_to_expire_weighted(Wallet wallet,
  */
 Coin *allocate_coins_even_from_min_to_max(Wallet wallet, long long amount,
                                           int *num_allocated_coins,
-                                          long long *allocated_amount,
                                           Wallet denomination_wallet) {
   // Sort coins in the wallet by their creation timestamp in ascending order
   qsort(wallet.coins, wallet.num_coins, sizeof(Coin),
@@ -831,12 +836,10 @@ Coin *allocate_coins_even_from_min_to_max(Wallet wallet, long long amount,
     }
   }
 
-  *allocated_amount = amount_collected;
   *num_allocated_coins = selectedCount;
 
   // Resize the selectedCoins array to the actual number of selected coins
-  Coin *finalSelectedCoins =
-      malloc(sizeof(Coin) * selectedCount);
+  Coin *finalSelectedCoins = malloc(sizeof(Coin) * selectedCount);
   if (finalSelectedCoins == NULL) {
     // If realloc failed, free original block and return NULL
     free(selectedCoins);
@@ -852,15 +855,18 @@ Coin *allocate_coins_even_from_min_to_max(Wallet wallet, long long amount,
   long long effective;
   long long partial_amount;
   for (int k = 0; k < selectedCount; k++) {
-      Coin *coin_k = &selectedCoins[k];
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        finalSelectedCoins[k] = *coin_k;
+    Coin *coin_k = &selectedCoins[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    finalSelectedCoins[k] = *coin_k;
   }
 
   free(denom_array[0]);
@@ -885,7 +891,6 @@ Coin *allocate_coins_even_from_min_to_max(Wallet wallet, long long amount,
  */
 Coin *allocate_coins_even_from_max_to_min(Wallet wallet, long long amount,
                                           int *num_allocated_coins,
-                                          long long *allocated_amount,
                                           Wallet denomination_wallet) {
   // Sort coins in the wallet by their creation timestamp in ascending order
   qsort(wallet.coins, wallet.num_coins, sizeof(Coin),
@@ -979,12 +984,10 @@ Coin *allocate_coins_even_from_max_to_min(Wallet wallet, long long amount,
     }
   }
 
-  *allocated_amount = amount_collected;
   *num_allocated_coins = selectedCount;
 
   // Resize the selectedCoins array to the actual number of selected coins
-  Coin *finalSelectedCoins =
-      malloc(sizeof(Coin) * selectedCount);
+  Coin *finalSelectedCoins = malloc(sizeof(Coin) * selectedCount);
   if (finalSelectedCoins == NULL) {
     free(selectedCoins);
     free(denom_array[0]);
@@ -994,20 +997,23 @@ Coin *allocate_coins_even_from_max_to_min(Wallet wallet, long long amount,
     return NULL;
   }
 
-    // Copy selected coins
+  // Copy selected coins
   amount_collected = 0;
   long long effective;
   long long partial_amount;
   for (int k = 0; k < selectedCount; k++) {
-      Coin *coin_k = &selectedCoins[k];
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        finalSelectedCoins[k] = *coin_k;
+    Coin *coin_k = &selectedCoins[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    finalSelectedCoins[k] = *coin_k;
   }
 
   // Clean up
@@ -1125,12 +1131,10 @@ Coin *allocate_coins_greedy_min_to_max_fixed(Wallet wallet, long long amount,
     selectedFlags[closestIndex] = 1;
   }
 
-  *allocated_amount = amount_collected;
   *num_allocated_coins = selectedCount;
 
   // Resize the selectedCoins array to the actual number of selected coins
-  Coin *finalSelectedCoins =
-      malloc(sizeof(Coin) * selectedCount);
+  Coin *finalSelectedCoins = malloc(sizeof(Coin) * selectedCount);
   if (finalSelectedCoins == NULL) {
     // If realloc failed, free original block and return NULL
     free(selectedCoins);
@@ -1141,20 +1145,23 @@ Coin *allocate_coins_greedy_min_to_max_fixed(Wallet wallet, long long amount,
     return NULL;
   }
 
-   // Copy selected coins
+  // Copy selected coins
   amount_collected = 0;
   long long effective;
   long long partial_amount;
   for (int k = 0; k < selectedCount; k++) {
-      Coin *coin_k = &selectedCoins[k];
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        finalSelectedCoins[k] = *coin_k;
+    Coin *coin_k = &selectedCoins[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    finalSelectedCoins[k] = *coin_k;
   }
 
   // Clean up
@@ -1180,7 +1187,6 @@ Coin *allocate_coins_greedy_min_to_max_fixed(Wallet wallet, long long amount,
  */
 Coin *allocate_coins_greedy_min_to_max(Wallet wallet, long long amount,
                                        int *num_allocated_coins,
-                                       long long *allocated_amount,
                                        Wallet denomination_wallet) {
   // Sort coins in the wallet by their creation timestamp in ascending order
   qsort(wallet.coins, wallet.num_coins, sizeof(Coin),
@@ -1284,12 +1290,10 @@ Coin *allocate_coins_greedy_min_to_max(Wallet wallet, long long amount,
     selectedFlags[closestIndex] = 1;
   }
 
-  *allocated_amount = amount_collected;
   *num_allocated_coins = selectedCount;
 
   // Resize the selectedCoins array to the actual number of selected coins
-  Coin *finalSelectedCoins =
-      malloc(sizeof(Coin) * selectedCount);
+  Coin *finalSelectedCoins = malloc(sizeof(Coin) * selectedCount);
   if (finalSelectedCoins == NULL) {
     // If realloc failed, free original block and return NULL
     free(selectedCoins);
@@ -1300,20 +1304,23 @@ Coin *allocate_coins_greedy_min_to_max(Wallet wallet, long long amount,
     return NULL;
   }
 
-     // Copy selected coins
+  // Copy selected coins
   amount_collected = 0;
   long long effective;
   long long partial_amount;
   for (int k = 0; k < selectedCount; k++) {
-      Coin *coin_k = &selectedCoins[k];
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        finalSelectedCoins[k] = *coin_k;
+    Coin *coin_k = &selectedCoins[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    finalSelectedCoins[k] = *coin_k;
   }
 
   // Clean up
@@ -1327,7 +1334,6 @@ Coin *allocate_coins_greedy_min_to_max(Wallet wallet, long long amount,
 
 Coin *allocate_coins_greedy_min_to_max_fix(Wallet wallet, long long amount,
                                            int *num_allocated_coins,
-                                           long long *allocated_amount,
                                            Wallet denomination_wallet) {
   // Sort coins in the wallet by their creation timestamp in ascending order
   qsort(wallet.coins, wallet.num_coins, sizeof(Coin),
@@ -1431,12 +1437,10 @@ Coin *allocate_coins_greedy_min_to_max_fix(Wallet wallet, long long amount,
     selectedFlags[closestIndex] = 1;
   }
 
-  *allocated_amount = amount_collected;
   *num_allocated_coins = selectedCount;
 
   // Resize the selectedCoins array to the actual number of selected coins
-  Coin *finalSelectedCoins =
-      malloc(sizeof(Coin) * selectedCount);
+  Coin *finalSelectedCoins = malloc(sizeof(Coin) * selectedCount);
   if (finalSelectedCoins == NULL) {
     // If realloc failed, free original block and return NULL
     free(selectedCoins);
@@ -1452,15 +1456,18 @@ Coin *allocate_coins_greedy_min_to_max_fix(Wallet wallet, long long amount,
   long long effective;
   long long partial_amount;
   for (int k = 0; k < selectedCount; k++) {
-      Coin *coin_k = &selectedCoins[k];
-      effective = effective_amount(coin_k);
-        if(amount_collected + effective > amount){
-            partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-        }else {
-            partial_amount = coin_k->denomination.amount;
-        }
-        coin_k->amount = partial_amount;
-        finalSelectedCoins[k] = *coin_k;
+    Coin *coin_k = &selectedCoins[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    finalSelectedCoins[k] = *coin_k;
   }
 
   // Clean up
@@ -1500,8 +1507,7 @@ PyObject *encodeDenomination(Denomination denom) {
 PyObject *encodeCoin(Coin coin) {
   return Py_BuildValue("(L,O,L,L)", coin.uniqueId,
                        encodeDenomination(coin.denomination),
-                       coin.creation_timestamp,
-                       coin.amount);
+                       coin.creation_timestamp, coin.amount);
 }
 
 PyObject *encodeGlobalFees(GlobalFees global_fees) {
@@ -1529,9 +1535,7 @@ PyObject *encodeWallet(Wallet wallet) {
 }
 
 Coin *allocate_call_external(Wallet wallet, long long amount,
-                             int *num_allocated_coins,
-                             long long *allocated_amount,
-                             Wallet denomination_wallet) {
+                             int *num_allocated_coins) {
 
   PyObject *pValue, *kwargs, *pAmount;
   if (checkOrLoadPython()) {
@@ -1566,32 +1570,34 @@ Coin *allocate_call_external(Wallet wallet, long long amount,
       selectedCoins[k] = wallet.coins[PyLong_AsInt(PyList_GetItem(pValue, k))];
       totalAmount += coinAmount;
     }
-    *allocated_amount = totalAmount;
+
     *num_allocated_coins = PyList_Size(pValue);
-    
+
     Coin *finalSelectedCoins = malloc(sizeof(Coin) * *num_allocated_coins);
 
     if (finalSelectedCoins == NULL) {
-        free(selectedCoins);
-        return NULL;
+      free(selectedCoins);
+      return NULL;
     }
 
-        // Copy selected coins
-         long long amount_collected = 0;
-      long long effective;
-      long long partial_amount;
-      for (int k = 0; k < *num_allocated_coins; k++) {
-          Coin *coin_k = &selectedCoins[k];
-          effective = effective_amount(coin_k);
-            if(amount_collected + effective > amount){
-                partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-            }else {
-                partial_amount = coin_k->denomination.amount;
-            }
-        coin_k->amount = partial_amount;
-        finalSelectedCoins[k] = *coin_k;
+    // Copy selected coins
+    long long amount_collected = 0;
+    long long effective;
+    long long partial_amount;
+    for (int k = 0; k < *num_allocated_coins; k++) {
+      Coin *coin_k = &selectedCoins[k];
+      effective = effective_amount(coin_k);
+      if (amount_collected + effective > amount) {
+        partial_amount =
+            amount - amount_collected +
+            coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+            coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+      } else {
+        partial_amount = coin_k->denomination.amount;
       }
-
+      coin_k->amount = partial_amount;
+      finalSelectedCoins[k] = *coin_k;
+    }
 
     if (pValue != NULL) {
       Py_DECREF(pValue);
@@ -1607,9 +1613,7 @@ Coin *allocate_call_external(Wallet wallet, long long amount,
 }
 
 Coin *allocate_wallet_core(Wallet wallet, long long amount,
-                           int *num_allocated_coins,
-                           long long *allocated_amount,
-                           Wallet denomination_wallet) {
+                           int *num_allocated_coins) {
   Coin *coinsCopy = malloc(sizeof(Coin) * wallet.num_coins);
   if (coinsCopy == NULL)
     return NULL;
@@ -1665,7 +1669,6 @@ Coin *allocate_wallet_core(Wallet wallet, long long amount,
     return NULL;
   }
 
-  *allocated_amount = amount - payRemaining;
   *num_allocated_coins = i; // Update the number of allocated coins
 
   // Resize the selectedCoins array to the actual number of selected coins
@@ -1676,22 +1679,24 @@ Coin *allocate_wallet_core(Wallet wallet, long long amount,
     return NULL;
   }
 
-
-    // Copy selected coins
-     long long amount_collected = 0;
-      long long effective;
-      long long partial_amount;
-      for (int k = 0; k < i; k++) {
-          Coin *coin_k = &selectedCoins[k];
-          effective = effective_amount(coin_k);
-            if(amount_collected + effective > amount){
-                partial_amount = amount - amount_collected + coin_k->denomination.rules.fees.deposit_fee.fee_satoshis + coin_k->denomination.rules.fees.refresh_fee.fee_satoshis; 
-            }else {
-                partial_amount = coin_k->denomination.amount;
-            }
-        coin_k->amount = partial_amount;
-        finalSelectedCoins[k] = *coin_k;
-      }
+  // Copy selected coins
+  long long amount_collected = 0;
+  long long effective;
+  long long partial_amount;
+  for (int k = 0; k < i; k++) {
+    Coin *coin_k = &selectedCoins[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    finalSelectedCoins[k] = *coin_k;
+  }
 
   free(coinsCopy);
   free(selectedCoins);
@@ -1713,8 +1718,7 @@ long long effective_refresh_fee(Coin *coin) {
   return coin->denomination.rules.fees.refresh_fee.fee_satoshis;
 }
 
-FeeTab fees_for_selection(long long amount, Coin *selection,
-                          int *num_coins) {
+FeeTab fees_for_selection(long long amount, Coin *selection, int *num_coins) {
   // TODO: allowance
   long long allocated_amount_sum = 0;
   long long deposit_fee_sum = 0;
@@ -1728,8 +1732,7 @@ FeeTab fees_for_selection(long long amount, Coin *selection,
     verify_partial_coin(coin_k);
 
     allocated_amount_sum += coin_k->amount;
-    deposit_fee_sum +=
-        coin_k->denomination.rules.fees.deposit_fee.fee_satoshis;
+    deposit_fee_sum += coin_k->denomination.rules.fees.deposit_fee.fee_satoshis;
     refresh_fee_sum += effective_refresh_fee(coin_k);
   }
 
@@ -1746,16 +1749,15 @@ FeeTab fees_for_selection(long long amount, Coin *selection,
   return tab;
 }
 
-int verify_coin_selection(Wallet wallet, long long amount,
-                          Coin *selection, int *num_coins) {
+int verify_coin_selection(Wallet wallet, long long amount, Coin *selection,
+                          int *num_coins) {
   FeeTab tab = fees_for_selection(amount, selection, num_coins);
 
-  if (!tab.valid) {
-    printf("Coin-selection invalid: %lld / %lld\n", tab.instructed_amount,
-           tab.effective_amount);
-    return 0;
-  }
-
+  // if (!tab.valid) {
+  //   printf("Coin-selection invalid: %lld / %lld\n", tab.instructed_amount,
+  //          tab.effective_amount);
+  //   return 0;
+  // }
 
   return 1;
 }
@@ -1773,79 +1775,75 @@ int verify_coin_selection(Wallet wallet, long long amount,
  * information.
  * @return An array of allocated coins.
  */
-Coin *allocate_coins_for_deposit(Wallet wallet, long long amount,
-                                 strategy strategy, long long time,
-                                 int *num_allocated_coins,
-                                 long long *allocated_amount,
-                                 Wallet denomination_wallet) {
+CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
+                                               strategy strategy,
+                                               long long time,
+                                               Wallet denomination_wallet) {
 
   if (!wallet.num_coins || !amount) { // if wallet is empty or amount 0, return
-    return NULL;
+    return (CoinSelectionResult) {.coins = NULL, .coin_count = 0, .tab = (FeeTab) {0}};
   }
 
-  Coin *result;
+  Coin *allocated_coins;
+  int num_allocated_coins = 0;
+
+  unsigned int seed = 0;
+
 
   switch (strategy) {
   case MAX_BILLS:
-    result = allocate_max_bills(wallet, amount, num_allocated_coins,
-                                allocated_amount);
+    allocated_coins = allocate_max_bills(wallet, amount, &num_allocated_coins);
     break;
   case MIN_BILLS:
-    result = allocate_min_bills(wallet, amount, num_allocated_coins,
-                                allocated_amount);
+    allocated_coins = allocate_min_bills(wallet, amount, &num_allocated_coins);
     break;
   case CLOSEST_TO_EXPIRE_MIN_BILLS:
-    result = allocate_closest_to_expire_min_bills(
-        wallet, amount, num_allocated_coins, allocated_amount);
+    allocated_coins = allocate_closest_to_expire_min_bills(wallet, amount, &num_allocated_coins);
     break;
   case CLOSEST_TO_EXPIRE_MAX_BILLS:
-    result = allocate_closest_to_expire_max_bills(
-        wallet, amount, num_allocated_coins, allocated_amount);
+    allocated_coins = allocate_closest_to_expire_max_bills(wallet, amount, &num_allocated_coins);
     break;
   case MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED:
-    result = allocate_max_bills_time_to_expire_weighted(
-        wallet, amount, num_allocated_coins, allocated_amount, time);
+    allocated_coins = allocate_max_bills_time_to_expire_weighted(wallet, amount, &num_allocated_coins, time);
     break;
   case RANDOM:
-    result = allocate_random_bills(wallet, amount, num_allocated_coins,
-                                   allocated_amount);
+    allocated_coins = allocate_random_bills(wallet, amount, &num_allocated_coins, &seed);
     break;
   case EVEN_FROM_MIN_TO_MAX:
-    result = allocate_coins_even_from_min_to_max(
-        wallet, amount, num_allocated_coins, allocated_amount,
-        denomination_wallet);
+    allocated_coins = allocate_coins_even_from_min_to_max(
+        wallet, amount, &num_allocated_coins, denomination_wallet);
     break;
   case EVEN_FROM_MAX_TO_MIN:
-    result = allocate_coins_even_from_max_to_min(
-        wallet, amount, num_allocated_coins, allocated_amount,
-        denomination_wallet);
+    allocated_coins = allocate_coins_even_from_max_to_min(
+        wallet, amount, &num_allocated_coins, denomination_wallet);
     break;
   case GREEDY_MIN_TO_MAX:
-    result =
-        allocate_coins_greedy_min_to_max(wallet, amount, num_allocated_coins,
-                                         allocated_amount, denomination_wallet);
+    allocated_coins =
+        allocate_coins_greedy_min_to_max(wallet, amount, &num_allocated_coins, denomination_wallet);
     break;
   case GREEDY_MIN_TO_MAX_FIX:
-    result = allocate_coins_greedy_min_to_max_fix(
-        wallet, amount, num_allocated_coins, allocated_amount,
-        denomination_wallet);
+    allocated_coins = allocate_coins_greedy_min_to_max_fix(
+        wallet, amount, &num_allocated_coins, denomination_wallet);
     break;
   case CUSTOM_EXTERNAL:
-    result = allocate_call_external(wallet, amount, num_allocated_coins,
-                                    allocated_amount, denomination_wallet);
+    allocated_coins =
+        allocate_call_external(wallet, amount, &num_allocated_coins);
     break;
   case WALLET_CORE:
-    result = allocate_wallet_core(wallet, amount, num_allocated_coins,
-                                  allocated_amount, denomination_wallet);
+    allocated_coins =
+        allocate_wallet_core(wallet, amount, &num_allocated_coins);
     break;
   default:
-    result = allocate_random_bills(wallet, amount, num_allocated_coins,
-                                   allocated_amount);
+    allocated_coins = allocate_random_bills(wallet, amount, &num_allocated_coins, &seed);
   }
 
-  verify_coin_selection(wallet, amount, result, num_allocated_coins);
+  FeeTab tab = fees_for_selection(amount, allocated_coins, &num_allocated_coins);
 
-  return result;
+  if (!tab.valid) {
+    printf("INVALID CS\n");
+  }
+
+  return (CoinSelectionResult) {.coins = allocated_coins, .coin_count = num_allocated_coins, .tab = tab};
 }
 
 /**
@@ -1911,7 +1909,8 @@ Coin *generate_withdraw_coins(long long amount, long long time,
       generatedCoins[generatedCount] = *(uniqueDenominations[i]);
       generatedCoins[generatedCount].creation_timestamp = time;
       generatedCoins[generatedCount].uniqueId = nextUniqueId++;
-      generatedCoins[generatedCount].amount = (uniqueDenominations[i])->denomination.amount;
+      generatedCoins[generatedCount].amount =
+          uniqueDenominations[i]->denomination.amount;
       remainingAmount -= uniqueDenominations[i]->denomination.amount;
       generatedCount++;
     }
@@ -1998,6 +1997,11 @@ void remove_selected_coins(Wallet *wallet, Coin *coins, int num_coins) {
     return; // No operation if the input is invalid
   }
 
+  // int dirtyCoins = 0;
+  //
+  // for (int i = 0; i < num_coins; i++){
+  //     if (coins[i].amount != coins[i].denomination.amount) {dirtyCoins++;}
+  // }
 
   // Allocate a new array to hold the remaining coins
   Coin *remainingCoins =
@@ -2034,6 +2038,7 @@ void remove_selected_coins(Wallet *wallet, Coin *coins, int num_coins) {
   }
 
   free(coins);
+  coins = NULL;
 
   // Update the wallet with the remaining coins
   wallet->coins = remainingCoins;
@@ -2076,7 +2081,7 @@ long long calculate_total_fee(Coin *coins, int num_coins,
 }
 
 long long calculate_total_fee_part(Coin *coins, int num_coins,
-                              operation_type operation) {
+                                   operation_type operation) {
   long long totalFee = 0;
 
   for (int i = 0; i < num_coins; i++) {
@@ -2084,7 +2089,7 @@ long long calculate_total_fee_part(Coin *coins, int num_coins,
     case DEPOSIT_OP:
       totalFee += coins[i].denomination.rules.fees.deposit_fee.fee_satoshis;
       if (coins[i].denomination.amount != coins[i].amount) {
-            totalFee += coins[i].denomination.rules.fees.refresh_fee.fee_satoshis;
+        totalFee += coins[i].denomination.rules.fees.refresh_fee.fee_satoshis;
       }
       break;
     case REFUND_OP:
@@ -2127,24 +2132,38 @@ long long calculate_renew_fee(Wallet wallet, long long time) {
   return totalRenewFee;
 }
 
+int is_dirty(Coin coin) {
+    return coin.amount != coin.denomination.amount;
+}
+
 void pprint(Coin *coins, int nr) {
-    for (int i = 0;i < nr; i++) {
-        Coin coin = coins[i];
-        printf("%lld:\t %lld/%lld\n", coin.uniqueId, coin.amount, coin.denomination.amount);
+  for (int i = 0; i < nr; i++) {
+    Coin coin = coins[i];
+
+    if (is_dirty(coin)) {
+        printf("[%lld / %lld | D: %d | R: %d]", coin.amount, coin.denomination.amount, coin.denomination.rules.fees.deposit_fee.fee_satoshis, coin.denomination.rules.fees.refresh_fee.fee_satoshis);
+    }else {
+        printf("[%lld]", coin.amount);
     }
-    printf("\n");
+  }
+  printf("\n");
 }
 
 // should return list of new + remaining coins and the refresh fee to be paid?
 // TODO: generate new coins only from denoms possible in this scenario (pass denom wallet)
-// long long refresh_dirty_coins(Coin *coins, int num_coins) {
+// void refresh_dirty_coins(Coin *coins, int num_coins) {
+//
+//     pprint(coins, num_coins);
+//
+//     return ;
 //
 //     long long total_refresh_fee = 0;
 //
 //     for(int i = 0; i < num_coins; i++) {
 //         Coin coin_i = coins[i];
 //         if (coin_i.amount < coin_i.denomination.amount) {
-//             total_refresh_fee += coin_i.denomination.rules.fees.refresh_fee.fee_satoshis;
+//             total_refresh_fee +=
+//             coin_i.denomination.rules.fees.refresh_fee.fee_satoshis;
 //         }
 //     }
 // }

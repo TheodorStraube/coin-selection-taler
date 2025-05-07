@@ -159,6 +159,8 @@ void simulate_actions_from_file(const char *filepath, Wallet denomination_wallet
  */
 void* thread_function(void* arg) {
     ThreadArgs* args = (ThreadArgs*)arg;
+
+    // srand(42);
     simulate_actions_from_file(args->filepath, args->denomination_wallet);
 
     sem_post(semaphore);
@@ -211,7 +213,6 @@ void load_and_simulate_actions(const char *base_dir, Wallet denomination_wallet)
             args->denomination_wallet = denomination_wallet;
 
             // thread_function(args);
-            
 
             if (pthread_create(&thread, NULL, thread_function, args) != 0) {
                 perror("Failed to create thread");
@@ -350,7 +351,7 @@ int main(int argc, char *argv[]) {
     //init_python();
     //checkOrLoadPytho();
     //return 0;
-    srand(21);
+    // srand(21);
 
 
     check_and_prepare_directory("../simulation");
