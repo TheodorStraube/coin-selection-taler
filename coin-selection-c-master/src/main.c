@@ -1,3 +1,4 @@
+#include "coin_selection.h"
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
@@ -183,7 +184,7 @@ void* thread_function(void* arg) {
  * @param base_dir The base directory containing the files.
  * @param denomination_wallet The wallet with coin denominations.
  */
-void load_and_simulate_actions(const char *base_dir, Wallet denomination_wallet) {
+void load_and_simulate_actions(const char *base_dir, Wallet denomination_wallet, int strategy) {
     DIR *dir;
     struct dirent *entry;
 
@@ -196,7 +197,11 @@ void load_and_simulate_actions(const char *base_dir, Wallet denomination_wallet)
         return;
     }
 
-    while ((entry = readdir(dir)) != NULL) {
+    struct dirent **sorted_entries;
+    int n_files = scandir(base_dir, &sorted_entries, 0, alphasort);
+
+    for(int i = 0; i < n_files; i++) {
+        struct dirent *entry = sorted_entries[i];
         if (strstr(entry->d_name, ".csv")) {
             char filepath[1024];
             sprintf(filepath, "%s/%s", base_dir, entry->d_name);
@@ -211,8 +216,6 @@ void load_and_simulate_actions(const char *base_dir, Wallet denomination_wallet)
 
             args->filepath = strdup(filepath);
             args->denomination_wallet = denomination_wallet;
-
-            // thread_function(args);
 
             if (pthread_create(&thread, NULL, thread_function, args) != 0) {
                 perror("Failed to create thread");
@@ -339,21 +342,20 @@ int checkOrLoadPytho() {
 
 int main(int argc, char *argv[]) {
     int num_users = 1;
+    int strategy = -1;
 
     if (argc > 1) {
-        num_users = atoi(argv[1]);
-        if (num_users <= 0) {
-            fprintf(stderr, "Number of users must be a positive integer. Using default: 100\n");
-            num_users = 100;
-        }
+        strategy = atoi(argv[1]);    
     }
+    printf("Strategy: %d\n", strategy);
+    // if (argc > 1) {
+    //     num_users = atoi(argv[1]);
+    //     if (num_users <= 0) {
+    //         fprintf(stderr, "Number of users must be a positive integer. Using default: 100\n");
+    //         num_users = 100;
+    //     }
+    // }
     
-    //init_python();
-    //checkOrLoadPytho();
-    //return 0;
-    // srand(21);
-
-
     check_and_prepare_directory("../simulation");
     check_and_prepare_directory("../simulation/users");
     check_and_prepare_directory("../simulation/results");
@@ -397,7 +399,7 @@ int main(int argc, char *argv[]) {
     generate_and_save_actions("../simulation/users", num_users);
 
     // Load and simulate actions from the generated files
-    load_and_simulate_actions("../simulation/users", denomination_wallet);
+    load_and_simulate_actions("../simulation/users", denomination_wallet, strategy);
 
     // Close and unlink the semaphore
     sem_close(semaphore);
