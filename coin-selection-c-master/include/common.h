@@ -64,6 +64,7 @@ typedef struct {
 typedef struct {
     const char* filepath;
     Wallet denomination_wallet;
+    int set_strategy;
 } ThreadArgs;
 
 typedef struct {

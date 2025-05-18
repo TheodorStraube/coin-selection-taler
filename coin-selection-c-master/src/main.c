@@ -97,7 +97,7 @@ void clear_directory(const char *directory_path) {
  * @param filepath The path to the file containing actions.
  * @param denomination_wallet The wallet with coin denominations.
  */
-void simulate_actions_from_file(const char *filepath, Wallet denomination_wallet) {
+void simulate_actions_from_file(const char *filepath, Wallet denomination_wallet, int set_strategy) {
     FILE *file = fopen(filepath, "r");
     if (!file) {
         perror("Failed to open file");
@@ -138,6 +138,13 @@ void simulate_actions_from_file(const char *filepath, Wallet denomination_wallet
     int user_index, strategy;
     sscanf(buffer, "%[^,],%d,%d,%d", user.name, &user.type, &strategy, &user_index);
 
+    if(set_strategy >= 0 && strategy != set_strategy){
+        fclose(file);
+        free(user.name);
+        free(actions);
+        return;
+    }
+
     // Read the actions from the rest of the file
     int num_actions = 0;
     while (fgets(buffer, sizeof(buffer), file) != NULL && num_actions < line_count - 1) {
@@ -162,7 +169,7 @@ void* thread_function(void* arg) {
     ThreadArgs* args = (ThreadArgs*)arg;
 
     // srand(42);
-    simulate_actions_from_file(args->filepath, args->denomination_wallet);
+    simulate_actions_from_file(args->filepath, args->denomination_wallet, args->set_strategy);
 
     sem_post(semaphore);
 
@@ -216,6 +223,7 @@ void load_and_simulate_actions(const char *base_dir, Wallet denomination_wallet,
 
             args->filepath = strdup(filepath);
             args->denomination_wallet = denomination_wallet;
+            args->set_strategy = strategy;
 
             thread_function(args);
 
@@ -254,93 +262,6 @@ void check_and_prepare_directory(const char *dir_path) {
     }
 }
 
-int init_python(){
-    PyStatus status;
-
-    printf("init_python\n");
-
-    PyConfig config;
-    PyConfig_InitPythonConfig(&config);
-
-    status = Py_InitializeFromConfig(&config);
-    if (PyStatus_Exception(status)) {
-        return 1;
-    }
-    PyConfig_Clear(&config);
-    
-    PyObject *pName, *pModule, *pFunc, *pValue, *kwargs;
-
-    pName = PyUnicode_FromString("main");
-    /* Error checking of pName left out */
-
-    pModule = PyImport_Import(pName);
-    Py_DECREF(pName);
-
-    if (pModule != NULL) {
-        pFunc = PyObject_GetAttrString(pModule, "process_call");
-        if (pFunc && PyCallable_Check(pFunc)) {
-            printf("found function");
-            kwargs = PyDict_New();
-
-            PyObject *value = PyLong_FromLong(13);
-            PyDict_SetItemString(kwargs, "amount", value);
-            pValue = PyObject_CallOneArg(pFunc, kwargs);
-            Py_DECREF(kwargs);
-            if (pValue != NULL) {
-                printf("Result of call: %ld\n", PyLong_AsLong(pValue));
-                Py_DECREF(pValue);
-            }else {
-                
-            }
-        }else {printf("func error");}
-    }else {
-        printf("init error");
-        PyErr_PrintEx(1);
-    }
-    
-
-    return 0;
-}
-int checkOrLoadPytho() {
-    PyObject *pName, *pModule, *pFunc, *pValue, *kwargs;
-
-    PyStatus status;
-
-    PyConfig config;
-
-    if(pName != NULL){
-        printf("name not null");
-        return 1;
-    }
-    PyConfig_InitPythonConfig(&config);
-
-    status = Py_InitializeFromConfig(&config);
-    if (PyStatus_Exception(status)) {
-        printf("init error");
-        return 0;
-    }
-    PyConfig_Clear(&config);
-    
-    pName = PyUnicode_FromString("main");
-    /* Error checking of pName left out */
-
-    pModule = PyImport_Import(pName);
-    Py_DECREF(pName);
-
-    printf("hier\n");
-    if (pModule != NULL) {
-        pFunc = PyObject_GetAttrString(pModule, "process_call");
-        if (!pFunc || !PyCallable_Check(pFunc)) {
-            printf("Failed to load Python");
-            return 0;
-        }
-        printf("reached\n");
-        pValue = PyObject_CallOneArg(pFunc, kwargs);
-        return 1;        
-    }
-    printf("ier\n");
-    return 0;
-}
 
 int main(int argc, char *argv[]) {
     int num_users = 1;
@@ -385,13 +306,13 @@ int main(int argc, char *argv[]) {
 
     if (denomination_wallet.num_coins > 0) {
         printf("Loaded %d coins from configuration.\n", denomination_wallet.num_coins);
-        for (int i = 0; i < denomination_wallet.num_coins; i++) {
-            printf("Coin %d: %s\n", i+1, denomination_wallet.coins[i].denomination.name);
-            printf("Amount: %lld satoshis\n", denomination_wallet.coins[i].denomination.amount);
-            printf("Withdraw Fee: %lld satoshis\n", denomination_wallet.coins[i].denomination.rules.fees.withdraw_fee.fee_satoshis);
-            printf("Refresh Fee: %lld satoshis\n", denomination_wallet.coins[i].denomination.rules.fees.refresh_fee.fee_satoshis);
-            printf("Deposit Fee: %lld satoshis\n", denomination_wallet.coins[i].denomination.rules.fees.deposit_fee.fee_satoshis);
-        }
+        // for (int i = 0; i < denomination_wallet.num_coins; i++) {
+        //     printf("Coin %d: %s\n", i+1, denomination_wallet.coins[i].denomination.name);
+        //     printf("Amount: %lld satoshis\n", denomination_wallet.coins[i].denomination.amount);
+        //     printf("Withdraw Fee: %lld satoshis\n", denomination_wallet.coins[i].denomination.rules.fees.withdraw_fee.fee_satoshis);
+        //     printf("Refresh Fee: %lld satoshis\n", denomination_wallet.coins[i].denomination.rules.fees.refresh_fee.fee_satoshis);
+        //     printf("Deposit Fee: %lld satoshis\n", denomination_wallet.coins[i].denomination.rules.fees.deposit_fee.fee_satoshis);
+        // }
     } else {
         printf("No coins were loaded from the configuration file.\n");
     }

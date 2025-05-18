@@ -1557,8 +1557,8 @@ Coin *allocate_call_external(Wallet wallet, long long amount,
     pValue = PyObject_CallOneArg(pFunc, kwargs);
 
     PyErr_Print();
-    Py_DECREF(kwargs);
-    Py_DECREF(pAmount);
+    // Py_DECREF(kwargs);
+    // Py_DECREF(pAmount);
 
     // Allocate memory for selected coins
     Coin *selectedCoins = malloc(sizeof(Coin) * PyList_Size(pValue));
@@ -1566,51 +1566,51 @@ Coin *allocate_call_external(Wallet wallet, long long amount,
       return NULL; // Allocation failed
     }
 
-    long long totalAmount = 0;
     // Copy selected coins
     for (int k = 0; k < PyList_Size(pValue); k++) {
-      long coinAmount = wallet.coins[PyLong_AsInt(PyList_GetItem(pValue, k))]
-                            .denomination.amount;
+      long coinAmount = wallet.coins[PyLong_AsInt(PyList_GetItem(pValue, k))].amount;
       // printf("index %i selected for %i\n",
       // PyLong_AsInt(PyList_GetItem(pValue, k)), coinAmount);
       selectedCoins[k] = wallet.coins[PyLong_AsInt(PyList_GetItem(pValue, k))];
-      totalAmount += coinAmount;
     }
 
     *num_allocated_coins = PyList_Size(pValue);
+    
+    // Py_DECREF(pValue);
+    return selectedCoins;
 
-    Coin *finalSelectedCoins = malloc(sizeof(Coin) * *num_allocated_coins);
-
-    if (finalSelectedCoins == NULL) {
-      free(selectedCoins);
-      return NULL;
-    }
-
-    // Copy selected coins
-    long long amount_collected = 0;
-    long long effective;
-    long long partial_amount;
-    for (int k = 0; k < *num_allocated_coins; k++) {
-      Coin *coin_k = &selectedCoins[k];
-      effective = effective_amount(coin_k);
-      if (amount_collected + effective > amount) {
-        partial_amount =
-            amount - amount_collected +
-            coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
-            coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
-      } else {
-        partial_amount = coin_k->denomination.amount;
-      }
-      coin_k->amount = partial_amount;
-      finalSelectedCoins[k] = *coin_k;
-    }
-
-    if (pValue != NULL) {
-      Py_DECREF(pValue);
-    } else {
-      printf("NULL result\n");
-    }
-    return finalSelectedCoins;
+    // Coin *finalSelectedCoins = malloc(sizeof(Coin) * *num_allocated_coins);
+    //
+    // if (finalSelectedCoins == NULL) {
+    //   free(selectedCoins);
+    //   return NULL;
+    // }
+    //
+    // // Copy selected coins
+    // long long amount_collected = 0;
+    // long long effective;
+    // long long partial_amount;
+    // for (int k = 0; k < *num_allocated_coins; k++) {
+    //   Coin *coin_k = &selectedCoins[k];
+    //   effective = effective_amount(coin_k);
+    //   if (amount_collected + effective > amount) {
+    //     partial_amount =
+    //         amount - amount_collected +
+    //         coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+    //         coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    //   } else {
+    //     partial_amount = coin_k->denomination.amount;
+    //   }
+    //   coin_k->amount = partial_amount;
+    //   finalSelectedCoins[k] = *coin_k;
+    // }
+    //
+    // if (pValue != NULL) {
+    //   Py_DECREF(pValue);
+    // } else {
+    //   printf("NULL result\n");
+    // }
+    // return finalSelectedCoins;
   } else {
     printf("Python didnt load :/\n");
     return NULL;
@@ -1672,6 +1672,7 @@ Coin *allocate_wallet_core(Wallet wallet, long long amount,
 
   if (payRemaining > 0) {
     free(selectedCoins);
+    free(coinsCopy);
     return NULL;
   }
 
@@ -1682,6 +1683,7 @@ Coin *allocate_wallet_core(Wallet wallet, long long amount,
   if (finalSelectedCoins == NULL) {
     // If realloc failed, free original block and return NULL
     free(selectedCoins);
+    free(coinsCopy);
     return NULL;
   }
 
@@ -1787,8 +1789,6 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
                                                Wallet denomination_wallet) {
 
   if (!wallet.num_coins || !amount) { // if wallet is empty or amount 0, return
-    printf("[%u][%lld]\tcoins or amount 0, skipping coin selection\n", strategy,
-           time);
     return (CoinSelectionResult){
         .coins = NULL, .coin_count = 0, .tab = (FeeTab){0}};
   }
@@ -1837,10 +1837,10 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
     allocated_coins = allocate_coins_greedy_min_to_max_fix(
         wallet, amount, &num_allocated_coins, denomination_wallet);
     break;
-  // case CUSTOM_EXTERNAL:
-  //   allocated_coins =
-  //       allocate_call_external(wallet, amount, &num_allocated_coins);
-  //   break;
+  case CUSTOM_EXTERNAL:
+    allocated_coins =
+        allocate_call_external(wallet, amount, &num_allocated_coins);
+    break;
   case WALLET_CORE:
     allocated_coins =
         allocate_wallet_core(wallet, amount, &num_allocated_coins);
@@ -1855,14 +1855,15 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
 
   if (!tab.valid) {
     long long total = 0;
-      for (int i = 0; i < num_allocated_coins; ++i) {
-        total += allocated_coins[i].amount;
-      }
+    for (int i = 0; i < num_allocated_coins; ++i) {
+      total += allocated_coins[i].amount;
+    }
 
     // This may happen when the generated Steps attempt to overspend
-    printf("Invalid Selection: %d Coins pay for Amount: %lld/%lld\t Wallet has %lld\n", num_allocated_coins, tab.effective_amount, amount, total);
-    pprint(allocated_coins, num_allocated_coins);
-    
+    // printf("Invalid Selection: %d Coins pay for Amount: %lld/%lld\t Wallet
+    // has %lld\n", num_allocated_coins, tab.effective_amount, amount, total);
+    // pprint(allocated_coins, num_allocated_coins);
+
     return (CoinSelectionResult){
         .coins = NULL, .coin_count = 0, .tab = (FeeTab){0}};
   }

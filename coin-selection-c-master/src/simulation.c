@@ -39,11 +39,7 @@ void print_deposit_status(int i, long long transaction_amount, Wallet* wallet, C
     //assert(alloc_balance <= wallet_balance);
     //assert(alloc_balance >= transaction_amount);
 
-    printf("[%d]\tAmt: %lld, Wallet[%lld]: %lld\t\tALLOC[%d]: [%lld\t%lld]\n",i, transaction_amount, wallet->num_coins, wallet_balance, allocatedCoins->coin_count, alloc_balance, allocatedCoins->tab.effective_amount);
-}
-
-int covers_amount(Coin *coins, int num_coins, long long amount) {
-  return coins_balance(coins, num_coins) >= amount;
+    // printf("[%d]\tAmt: %lld, Wallet[%lld]: %lld\t\tALLOC[%d]: [%lld\t%lld]\n",i, transaction_amount, wallet->num_coins, wallet_balance, allocatedCoins->coin_count, alloc_balance, allocatedCoins->tab.effective_amount);
 }
 
 /**
@@ -110,7 +106,7 @@ void simulate_user_actions(int user_index, User user,
     for (int i = 0; i < num_actions; i++) {
 
         // printf("\n");
-        // printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
+        printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
 
       long long renew_fee =
           calculate_renew_fee(user.wallet, user.actions[i].time);
@@ -160,7 +156,7 @@ void simulate_user_actions(int user_index, User user,
         CoinSelectionResult allocatedCoins = allocate_coins_for_deposit(
             user.wallet, transaction_amount, strategy, user.actions[i].time, denomination_wallet);
 
-        print_deposit_status(i, transaction_amount, &user.wallet, &allocatedCoins);
+        // print_deposit_status(i, transaction_amount, &user.wallet, &allocatedCoins);
 
         if (!allocatedCoins.coins) {
           char error[1024];
@@ -168,7 +164,6 @@ void simulate_user_actions(int user_index, User user,
                   "No coins allocated. %d coins for denomination %lld. [%s]",
                   user.wallet.num_coins, transaction_amount,
                   StrategyNames[strategy]);
-          printf("ERROR MESSAGE\n%s\n", error);
         } else {
 
           fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
