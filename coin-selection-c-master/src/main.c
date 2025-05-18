@@ -217,13 +217,15 @@ void load_and_simulate_actions(const char *base_dir, Wallet denomination_wallet,
             args->filepath = strdup(filepath);
             args->denomination_wallet = denomination_wallet;
 
-            if (pthread_create(&thread, NULL, thread_function, args) != 0) {
-                perror("Failed to create thread");
-                free(args);
-                sem_post(semaphore); // Release the semaphore if thread creation fails
-            } else {
-                pthread_detach(thread); // Detach the thread
-            }
+            thread_function(args);
+
+            // if (pthread_create(&thread, NULL, thread_function, args) != 0) {
+            //     perror("Failed to create thread");
+            //     free(args);
+            //     sem_post(semaphore); // Release the semaphore if thread creation fails
+            // } else {
+            //     pthread_detach(thread); // Detach the thread
+            // }
         }
     }
 

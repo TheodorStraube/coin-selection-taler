@@ -617,7 +617,8 @@ Coin *allocate_random_bills(Wallet wallet, long long amount,
 
   // Allocate memory for selected coins
   Coin *finalSelectedCoins = malloc(sizeof(Coin) * selectedCount);
-  if (selectedCoins == NULL) {
+  if (finalSelectedCoins == NULL) {
+    free(selectedCoins);
     free(indices);
     return NULL; // Allocation failed
   }
@@ -642,6 +643,7 @@ Coin *allocate_random_bills(Wallet wallet, long long amount,
   }
   *num_allocated_coins = selectedCount;
 
+  free(selectedCoins);
   free(indices);
   return finalSelectedCoins;
 }
@@ -868,7 +870,7 @@ Coin *allocate_coins_even_from_min_to_max(Wallet wallet, long long amount,
     coin_k->amount = partial_amount;
     finalSelectedCoins[k] = *coin_k;
   }
-
+  free(selectedCoins);
   free(denom_array[0]);
   free(denom_array[1]);
   free(denom_array);
@@ -1017,6 +1019,7 @@ Coin *allocate_coins_even_from_max_to_min(Wallet wallet, long long amount,
   }
 
   // Clean up
+  free(selectedCoins);
   free(denom_array[0]);
   free(denom_array[1]);
   free(denom_array);
@@ -1165,6 +1168,7 @@ Coin *allocate_coins_greedy_min_to_max_fixed(Wallet wallet, long long amount,
   }
 
   // Clean up
+  free(selectedCoins);
   free(denom_array[0]);
   free(denom_array[1]);
   free(denom_array);
@@ -1324,6 +1328,7 @@ Coin *allocate_coins_greedy_min_to_max(Wallet wallet, long long amount,
   }
 
   // Clean up
+  free(selectedCoins);
   free(denom_array[0]);
   free(denom_array[1]);
   free(denom_array);
@@ -1471,6 +1476,7 @@ Coin *allocate_coins_greedy_min_to_max_fix(Wallet wallet, long long amount,
   }
 
   // Clean up
+  free(selectedCoins);
   free(denom_array[0]);
   free(denom_array[1]);
   free(denom_array);
@@ -1781,14 +1787,16 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
                                                Wallet denomination_wallet) {
 
   if (!wallet.num_coins || !amount) { // if wallet is empty or amount 0, return
-    return (CoinSelectionResult) {.coins = NULL, .coin_count = 0, .tab = (FeeTab) {0}};
+    printf("[%u][%lld]\tcoins or amount 0, skipping coin selection\n", strategy,
+           time);
+    return (CoinSelectionResult){
+        .coins = NULL, .coin_count = 0, .tab = (FeeTab){0}};
   }
 
   Coin *allocated_coins;
   int num_allocated_coins = 0;
 
   unsigned int seed = 0;
-
 
   switch (strategy) {
   case MAX_BILLS:
@@ -1798,16 +1806,20 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
     allocated_coins = allocate_min_bills(wallet, amount, &num_allocated_coins);
     break;
   case CLOSEST_TO_EXPIRE_MIN_BILLS:
-    allocated_coins = allocate_closest_to_expire_min_bills(wallet, amount, &num_allocated_coins);
+    allocated_coins = allocate_closest_to_expire_min_bills(
+        wallet, amount, &num_allocated_coins);
     break;
   case CLOSEST_TO_EXPIRE_MAX_BILLS:
-    allocated_coins = allocate_closest_to_expire_max_bills(wallet, amount, &num_allocated_coins);
+    allocated_coins = allocate_closest_to_expire_max_bills(
+        wallet, amount, &num_allocated_coins);
     break;
   case MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED:
-    allocated_coins = allocate_max_bills_time_to_expire_weighted(wallet, amount, &num_allocated_coins, time);
+    allocated_coins = allocate_max_bills_time_to_expire_weighted(
+        wallet, amount, &num_allocated_coins, time);
     break;
   case RANDOM:
-    allocated_coins = allocate_random_bills(wallet, amount, &num_allocated_coins, &seed);
+    allocated_coins =
+        allocate_random_bills(wallet, amount, &num_allocated_coins, &seed);
     break;
   case EVEN_FROM_MIN_TO_MAX:
     allocated_coins = allocate_coins_even_from_min_to_max(
@@ -1818,32 +1830,45 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
         wallet, amount, &num_allocated_coins, denomination_wallet);
     break;
   case GREEDY_MIN_TO_MAX:
-    allocated_coins =
-        allocate_coins_greedy_min_to_max(wallet, amount, &num_allocated_coins, denomination_wallet);
+    allocated_coins = allocate_coins_greedy_min_to_max(
+        wallet, amount, &num_allocated_coins, denomination_wallet);
     break;
   case GREEDY_MIN_TO_MAX_FIX:
     allocated_coins = allocate_coins_greedy_min_to_max_fix(
         wallet, amount, &num_allocated_coins, denomination_wallet);
     break;
-  case CUSTOM_EXTERNAL:
-    allocated_coins =
-        allocate_call_external(wallet, amount, &num_allocated_coins);
-    break;
+  // case CUSTOM_EXTERNAL:
+  //   allocated_coins =
+  //       allocate_call_external(wallet, amount, &num_allocated_coins);
+  //   break;
   case WALLET_CORE:
     allocated_coins =
         allocate_wallet_core(wallet, amount, &num_allocated_coins);
     break;
   default:
-    allocated_coins = allocate_random_bills(wallet, amount, &num_allocated_coins, &seed);
+    allocated_coins =
+        allocate_random_bills(wallet, amount, &num_allocated_coins, &seed);
   }
 
-  FeeTab tab = fees_for_selection(amount, allocated_coins, &num_allocated_coins);
+  FeeTab tab =
+      fees_for_selection(amount, allocated_coins, &num_allocated_coins);
 
   if (!tab.valid) {
-    printf("INVALID CS\n");
+    long long total = 0;
+      for (int i = 0; i < num_allocated_coins; ++i) {
+        total += allocated_coins[i].amount;
+      }
+
+    // This may happen when the generated Steps attempt to overspend
+    printf("Invalid Selection: %d Coins pay for Amount: %lld/%lld\t Wallet has %lld\n", num_allocated_coins, tab.effective_amount, amount, total);
+    pprint(allocated_coins, num_allocated_coins);
+    
+    return (CoinSelectionResult){
+        .coins = NULL, .coin_count = 0, .tab = (FeeTab){0}};
   }
 
-  return (CoinSelectionResult) {.coins = allocated_coins, .coin_count = num_allocated_coins, .tab = tab};
+  return (CoinSelectionResult){
+      .coins = allocated_coins, .coin_count = num_allocated_coins, .tab = tab};
 }
 
 /**
@@ -2132,26 +2157,27 @@ long long calculate_renew_fee(Wallet wallet, long long time) {
   return totalRenewFee;
 }
 
-int is_dirty(Coin coin) {
-    return coin.amount != coin.denomination.amount;
-}
+int is_dirty(Coin coin) { return coin.amount != coin.denomination.amount; }
 
 void pprint(Coin *coins, int nr) {
   for (int i = 0; i < nr; i++) {
     Coin coin = coins[i];
 
     if (is_dirty(coin)) {
-        printf("[%lld / %lld | D: %d | R: %d]", coin.amount, coin.denomination.amount, coin.denomination.rules.fees.deposit_fee.fee_satoshis, coin.denomination.rules.fees.refresh_fee.fee_satoshis);
-    }else {
-        printf("[%lld]", coin.amount);
+      printf("[%lld / %lld | D: %d | R: %d]", coin.amount,
+             coin.denomination.amount,
+             coin.denomination.rules.fees.deposit_fee.fee_satoshis,
+             coin.denomination.rules.fees.refresh_fee.fee_satoshis);
+    } else {
+      printf("[%lld]", coin.amount);
     }
   }
   printf("\n");
 }
 
 // should return list of new + remaining coins and the refresh fee to be paid?
-// TODO: generate new coins only from denoms possible in this scenario (pass denom wallet)
-// void refresh_dirty_coins(Coin *coins, int num_coins) {
+// TODO: generate new coins only from denoms possible in this scenario (pass
+// denom wallet) void refresh_dirty_coins(Coin *coins, int num_coins) {
 //
 //     pprint(coins, num_coins);
 //

@@ -6,7 +6,6 @@
 #include "fee.h"
 #include "user.h"
 #include "coin_selection.h"
-#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 
