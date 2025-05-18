@@ -24,13 +24,26 @@ int get_scale(long long amount) {
   return scale;
 }
 
+long long coins_balance(Coin* coins, int num_coins) {
+    long long total = 0;
+      for (int i = 0; i < num_coins; ++i) {
+        total += coins[i].amount;
+      }
+      return total;
+}
+
+void print_deposit_status(int i, long long transaction_amount, Wallet* wallet, CoinSelectionResult* allocatedCoins){
+    long long wallet_balance = coins_balance(wallet->coins, wallet->num_coins); 
+    long long alloc_balance = coins_balance(allocatedCoins->coins, allocatedCoins->coin_count);
+
+    //assert(alloc_balance <= wallet_balance);
+    //assert(alloc_balance >= transaction_amount);
+
+    printf("[%d]\tAmt: %lld, Wallet[%lld]: %lld\t\tALLOC[%d]: [%lld\t%lld]\n",i, transaction_amount, wallet->num_coins, wallet_balance, allocatedCoins->coin_count, alloc_balance, allocatedCoins->tab.effective_amount);
+}
+
 int covers_amount(Coin *coins, int num_coins, long long amount) {
-  long long total = 0;
-  for (int i = 0; i < num_coins; ++i) {
-    total += coins[i].denomination.amount;
-  }
-  // printf("[ %d / %d ]\n", total, amount);
-  return total >= amount;
+  return coins_balance(coins, num_coins) >= amount;
 }
 
 /**
@@ -92,7 +105,12 @@ void simulate_user_actions(int user_index, User user,
   if (user.actions != NULL && num_actions > 0) {
     fprintf(fp, "%s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
 
+        // printf("\n");
+    // printf("%d Aktionen\n", num_actions);
     for (int i = 0; i < num_actions; i++) {
+
+        // printf("\n");
+        // printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
 
       long long renew_fee =
           calculate_renew_fee(user.wallet, user.actions[i].time);
@@ -133,13 +151,16 @@ void simulate_user_actions(int user_index, User user,
 
           total_fee += fee_for_action;
           add_coins_to_wallet(&user.wallet, generatedCoins, generatedCoinCount);
+        }else {
+            printf("NO CS returned\n");
         }
       } else if (user.actions[i].operation == DEPOSIT_OP) {
+          // printf("DEPOSIT %lld as %u STRAT %u\n", transaction_amount, user.type, strategy);
         // Simulate withdrawal
-        int allocatedCoinCount = 0;
         CoinSelectionResult allocatedCoins = allocate_coins_for_deposit(
             user.wallet, transaction_amount, strategy, user.actions[i].time, denomination_wallet);
 
+        print_deposit_status(i, transaction_amount, &user.wallet, &allocatedCoins);
 
         if (!allocatedCoins.coins) {
           char error[1024];
@@ -147,7 +168,7 @@ void simulate_user_actions(int user_index, User user,
                   "No coins allocated. %d coins for denomination %lld. [%s]",
                   user.wallet.num_coins, transaction_amount,
                   StrategyNames[strategy]);
-          printf("%s\n", error);
+          printf("ERROR MESSAGE\n%s\n", error);
         } else {
 
           fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
@@ -155,13 +176,14 @@ void simulate_user_actions(int user_index, User user,
                   OperationNames[user.actions[i].operation], allocatedCoins.tab.deposit_fee_sum,
                   user.wallet.num_coins);
 
+          // printf("Before: %d coins\t\t\n", user.wallet.num_coins);
           remove_selected_coins(&user.wallet, allocatedCoins.coins,
-                                allocatedCoinCount);
+                                allocatedCoins.coin_count);
+          // printf("After: %d coins\n", user.wallet.num_coins);
 
           long long changeAmount = allocatedCoins.tab.effective_amount - transaction_amount;
 
           // printf("%lld - %lld - %lld - %d", transaction_amount, allocatedAmount, changeAmount, allocatedCoins.coin_count);
-
 
             int changeCoinCount = 0;
             Coin *changeCoins =
@@ -182,17 +204,14 @@ void simulate_user_actions(int user_index, User user,
             } else {
               printf("Error for allocation of change coins\n");
             }
-          total_fee += fee_for_action;
-        }
-        if (allocatedCoins.coins != NULL) {
-            free(allocatedCoins.coins);
+          total_fee += allocatedCoins.tab.refresh_fee_sum + allocatedCoins.tab.deposit_fee_sum;
         }
       }
+// printf("[%s][%lld] finished.\n", StrategyNames[strategy], user.actions[i].time);
     }
   } else {
     printf("No actions generated for the user.\n");
   }
-
     fclose(fp);
     fclose(log_fp);
 
@@ -201,3 +220,6 @@ void simulate_user_actions(int user_index, User user,
   }
   free(user.actions);
 }
+
+
+
