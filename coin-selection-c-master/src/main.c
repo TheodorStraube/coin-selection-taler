@@ -1,4 +1,3 @@
-#include "coin_selection.h"
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
