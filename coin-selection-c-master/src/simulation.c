@@ -2,10 +2,12 @@
 // Created by Bohdan Potuzhnyi on 29.04.2024.
 //
 #include "simulation.h"
+#include <fcntl.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "cjson/cJSON.h"
 #include "coin_selection.h"
 #include "common.h"
 #include "simulation.h"
@@ -40,6 +42,31 @@ void print_deposit_status(int i, long long transaction_amount, Wallet* wallet, C
     //assert(alloc_balance >= transaction_amount);
 
     // printf("[%d]\tAmt: %lld, Wallet[%lld]: %lld\t\tALLOC[%d]: [%lld\t%lld]\n",i, transaction_amount, wallet->num_coins, wallet_balance, allocatedCoins->coin_count, alloc_balance, allocatedCoins->tab.effective_amount);
+}
+
+void add_coins_to_array(Wallet wallet, cJSON *json) {
+
+    for(int i = 0; i < wallet.num_coins; i++) {
+        cJSON *coin_json = cJSON_CreateObject();
+        cJSON_AddNumberToObject(coin_json, "value", wallet.coins[i].amount);
+        cJSON_AddItemToArray(json, coin_json);
+    }
+    
+}
+
+void save_wallet_state(Wallet wallet, long long time, FILE *file_handle) {
+    cJSON *json = cJSON_CreateObject();; 
+    cJSON_AddNumberToObject(json, "time", time);
+    
+    cJSON *coins = cJSON_AddArrayToObject(json, "coins");
+    add_coins_to_array(wallet, coins);
+
+    char *json_str = cJSON_PrintUnformatted(json);
+    fputs(json_str, file_handle);
+    fprintf(file_handle, ",\n");
+
+    cJSON_Delete(json);
+    free(json_str);
 }
 
 /**
@@ -82,7 +109,7 @@ void simulate_user_actions(int user_index, User user,
   wallet_scale = get_scale(wallet_scale);
 
   char logfilename[256];
-  sprintf(logfilename, "../simulation/results/log_user_%d_strategy_%s.csv", user_index, StrategyNames[strategy]);
+  sprintf(logfilename, "../simulation/results/log_user_%d_strategy_%s.json", user_index, StrategyNames[strategy]);
 
   FILE *log_fp = fopen(logfilename, "w");
 
@@ -98,15 +125,22 @@ void simulate_user_actions(int user_index, User user,
   user.wallet.num_coins = 0;
 
   long long total_fee = 0;
+
   if (user.actions != NULL && num_actions > 0) {
     fprintf(fp, "%s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
 
         // printf("\n");
     // printf("%d Aktionen\n", num_actions);
+
+    fprintf(log_fp, "[");
+    save_wallet_state(user.wallet, -1, log_fp);
+
     for (int i = 0; i < num_actions; i++) {
 
         // printf("\n");
         printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
+
+    
 
       long long renew_fee =
           calculate_renew_fee(user.wallet, user.actions[i].time);
@@ -203,11 +237,17 @@ void simulate_user_actions(int user_index, User user,
         }
       }
 // printf("[%s][%lld] finished.\n", StrategyNames[strategy], user.actions[i].time);
+    
+    save_wallet_state(user.wallet, user.actions[i].time, log_fp);
     }
   } else {
     printf("No actions generated for the user.\n");
   }
     fclose(fp);
+
+    // remove illegal trailing comma and close outer list
+    fseek(log_fp, -2, SEEK_END);
+    fprintf(log_fp, "]");
     fclose(log_fp);
 
   if (user.wallet.coins != NULL) {
