@@ -33,14 +33,13 @@ class Action(JSONWizard):
 
 def load_coins_json(file: Path) -> list[DataPoint]:
     with open(file, 'r') as json_file:
-        return list(DataPoint.from_dict(d) for d in tqdm(json.load(json_file)))  
+        return list(DataPoint.from_dict(d) for d in tqdm(json.load(json_file), desc=file.name))  
 
 def load_actions_json(file) -> list[Action]:
     with open(file, 'r') as json_file:
-        return list(Action.from_dict(d) for d in tqdm(json.load(json_file)))  
+        return list(Action.from_dict(d) for d in tqdm(json.load(json_file), desc=file.name))  
 
 def load_file(file: Path):
-    print("________________________________ " + file.name)
     if file.name.startswith('coins'):
         yield load_coins_json(file)
     elif file.name.startswith('actions'):
@@ -48,11 +47,8 @@ def load_file(file: Path):
     else:
         print(f"{file.name} can not be read")
 
-def main():
-    files = list(f for f in Path.iterdir(PATH) if f.name.endswith(".json"))
+def load_all_files(path = PATH):
+    files = list(f for f in Path.iterdir(path) if f.name.endswith(".json"))
 
-    return {f: list(load_file(f)) for f in files}
-
-
-r = main()
+    return {f: list(load_file(f)) for f in sorted(files)}
 
