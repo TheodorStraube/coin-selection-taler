@@ -61,9 +61,11 @@ void add_coins_to_array(Coin *coins, int num_coins, cJSON *json) {
     
 }
 
-void save_wallet_state(Wallet wallet, long long time, FILE *file_handle) {
-    cJSON *json = cJSON_CreateObject();; 
-    cJSON_AddNumberToObject(json, "time", time);
+void save_wallet_state(Wallet wallet, int i, long long time, FILE *file_handle) {
+    cJSON *json = cJSON_CreateObject(); 
+    cJSON_AddNumberToObject(json, "Id", i);
+    cJSON_AddNumberToObject(json, "Time", time);
+
     
     cJSON *coins_json = cJSON_AddArrayToObject(json, "coins");
     add_coins_to_array(wallet.coins, wallet.num_coins, coins_json);
@@ -78,12 +80,12 @@ void save_wallet_state(Wallet wallet, long long time, FILE *file_handle) {
 
 void save_action(int i, long long time, long transaction_amount, int operation, long long fee_for_action, Coin *coins, int num_coins, FILE *file_handle) {
     cJSON *json = cJSON_CreateObject(); 
-    cJSON_AddNumberToObject(json, "step", i);
-    cJSON_AddNumberToObject(json, "time", time);
-    cJSON_AddNumberToObject(json, "amount", transaction_amount);
-    cJSON_AddNumberToObject(json, "operation", operation);
-    cJSON_AddNumberToObject(json, "fee", fee_for_action);
-    cJSON_AddNumberToObject(json, "num_coins", num_coins);
+    cJSON_AddNumberToObject(json, "Id", i);
+    cJSON_AddNumberToObject(json, "Time", time);
+    cJSON_AddNumberToObject(json, "Amount", transaction_amount);
+    cJSON_AddNumberToObject(json, "Operation", operation);
+    cJSON_AddNumberToObject(json, "Fee", fee_for_action);
+    cJSON_AddNumberToObject(json, "CoinCount", num_coins);
 
     cJSON *coins_json = cJSON_AddArrayToObject(json, "coins");
     add_coins_to_array(coins, num_coins, coins_json);
@@ -162,16 +164,11 @@ void simulate_user_actions(int user_index, User user,
   if (user.actions != NULL && num_actions > 0) {
     fprintf(fp, "%s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
 
-        // printf("\n");
-    // printf("%d Aktionen\n", num_actions);
-
-
-    save_wallet_state(user.wallet, -1, coins_log_fp);
+    save_wallet_state(user.wallet, -1, -1, coins_log_fp);
 
     for (int i = 0; i < num_actions; i++) {
 
-        // printf("\n");
-        printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
+      // printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
 
       long long renew_fee =
           calculate_renew_fee(user.wallet, user.actions[i].time);
@@ -278,7 +275,7 @@ void simulate_user_actions(int user_index, User user,
       }
 // printf("[%s][%lld] finished.\n", StrategyNames[strategy], user.actions[i].time);
     
-    save_wallet_state(user.wallet, user.actions[i].time, coins_log_fp);
+    save_wallet_state(user.wallet, i, user.actions[i].time, coins_log_fp);
     }
   } else {
     printf("No actions generated for the user.\n");
