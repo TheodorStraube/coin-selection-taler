@@ -10,6 +10,7 @@
 #include "cjson/cJSON.h"
 #include "coin_selection.h"
 #include "common.h"
+#include "fee.h"
 #include "simulation.h"
 /**
  * @brief Get the scale of a given amount.
@@ -44,11 +45,17 @@ void print_deposit_status(int i, long long transaction_amount, Wallet* wallet, C
     // printf("[%d]\tAmt: %lld, Wallet[%lld]: %lld\t\tALLOC[%d]: [%lld\t%lld]\n",i, transaction_amount, wallet->num_coins, wallet_balance, allocatedCoins->coin_count, alloc_balance, allocatedCoins->tab.effective_amount);
 }
 
-void add_coins_to_array(Wallet wallet, cJSON *json) {
+void close_json_array_file(FILE *file_handle) {
+    fseek(file_handle, -2, SEEK_END);
+    fprintf(file_handle, "]");
+    fclose(file_handle);
+}
 
-    for(int i = 0; i < wallet.num_coins; i++) {
+void add_coins_to_array(Coin *coins, int num_coins, cJSON *json) {
+
+    for(int i = 0; i < num_coins; i++) {
         cJSON *coin_json = cJSON_CreateObject();
-        cJSON_AddNumberToObject(coin_json, "value", wallet.coins[i].amount);
+        cJSON_AddNumberToObject(coin_json, "value", coins[i].amount);
         cJSON_AddItemToArray(json, coin_json);
     }
     
@@ -58,8 +65,8 @@ void save_wallet_state(Wallet wallet, long long time, FILE *file_handle) {
     cJSON *json = cJSON_CreateObject();; 
     cJSON_AddNumberToObject(json, "time", time);
     
-    cJSON *coins = cJSON_AddArrayToObject(json, "coins");
-    add_coins_to_array(wallet, coins);
+    cJSON *coins_json = cJSON_AddArrayToObject(json, "coins");
+    add_coins_to_array(wallet.coins, wallet.num_coins, coins_json);
 
     char *json_str = cJSON_PrintUnformatted(json);
     fputs(json_str, file_handle);
@@ -68,6 +75,27 @@ void save_wallet_state(Wallet wallet, long long time, FILE *file_handle) {
     cJSON_Delete(json);
     free(json_str);
 }
+
+void save_action(int i, long long time, long transaction_amount, int operation, long long fee_for_action, Coin *coins, int num_coins, FILE *file_handle) {
+    cJSON *json = cJSON_CreateObject(); 
+    cJSON_AddNumberToObject(json, "step", i);
+    cJSON_AddNumberToObject(json, "time", time);
+    cJSON_AddNumberToObject(json, "amount", transaction_amount);
+    cJSON_AddNumberToObject(json, "operation", operation);
+    cJSON_AddNumberToObject(json, "fee", fee_for_action);
+    cJSON_AddNumberToObject(json, "num_coins", num_coins);
+
+    cJSON *coins_json = cJSON_AddArrayToObject(json, "coins");
+    add_coins_to_array(coins, num_coins, coins_json);
+
+    char *json_str = cJSON_PrintUnformatted(json);
+    fputs(json_str, file_handle);
+    fprintf(file_handle, ",\n");
+
+    cJSON_Delete(json);
+    free(json_str);
+}
+
 
 /**
  * @brief Simulate user actions and write results to a file.
@@ -108,10 +136,15 @@ void simulate_user_actions(int user_index, User user,
 
   wallet_scale = get_scale(wallet_scale);
 
-  char logfilename[256];
-  sprintf(logfilename, "../simulation/results/log_user_%d_strategy_%s.json", user_index, StrategyNames[strategy]);
+  char coins_log_fname[256];
+  sprintf(coins_log_fname, "../simulation/results/coins_user_%d_strategy_%s.json", user_index, StrategyNames[strategy]);
+  FILE *coins_log_fp = fopen(coins_log_fname, "w");
+  fprintf(coins_log_fp, "[");
 
-  FILE *log_fp = fopen(logfilename, "w");
+  char action_log_fname[256];
+  sprintf(coins_log_fname, "../simulation/results/actions_user_%d_strategy_%s.json", user_index, StrategyNames[strategy]);
+  FILE *action_log_fp = fopen(coins_log_fname, "w");
+  fprintf(action_log_fp, "[");
 
   char filename[256];
   sprintf(filename, "../simulation/results/user_%d_strategy_%s.csv", user_index,
@@ -132,15 +165,13 @@ void simulate_user_actions(int user_index, User user,
         // printf("\n");
     // printf("%d Aktionen\n", num_actions);
 
-    fprintf(log_fp, "[");
-    save_wallet_state(user.wallet, -1, log_fp);
+
+    save_wallet_state(user.wallet, -1, coins_log_fp);
 
     for (int i = 0; i < num_actions; i++) {
 
         // printf("\n");
         printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
-
-    
 
       long long renew_fee =
           calculate_renew_fee(user.wallet, user.actions[i].time);
@@ -148,7 +179,11 @@ void simulate_user_actions(int user_index, User user,
         fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
                 user.actions[i].time, 0ll, OperationNames[REFRESH_OP],
                 renew_fee, user.wallet.num_coins);
+
+        // TODO: change after melting is impl
+        save_action(i, user.actions[i].time, 0ll, REFRESH_OP, renew_fee, NULL, 0, action_log_fp);
         total_fee += renew_fee;
+        // TODO: melt
       }
 
       long long fee_for_action;
@@ -174,10 +209,12 @@ void simulate_user_actions(int user_index, User user,
           fee_for_action = calculate_total_fee(
               generatedCoins, generatedCoinCount, user.actions[i].operation);
 
-          fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
+        fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
                   user.actions[i].time, transaction_amount,
                   OperationNames[user.actions[i].operation], fee_for_action,
                   user.wallet.num_coins);
+
+        save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, fee_for_action, generatedCoins, generatedCoinCount, action_log_fp);
 
           total_fee += fee_for_action;
           add_coins_to_wallet(&user.wallet, generatedCoins, generatedCoinCount);
@@ -205,6 +242,8 @@ void simulate_user_actions(int user_index, User user,
                   OperationNames[user.actions[i].operation], allocatedCoins.tab.deposit_fee_sum,
                   user.wallet.num_coins);
 
+          save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, fee_for_action, allocatedCoins.coins, allocatedCoins.coin_count, action_log_fp);
+
           // printf("Before: %d coins\t\t\n", user.wallet.num_coins);
           remove_selected_coins(&user.wallet, allocatedCoins.coins,
                                 allocatedCoins.coin_count);
@@ -212,8 +251,7 @@ void simulate_user_actions(int user_index, User user,
 
           long long changeAmount = allocatedCoins.tab.effective_amount - transaction_amount;
 
-          // printf("%lld - %lld - %lld - %d", transaction_amount, allocatedAmount, changeAmount, allocatedCoins.coin_count);
-
+          if (changeAmount > 0){          
             int changeCoinCount = 0;
             Coin *changeCoins =
                 generate_withdraw_coins(changeAmount, user.actions[i].time,
@@ -229,26 +267,26 @@ void simulate_user_actions(int user_index, User user,
                     allocatedCoins.tab.deposit_fee_sum + allocatedCoins.tab.refresh_fee_sum,
                     user.wallet.num_coins + changeCoinCount);
             if (changeCoins) {
+              save_action(i, user.actions[i].time, changeAmount, REFRESH_OP, fee_for_action, allocatedCoins.coins, allocatedCoins.coin_count, action_log_fp);
               add_coins_to_wallet(&user.wallet, changeCoins, changeCoinCount);
             } else {
               printf("Error for allocation of change coins\n");
-            }
+            }  
+          }
           total_fee += allocatedCoins.tab.refresh_fee_sum + allocatedCoins.tab.deposit_fee_sum;
         }
       }
 // printf("[%s][%lld] finished.\n", StrategyNames[strategy], user.actions[i].time);
     
-    save_wallet_state(user.wallet, user.actions[i].time, log_fp);
+    save_wallet_state(user.wallet, user.actions[i].time, coins_log_fp);
     }
   } else {
     printf("No actions generated for the user.\n");
   }
     fclose(fp);
 
-    // remove illegal trailing comma and close outer list
-    fseek(log_fp, -2, SEEK_END);
-    fprintf(log_fp, "]");
-    fclose(log_fp);
+   close_json_array_file(coins_log_fp);
+   close_json_array_file(action_log_fp);
 
   if (user.wallet.coins != NULL) {
       free(user.wallet.coins);
