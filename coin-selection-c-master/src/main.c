@@ -278,12 +278,13 @@ int main(int argc, char *argv[]) {
     //     }
     // }
     
-    check_and_prepare_directory("../simulation");
-    check_and_prepare_directory("../simulation/users");
-    check_and_prepare_directory("../simulation/results");
-
-    clear_directory("../simulation/users");
-    clear_directory("../simulation/results");
+    // TODO: separate check from clear + maybe clear depending on selection param
+    // check_and_prepare_directory("../simulation");
+    // check_and_prepare_directory("../simulation/users");
+    // check_and_prepare_directory("../simulation/results");
+    //
+    // clear_directory("../simulation/users");
+    // clear_directory("../simulation/results");
 
     sem_unlink(SEMAPHORE_NAME);
 
