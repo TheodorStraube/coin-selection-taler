@@ -11,5 +11,6 @@
 #include "coin_selection.h"
 
 void simulate_user_actions(int user_index, User user, Wallet denomination_wallet, int num_actions, strategy strategy);
+void clean_wallet(Wallet *wallet, Coin *coins, int num_coins, Wallet denomination_wallet, long long time);
 
 #endif //COIN_SELECTION_C_SIMULATION_H
