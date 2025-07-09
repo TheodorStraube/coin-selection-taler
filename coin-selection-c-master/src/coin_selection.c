@@ -2023,12 +2023,6 @@ void remove_selected_coins(Wallet *wallet, Coin *coins, int num_coins) {
     return; // No operation if the input is invalid
   }
 
-  // int dirtyCoins = 0;
-  //
-  // for (int i = 0; i < num_coins; i++){
-  //     if (coins[i].amount != coins[i].denomination.amount) {dirtyCoins++;}
-  // }
-
   // Allocate a new array to hold the remaining coins
   Coin *remainingCoins =
       (Coin *)malloc(sizeof(Coin) * (wallet->num_coins - num_coins));
@@ -2165,7 +2159,7 @@ void pprint(Coin *coins, int nr) {
     Coin coin = coins[i];
 
     if (is_dirty(coin)) {
-      printf("[%lld / %lld | D: %d | R: %d]", coin.amount,
+      printf("[%lld / %lld | D: %lld | R: %lld]", coin.amount,
              coin.denomination.amount,
              coin.denomination.rules.fees.deposit_fee.fee_satoshis,
              coin.denomination.rules.fees.refresh_fee.fee_satoshis);
@@ -2175,6 +2169,70 @@ void pprint(Coin *coins, int nr) {
   }
   printf("\n");
 }
+
+
+/**
+ * @brief Remove fully spent from wallet and melt partially spent ones in the it.
+ *
+ * @param wallet
+ * @param coins Coins to be checked
+ * @param num_coins Number of coins in coins
+ * @return
+ */
+void clean_wallet(Wallet *wallet, Coin *coins, int num_coins, Wallet denomination_wallet, long long time) {
+  if (wallet == NULL || wallet->num_coins == 0 || coins == NULL ||
+      num_coins == 0) {
+    return; // No operation if the input is invalid
+  }
+
+  int num_spent_coins = 0;
+  int num_dirty_coins = 0;
+  long long amount_dirty = 0;
+
+  // Coin *spent_coins = (Coin *)malloc(sizeof(Coin*) * num_coins);
+  // Coin *dirty_coins = (Coin *)malloc(sizeof(Coin*) * num_coins);
+  Coin *remaining_coins = (Coin *)malloc(sizeof(Coin*) * wallet->num_coins);
+
+  if (remaining_coins == NULL) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
+
+  for (int i = 0; i < num_coins; i++){
+      if (coins[i].amount != coins[i].denomination.amount) {
+            if (coins[i].amount == 0) {
+                // spent_coins[num_spent_coins] = coins[i];
+                num_spent_coins++;
+            }else if (coins[i].amount < coins[i].denomination.amount) {
+                // dirty_coins[num_dirty_coins] = coins[i];
+                num_dirty_coins++;
+                amount_dirty += coins[i].amount;
+            }else {
+                remaining_coins[i - (num_spent_coins + num_dirty_coins)] = coins[i];
+            }
+      }else {
+          printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", coins[i].amount, coins[i].denomination.amount);
+          exit(1);
+      }
+  }
+  // spent_coins = realloc(spent_coins, num_spent_coins);
+  // dirty_coins = realloc(dirty_coins, num_dirty_coins);
+  remaining_coins = realloc(remaining_coins, wallet->num_coins - (num_spent_coins + num_dirty_coins));
+
+  if (remaining_coins == NULL) {
+    printf("Memory allocation failed.\n");
+    exit(1);
+  }
+
+  wallet->coins = remaining_coins;
+  wallet->num_coins = wallet->num_coins - (num_spent_coins + num_dirty_coins);
+
+  // melt_selected_coins(wallet, dirty_coins, num_dirty_coins);
+  int num_withdrawn = 0;
+  Coin *withdrawn_coins = generate_withdraw_coins(amount_dirty, time, denomination_wallet, &num_withdrawn);
+  add_coins_to_wallet(wallet, withdrawn_coins, num_withdrawn);
+}
+
 
 // should return list of new + remaining coins and the refresh fee to be paid?
 // TODO: generate new coins only from denoms possible in this scenario (pass
