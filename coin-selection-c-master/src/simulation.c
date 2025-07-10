@@ -6,12 +6,34 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "cjson/cJSON.h"
 #include "coin_selection.h"
 #include "common.h"
 #include "fee.h"
 #include "simulation.h"
+
+
+void init(CPUTimer *self) {
+    self->accum = 0;
+}
+
+float read_timer(CPUTimer *self){ 
+    if(self->start_time == (clock_t) - 1) {
+        return (float)(clock() - self->start_time + self->accum) / CLOCKS_PER_SEC;
+    }
+    return (float)self->accum / CLOCKS_PER_SEC;
+}
+
+void pause_timer(CPUTimer *self) {
+    self->accum += (clock() - self->start_time);
+    self->start_time = (clock_t)-1; 
+}
+void start(CPUTimer *self) {
+    self->start_time = clock(); 
+}
+
 /**
  * @brief Get the scale of a given amount.
  *
@@ -148,6 +170,11 @@ void simulate_user_actions(int user_index, User user,
   FILE *action_log_fp = fopen(action_log_fname, "w");
   fprintf(action_log_fp, "[");
 
+  char stat_log_fname[256];
+  sprintf(action_log_fname, "../simulation/results/stats_user_%d_strategy_%s.ccsv", user_index, StrategyNames[strategy]);
+  FILE *stat_log_fp = fopen(action_log_fname, "w");
+
+
   char filename[256];
   sprintf(filename, "../simulation/results/user_%d_strategy_%s.csv", user_index,
           StrategyNames[strategy]);
@@ -156,6 +183,10 @@ void simulate_user_actions(int user_index, User user,
   if (!fp) {
     printf("Failed to open file %s for writing.\n", filename);
   }
+
+  CPUTimer timer;
+  timer.accum = 0;
+  timer.start_time = 0;
 
   user.wallet.num_coins = 0;
 
@@ -224,8 +255,11 @@ void simulate_user_actions(int user_index, User user,
       } else if (user.actions[i].operation == DEPOSIT_OP) {
           // printf("DEPOSIT %lld as %u STRAT %u\n", transaction_amount, user.type, strategy);
         // Simulate withdrawal
+
+        start(&timer);
         CoinSelectionResult allocatedCoins = allocate_coins_for_deposit(
             user.wallet, transaction_amount, strategy, user.actions[i].time, denomination_wallet);
+        pause_timer(&timer);
 
         // print_deposit_status(i, transaction_amount, &user.wallet, &allocatedCoins);
 
@@ -286,6 +320,8 @@ void simulate_user_actions(int user_index, User user,
   } else {
     printf("No actions generated for the user.\n");
   }
+   printf("Timer: %f\n", read_timer(&timer));
+    fprintf(stat_log_fp, "%s,%s,%f\n", TypeNames[user_index], StrategyNames[strategy], read_timer(&timer));
     fclose(fp);
 
    close_json_array_file(coins_log_fp);
