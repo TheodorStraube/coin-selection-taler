@@ -2220,7 +2220,7 @@ void refresh_dirty_coins(Wallet *wallet, Coin *coins, int num_coins, Wallet deno
             amount_dirty += coins[i].denomination.amount - coins[i].amount;
         } else {
             printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", coins[i].amount, coins[i].denomination.amount);
-            exit(1);
+            // exit(1);
         }
       
   }
