@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include <sched.h>
+#include <stddef.h>
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
@@ -2129,6 +2130,7 @@ long long calculate_total_fee_part(Coin *coins, int num_coins,
   return totalFee;
 }
 
+// TODO update descr
 /**
  * @brief Calculate the renew fee for the wallet based on the current time.
  *
@@ -2136,20 +2138,36 @@ long long calculate_total_fee_part(Coin *coins, int num_coins,
  * @param time The current time in seconds.
  * @return The total renew fee for the wallet.
  */
-long long calculate_renew_fee(Wallet wallet, long long time) {
-  long long totalRenewFee = 0;
+Coin *refresh_old_coins(Wallet wallet, long long time, int* num_renewed_coins, long long *total_fee) {
+    *num_renewed_coins = 0;
+    *total_fee = 0;
 
+    if(wallet.num_coins == 0){
+        return NULL;
+    }
+
+    Coin *renew_coins = malloc(sizeof(Coin*) * wallet.num_coins);
   for (int i = 0; i < wallet.num_coins; i++) {
     long long timeDifference = time - wallet.coins[i].creation_timestamp;
     if (timeDifference >
         wallet.coins[i].denomination.rules.durations.legal.time) {
       long long renewFee = calculate_fee(wallet.coins[i], REFRESH_OP);
-      wallet.coins[i].creation_timestamp = time;
-      totalRenewFee += renewFee;
+      // wallet.coins[i].creation_timestamp = time;
+      if(wallet.coins[i].amount < renewFee){
+        *total_fee += wallet.coins[i].amount; 
+        wallet.coins[i].amount = 0;
+      }else {
+        wallet.coins[i].amount -= renewFee;
+        *total_fee += renewFee;
+      }
+    renew_coins[*num_renewed_coins] = wallet.coins[i];
+    (*num_renewed_coins)++;
     }
   }
+  
+  renew_coins = realloc(renew_coins, *num_renewed_coins);
 
-  return totalRenewFee;
+  return renew_coins;
 }
 
 int is_dirty(Coin coin) { return coin.amount != coin.denomination.amount; }
@@ -2172,16 +2190,16 @@ void pprint(Coin *coins, int nr) {
 
 
 /**
- * @brief Remove fully spent from wallet and melt partially spent ones in the it.
+ * @brief Melt partially spent coins in wallet and add refreshed coins to it
+ * this will NOT remove them from the wallet or free *coins. You're supposed to call remove_coins_from_wallet after
  *
  * @param wallet
  * @param coins Coins to be checked
  * @param num_coins Number of coins in coins
  * @return
  */
-void clean_wallet(Wallet *wallet, Coin *coins, int num_coins, Wallet denomination_wallet, long long time) {
-  if (wallet == NULL || wallet->num_coins == 0 || coins == NULL ||
-      num_coins == 0) {
+void refresh_dirty_coins(Wallet *wallet, Coin *coins, int num_coins, Wallet denomination_wallet, long long time) {
+  if (wallet == NULL || coins == NULL || num_coins == 0) {
     return; // No operation if the input is invalid
   }
 
@@ -2191,41 +2209,23 @@ void clean_wallet(Wallet *wallet, Coin *coins, int num_coins, Wallet denominatio
 
   // Coin *spent_coins = (Coin *)malloc(sizeof(Coin*) * num_coins);
   // Coin *dirty_coins = (Coin *)malloc(sizeof(Coin*) * num_coins);
-  Coin *remaining_coins = (Coin *)malloc(sizeof(Coin*) * wallet->num_coins);
-
-  if (remaining_coins == NULL) {
-    printf("Memory allocation failed.\n");
-    exit(1);
-  }
 
   for (int i = 0; i < num_coins; i++){
-      if (coins[i].amount != coins[i].denomination.amount) {
-            if (coins[i].amount == 0) {
-                // spent_coins[num_spent_coins] = coins[i];
-                num_spent_coins++;
-            }else if (coins[i].amount < coins[i].denomination.amount) {
-                // dirty_coins[num_dirty_coins] = coins[i];
-                num_dirty_coins++;
-                amount_dirty += coins[i].amount;
-            }else {
-                remaining_coins[i - (num_spent_coins + num_dirty_coins)] = coins[i];
-            }
-      }else {
-          printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", coins[i].amount, coins[i].denomination.amount);
-          exit(1);
-      }
+        if (coins[i].amount == coins[i].denomination.amount) {
+            // spent_coins[num_spent_coins] = coins[i];
+            num_spent_coins++;
+        }else if (0 < coins[i].amount && coins[i].amount < coins[i].denomination.amount) {
+            // dirty_coins[num_dirty_coins] = coins[i];
+            num_dirty_coins++;
+            amount_dirty += coins[i].denomination.amount - coins[i].amount;
+        } else {
+            printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", coins[i].amount, coins[i].denomination.amount);
+            exit(1);
+        }
+      
   }
   // spent_coins = realloc(spent_coins, num_spent_coins);
   // dirty_coins = realloc(dirty_coins, num_dirty_coins);
-  remaining_coins = realloc(remaining_coins, wallet->num_coins - (num_spent_coins + num_dirty_coins));
-
-  if (remaining_coins == NULL) {
-    printf("Memory allocation failed.\n");
-    exit(1);
-  }
-
-  wallet->coins = remaining_coins;
-  wallet->num_coins = wallet->num_coins - (num_spent_coins + num_dirty_coins);
 
   // melt_selected_coins(wallet, dirty_coins, num_dirty_coins);
   int num_withdrawn = 0;
