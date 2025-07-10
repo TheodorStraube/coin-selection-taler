@@ -5,8 +5,8 @@ typedef struct Timer {
     long long accum;
 
     void (*start)();
-    void (*pause)();
-    void (*resume)();
-    float (*read)();
+    void (*pause_timer)();
+    void (*init)();
+    float (*read_timer)();
 
 } Timer;
