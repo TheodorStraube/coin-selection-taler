@@ -9,6 +9,16 @@
 #include "user.h"
 #include "coin_selection.h"
 
+typedef struct {
+    clock_t start_time;
+    long long accum;
+
+
+} CPUTimer;
+void start(CPUTimer *timer);
+void pause_timer(CPUTimer *timer);
+float read_timer(CPUTimer *timer);
+
 void simulate_user_actions(int user_index, User user, Wallet denomination_wallet, int num_actions, strategy strategy);
 void refresh_dirty_coins(Wallet *wallet, Coin *coins, int num_coins, Wallet denomination_wallet, long long time);
 
