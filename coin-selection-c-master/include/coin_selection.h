@@ -38,7 +38,7 @@ void add_coins_to_wallet(Wallet* wallet, Coin* coins, int num_coins);
 
 long long calculate_total_fee(Coin* coins, int num_coins, operation_type operation);
 
-long long calculate_renew_fee(Wallet wallet, long long time);
+Coin* refresh_old_coins(Wallet wallet, long long time, int* num_renewed_coins, long long *total_fee);
 
 Coin* generate_withdraw_coins(long long amount, long long time, Wallet default_wallet, int *num_coins);
 
