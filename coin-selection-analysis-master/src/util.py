@@ -52,3 +52,21 @@ def load_all_files(path = PATH):
 
     return {f: list(load_file(f)) for f in sorted(files)}
 
+import re
+massif_re = re.compile(r'mem_heap_B=(\d+)');
+
+def _read_massif_peak(file_name):
+    result = []
+    with open(file_name) as file:
+        for line in file.readlines():
+            match = massif_re.match(line)
+            if match:
+                result.append(int(match.groups()[0]))
+    return result
+
+
+def load_massif(path=PATH):
+    files = list(f for f in Path.iterdir(path) if f.name.endswith(".massif"))
+    return {f: _read_massif_peak(f) for f in files}
+    
+
