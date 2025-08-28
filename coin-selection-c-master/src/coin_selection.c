@@ -1712,6 +1712,90 @@ Coin *allocate_wallet_core(Wallet wallet, long long amount,
   return finalSelectedCoins;
 }
 
+/**
+ * @brief Allocate coins from the wallet randomly until the desired amount is
+ * reached.
+ *
+ * @param wallet The wallet containing the coins.
+ * @param amount The target amount to allocate.
+ * @param num_allocated_coins Pointer to store the number of allocated coins.
+ * @param allocated_amount Pointer to store the total allocated amount.
+ * @return An array of allocated coins.
+ */
+Coin *allocate_random_improve(Wallet wallet, long long amount,
+                            int *num_allocated_coins, unsigned int *seed) {
+
+  // Create an array of indices representing the coins
+  int *indices = malloc(sizeof(int) * wallet.num_coins);
+  if (indices == NULL)
+    return NULL; // Check if malloc failed for indices
+
+  for (int i = 0; i < wallet.num_coins; i++) {
+    indices[i] = i; // Initialize indices with the coin positions
+  }
+
+  long long amount_collected = 0;
+  Coin *selectedCoins = malloc(
+      sizeof(Coin) *
+      wallet.num_coins); // Allocate memory to store potentially all coins
+  if (selectedCoins == NULL) {
+    free(indices);
+    return NULL; // Allocation failed
+  }
+
+  int selectedCount = 0;
+  int remainingCoins = wallet.num_coins;
+
+  while (amount_collected < amount && remainingCoins > 0) {
+    int randIndex =
+        rand_r(seed) %
+        remainingCoins; // Pick a random index from the remaining indices
+    int selectedCoinIndex = indices[randIndex];
+
+    // Add the selected coin if it doesn't exceed the desired amount
+    if (amount_collected <= amount) {
+      amount_collected += wallet.coins[selectedCoinIndex].denomination.amount;
+      selectedCoins[selectedCount++] = wallet.coins[selectedCoinIndex];
+    }
+
+    // Remove the selected index by replacing it with the last available index
+    indices[randIndex] = indices[remainingCoins - 1];
+    remainingCoins--;
+  }
+
+  // Allocate memory for selected coins
+  Coin *finalSelectedCoins = malloc(sizeof(Coin) * selectedCount);
+  if (finalSelectedCoins == NULL) {
+    free(selectedCoins);
+    free(indices);
+    return NULL; // Allocation failed
+  }
+
+  // Copy selected coins
+  amount_collected = 0;
+  long long effective;
+  long long partial_amount;
+  for (int k = 0; k < selectedCount; k++) {
+    Coin *coin_k = &selectedCoins[k];
+    effective = effective_amount(coin_k);
+    if (amount_collected + effective > amount) {
+      partial_amount =
+          amount - amount_collected +
+          coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
+          coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+    } else {
+      partial_amount = coin_k->denomination.amount;
+    }
+    coin_k->amount = partial_amount;
+    finalSelectedCoins[k] = *coin_k;
+  }
+  *num_allocated_coins = selectedCount;
+
+  free(selectedCoins);
+  free(indices);
+  return finalSelectedCoins;
+}
+
 void verify_partial_coin(Coin *coin) {
   // assert(coin->amount < coin->denomination.amount);
   // if (coin_part->amount < coin_part->coin->denomination.amount) {
@@ -1920,9 +2004,10 @@ Coin *generate_withdraw_coins(long long amount, long long time,
   qsort(uniqueDenominations, numUnique, sizeof(Coin *),
         compare_denomination_desc);
 
-  Coin *generatedCoins =
-      malloc(sizeof(Coin) *
-             numUnique); // In worst case, we use one of each denomination
+  // printf("%lli Amount, max %lli. %i unique, %lu bytes, was %lu\n", amount, uniqueDenominations[0]->amount, numUnique, sizeof(Coin*) * numUnique, sizeof(Coin) * numUnique);
+
+  // TODO: whats actually an upper bound here?
+  Coin *generatedCoins = malloc(sizeof(Coin) * numUnique * 4); // In worst case, we use one of each denomination
   if (!generatedCoins) {
     free(uniqueDenominations);
     return NULL; // Allocation failed
@@ -1932,6 +2017,7 @@ Coin *generate_withdraw_coins(long long amount, long long time,
   long long remainingAmount = amount;
   for (int i = 0; i < numUnique && remainingAmount > 0; i++) {
     while (remainingAmount >= uniqueDenominations[i]->denomination.amount) {
+        // printf("generatedCount: %i of denom: \n", generatedCount);
       // Create a coin of this denomination
       generatedCoins[generatedCount] = *(uniqueDenominations[i]);
       generatedCoins[generatedCount].creation_timestamp = time;
@@ -1942,6 +2028,7 @@ Coin *generate_withdraw_coins(long long amount, long long time,
       generatedCount++;
     }
   }
+  // printf("done.\n");
 
   free(uniqueDenominations);
 
@@ -2025,8 +2112,7 @@ void remove_selected_coins(Wallet *wallet, Coin *coins, int num_coins) {
   }
 
   // Allocate a new array to hold the remaining coins
-  Coin *remainingCoins =
-      (Coin *)malloc(sizeof(Coin) * (wallet->num_coins - num_coins));
+  Coin *remainingCoins = malloc(sizeof(Coin) * wallet->num_coins);
   if (remainingCoins == NULL) {
     printf("Memory allocation failed.\n");
     return;
@@ -2055,12 +2141,14 @@ void remove_selected_coins(Wallet *wallet, Coin *coins, int num_coins) {
   // Free the old coins array (if any)
   if (wallet->coins != NULL) {
     free(wallet->coins);
-    wallet->coins = NULL;
   }
 
   free(coins);
   coins = NULL;
 
+  // printf("_______________________________________  %i - %i = %i\n", wallet->num_coins, num_coins, remainingCount);
+
+  remainingCoins = realloc(remainingCoins, sizeof(Coin) * remainingCount);
   // Update the wallet with the remaining coins
   wallet->coins = remainingCoins;
   wallet->num_coins = remainingCount;
@@ -2146,26 +2234,30 @@ Coin *refresh_old_coins(Wallet wallet, long long time, int* num_renewed_coins, l
         return NULL;
     }
 
-    Coin *renew_coins = malloc(sizeof(Coin*) * wallet.num_coins);
-  for (int i = 0; i < wallet.num_coins; i++) {
-    long long timeDifference = time - wallet.coins[i].creation_timestamp;
-    if (timeDifference >
-        wallet.coins[i].denomination.rules.durations.legal.time) {
-      long long renewFee = calculate_fee(wallet.coins[i], REFRESH_OP);
-      // wallet.coins[i].creation_timestamp = time;
-      if(wallet.coins[i].amount < renewFee){
-        *total_fee += wallet.coins[i].amount; 
-        wallet.coins[i].amount = 0;
-      }else {
-        wallet.coins[i].amount -= renewFee;
-        *total_fee += renewFee;
-      }
-    renew_coins[*num_renewed_coins] = wallet.coins[i];
-    (*num_renewed_coins)++;
+    Coin *renew_coins = malloc(sizeof(Coin) * wallet.num_coins);
+    for (int i = 0; i < wallet.num_coins; i++) {
+        long long timeDifference = time - wallet.coins[i].creation_timestamp;
+        if (timeDifference > wallet.coins[i].denomination.rules.durations.legal.time) {
+            long long renewFee = calculate_fee(wallet.coins[i], REFRESH_OP);
+            // wallet.coins[i].creation_timestamp = time;
+            if(wallet.coins[i].amount < renewFee){
+                *total_fee += wallet.coins[i].amount; 
+                wallet.coins[i].amount = 0;
+            }else {
+                wallet.coins[i].amount -= renewFee;
+                *total_fee += renewFee;
+            }
+            renew_coins[*num_renewed_coins] = wallet.coins[i];
+            (*num_renewed_coins)++;
+        }
     }
+
+  if(!*num_renewed_coins) {
+      free(renew_coins);
+      return NULL;
   }
   
-  renew_coins = realloc(renew_coins, *num_renewed_coins);
+  renew_coins = realloc(renew_coins, sizeof(Coin) * *num_renewed_coins);
 
   return renew_coins;
 }
@@ -2198,28 +2290,26 @@ void pprint(Coin *coins, int nr) {
  * @param num_coins Number of coins in coins
  * @return
  */
-void refresh_dirty_coins(Wallet *wallet, Coin *coins, int num_coins, Wallet denomination_wallet, long long time) {
-  if (wallet == NULL || coins == NULL || num_coins == 0) {
+void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long time) {
+  if (wallet == NULL) {
     return; // No operation if the input is invalid
   }
 
-  int num_spent_coins = 0;
-  int num_dirty_coins = 0;
   long long amount_dirty = 0;
+  int num_dirty_coins = 0;
 
   // Coin *spent_coins = (Coin *)malloc(sizeof(Coin*) * num_coins);
-  // Coin *dirty_coins = (Coin *)malloc(sizeof(Coin*) * num_coins);
+  Coin *dirty_coins = malloc(sizeof(Coin) * wallet->num_coins);
 
-  for (int i = 0; i < num_coins; i++){
-        if (coins[i].amount == coins[i].denomination.amount) {
+  for (int i = 0; i < wallet->num_coins; i++){
+        if (wallet->coins[i].amount == wallet->coins[i].denomination.amount) {
             // spent_coins[num_spent_coins] = coins[i];
-            num_spent_coins++;
-        }else if (0 < coins[i].amount && coins[i].amount < coins[i].denomination.amount) {
-            // dirty_coins[num_dirty_coins] = coins[i];
-            num_dirty_coins++;
-            amount_dirty += coins[i].denomination.amount - coins[i].amount;
+        }else if (0 < wallet->coins[i].amount && wallet->coins[i].amount < wallet->coins[i].denomination.amount) {
+            dirty_coins[num_dirty_coins] = wallet->coins[i];
+            num_dirty_coins ++;
+            amount_dirty += wallet->coins[i].amount;
         } else {
-            printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", coins[i].amount, coins[i].denomination.amount);
+            printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount);
             // exit(1);
         }
       
@@ -2228,9 +2318,14 @@ void refresh_dirty_coins(Wallet *wallet, Coin *coins, int num_coins, Wallet deno
   // dirty_coins = realloc(dirty_coins, num_dirty_coins);
 
   // melt_selected_coins(wallet, dirty_coins, num_dirty_coins);
+  dirty_coins = realloc(dirty_coins, sizeof(Coin) * num_dirty_coins);
+  remove_selected_coins(wallet, dirty_coins, num_dirty_coins);
   int num_withdrawn = 0;
+  // printf("withdraw from refresh: %lld\n", amount_dirty);
   Coin *withdrawn_coins = generate_withdraw_coins(amount_dirty, time, denomination_wallet, &num_withdrawn);
   add_coins_to_wallet(wallet, withdrawn_coins, num_withdrawn);
+
+  printf("RDC: -%i / +%i \t=%i\n", num_dirty_coins, num_withdrawn, wallet->num_coins);
 }
 
 
