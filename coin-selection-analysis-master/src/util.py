@@ -5,8 +5,12 @@ from dataclass_wizard import JSONWizard
 from tqdm import tqdm
 import json
 from pathlib import Path
+import pandas as pd
+from itertools import chain
 
 PATH = Path("../coin-selection-c-master/simulation/results")
+COIN_PX = 'coins_'
+ACTION_PX = 'actions_'
 
 @dataclass
 class Coin:
@@ -22,12 +26,12 @@ class DataPoint(JSONWizard):
 
 @dataclass
 class Action(JSONWizard):
-    step: int
+    Id: int
     time: int
     amount: int
     operation: int
     fee: int
-    num_coins: int
+    CoinCount: int
     coins: list[Coin]
 
 
@@ -41,16 +45,52 @@ def load_actions_json(file) -> list[Action]:
 
 def load_file(file: Path):
     if file.name.startswith('coins'):
-        yield load_coins_json(file)
+        return load_coins_json(file)
     elif file.name.startswith('actions'):
-        yield load_actions_json(file)
+        return load_actions_json(file)
     else:
         print(f"{file.name} can not be read")
 
 def load_all_files(path = PATH):
     files = list(f for f in Path.iterdir(path) if f.name.endswith(".json"))
 
-    return {f: list(load_file(f)) for f in sorted(files)}
+    return {f.name: load_file(f) for f in sorted(files)}
+
+def load_df(actions, file_name):
+    levels = [(0, 10), (10, 100), (100, 1000), (1000, 10000), (10000, 100000)]
+    data = []
+    for action in actions:
+        level_data = {str((low, high)): len([c for c in action.coins if c.value < high and c.value >= low]) for low, high in levels}
+        level_data["Time"] = action.time
+        level_data["FileName"] = file_name
+        data.append(level_data)
+    return data
+
+def load_all_dfs():
+    files = list(f for f in Path.iterdir(PATH) if f.name.endswith(".json") and f.name.startswith('coins'))
+    return pd.DataFrame(chain.from_iterable(load_df(load_coins_json(f), f.name) for f in sorted(files)))
+
+def match_json_files():
+    coin_files = list(f for f in Path.iterdir(PATH) if f.name.endswith(".json") and f.name.startswith(COIN_PX))
+    action_files = list(f for f in Path.iterdir(PATH) if f.name.endswith(".json") and f.name.startswith(ACTION_PX))
+    result = dict()
+
+    for cf in coin_files:
+        result[cf.name.removeprefix(COIN_PX).removesuffix('.json')] = cf
+
+    for af in action_files:
+        key = af.name.removeprefix(ACTION_PX).removesuffix('.json')
+        if key in result:
+            result[key] = result[key], af
+        else:
+            print(f"Missing actions for {key}")
+
+    return result
+
+def load_json_files():
+    matches = match_json_files()
+    return {k: (load_coins_json(c), load_actions_json(a)) for k, (c, a) in matches.items()}
+
 
 import re
 massif_re = re.compile(r'mem_heap_B=(\d+)');
