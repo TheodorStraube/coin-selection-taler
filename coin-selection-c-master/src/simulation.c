@@ -199,6 +199,8 @@ void simulate_user_actions(int user_index, User user,
 
     for (int i = 0; i < num_actions; i++) {
 
+        printf("\n");
+        printf("STEP %i: %i\n", i, user.wallet.num_coins);
       // printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
       
       // STEP Refresh old coins
@@ -211,10 +213,13 @@ void simulate_user_actions(int user_index, User user,
                 user.actions[i].time, 0ll, OperationNames[REFRESH_OP],
                 renew_fee, user.wallet.num_coins);
 
-        refresh_dirty_coins(&user.wallet, fresh_coins, num_renew_coins, denomination_wallet, user.actions[i].time);
+        refresh_dirty_coins(&user.wallet, denomination_wallet, user.actions[i].time);
         save_action(i, user.actions[i].time, 0ll, REFRESH_OP, renew_fee, fresh_coins, num_renew_coins, action_log_fp);
-        remove_selected_coins(&user.wallet, fresh_coins, num_renew_coins);
+        // printf("Remove after refresh\n");
+        // printf("REFRESH: +%i\n", num_renew_coins);
         total_fee += renew_fee;
+
+        printf("RENEWING ~%i\t=%i\n", num_renew_coins, user.wallet.num_coins);
       }
 
       long long fee_for_action = 0;
@@ -249,6 +254,7 @@ void simulate_user_actions(int user_index, User user,
 
           total_fee += fee_for_action;
           add_coins_to_wallet(&user.wallet, generatedCoins, generatedCoinCount);
+        printf("WITHDRAWING +%i\t=%i\n", generatedCoinCount, user.wallet.num_coins);
         }else {
             printf("NO CS returned\n");
         }
@@ -283,9 +289,11 @@ void simulate_user_actions(int user_index, User user,
           //                       allocatedCoins.coin_count);
           // printf("After: %d coins\n", user.wallet.num_coins);
 
-          refresh_dirty_coins(&user.wallet, allocatedCoins.coins, allocatedCoins.coin_count, denomination_wallet, user.actions[i].time);
+          refresh_dirty_coins(&user.wallet, denomination_wallet, user.actions[i].time);
+          // printf("Remove after deposit\n");
           remove_selected_coins(&user.wallet, allocatedCoins.coins, allocatedCoins.coin_count);
 
+          printf("DEPOSIT -%i\t=%i\n", allocatedCoins.coin_count, user.wallet.num_coins);
           // long long changeAmount = allocatedCoins.tab.effective_amount - transaction_amount;
           //
           // if (changeAmount > 0){          
