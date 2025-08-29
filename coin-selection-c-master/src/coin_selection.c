@@ -1874,6 +1874,7 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
                                                Wallet denomination_wallet) {
 
   if (!wallet.num_coins || !amount) { // if wallet is empty or amount 0, return
+    printf("cancel selection\n");
     return (CoinSelectionResult){
         .coins = NULL, .coin_count = 0, .tab = (FeeTab){0}};
   }
@@ -1938,11 +1939,18 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
   FeeTab tab =
       fees_for_selection(amount, allocated_coins, &num_allocated_coins);
 
+    printf("TAB: target: %lld, instructed %lld, payed: %lld\n", amount, tab.instructed_amount, tab.effective_amount);
+    for (int i = 0; i<num_allocated_coins; i++) {
+        printf("\tpaying: %lld/%lld\n", allocated_coins[i].amount, allocated_coins[i].denomination.amount);
+    }
+
   if (!tab.valid) {
     long long total = 0;
     for (int i = 0; i < num_allocated_coins; ++i) {
       total += allocated_coins[i].amount;
     }
+
+
 
     // This may happen when the generated Steps attempt to overspend
     // printf("Invalid Selection: %d Coins pay for Amount: %lld/%lld\t Wallet
@@ -2308,6 +2316,7 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
             dirty_coins[num_dirty_coins] = wallet->coins[i];
             num_dirty_coins ++;
             amount_dirty += wallet->coins[i].amount;
+            printf("\t melting %lld / %lld sum of change: %lld\n", wallet->coins->amount, wallet->coins->denomination.amount, amount_dirty);
         } else {
             printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount);
             // exit(1);
@@ -2327,6 +2336,7 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
 
   printf("RDC: -%i / +%i \t=%i\n", num_dirty_coins, num_withdrawn, wallet->num_coins);
 }
+
 
 
 // should return list of new + remaining coins and the refresh fee to be paid?
