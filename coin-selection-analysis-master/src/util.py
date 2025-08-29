@@ -2,19 +2,23 @@ from dataclasses import dataclass
 from os import listdir
 from typing import Generator
 from dataclass_wizard import JSONWizard
+from numpy import amax
 from tqdm import tqdm
 import json
 from pathlib import Path
 import pandas as pd
 from itertools import chain
+from pprint import pprint
 
 PATH = Path("../coin-selection-c-master/simulation/results")
 COIN_PX = 'coins_'
 ACTION_PX = 'actions_'
+ACTIONS = ["Deposit", "Withdraw", "Refund", "Refresh"]
 
 @dataclass
 class Coin:
     value: int
+    denomination: int
 
 @dataclass
 class DataPoint(JSONWizard):
@@ -22,7 +26,7 @@ class DataPoint(JSONWizard):
     coins: list[Coin]
 
     def __repr__(self):
-        return f"[{self.time}]\t{sum(c.value for c in self.coins)}$"
+        return f"{self.time}\t{sum(c.value for c in self.coins)}"
 
 @dataclass
 class Action(JSONWizard):
@@ -33,6 +37,9 @@ class Action(JSONWizard):
     fee: int
     CoinCount: int
     coins: list[Coin]
+
+    def __repr__(self):
+        return f"{self.time}\t{ACTIONS[self.operation]} {self.amount} fee: {self.fee}"
 
 
 def load_coins_json(file: Path) -> list[DataPoint]:
@@ -76,16 +83,51 @@ def match_json_files():
     result = dict()
 
     for cf in coin_files:
-        result[cf.name.removeprefix(COIN_PX).removesuffix('.json')] = cf
+        print(cf)
+        result[cf.name.removeprefix(COIN_PX).removesuffix('.json')] = load_coins_json(cf)
 
     for af in action_files:
+        print("key")
         key = af.name.removeprefix(ACTION_PX).removesuffix('.json')
         if key in result:
-            result[key] = result[key], af
+            result[key] = result[key], load_actions_json(af)
         else:
             print(f"Missing actions for {key}")
 
     return result
+
+def validate_actions(coins: list[DataPoint], actions: list[Action]):
+    expected_balance = 0
+    last_balance = 0
+    actual_balance = 0
+    wallet = []
+
+    for step in coins:
+        next_wallet = list(step.coins)
+        if wallet != next_wallet:
+            last_actions = [a for a in actions if a.time == step.time]
+            for action in last_actions:
+                if action.operation == 0:
+                    expected_balance -= action.amount + action.fee
+                    print(f"{last_balance} -= {action.amount} + {action.fee} = {expected_balance}")
+
+                elif action.operation == 1:
+                    expected_balance += action.amount - action.fee
+                    print(f"{last_balance} += {action.amount} - {action.fee} = {expected_balance}")
+                else:
+                    pass
+
+            actual_balance = sum([c.value for c in next_wallet])
+            if expected_balance != actual_balance: 
+                print(f"{step.time} Balance ${last_balance} -> ${expected_balance} but is ${actual_balance}")
+                pprint(last_actions)
+                print(next_wallet)
+                print()
+        last_balance = actual_balance
+        expected_balance = actual_balance
+        wallet = next_wallet
+
+
 
 def load_json_files():
     matches = match_json_files()

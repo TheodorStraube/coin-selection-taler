@@ -64,7 +64,7 @@ void print_deposit_status(int i, long long transaction_amount, Wallet* wallet, C
     //assert(alloc_balance <= wallet_balance);
     //assert(alloc_balance >= transaction_amount);
 
-    // printf("[%d]\tAmt: %lld, Wallet[%lld]: %lld\t\tALLOC[%d]: [%lld\t%lld]\n",i, transaction_amount, wallet->num_coins, wallet_balance, allocatedCoins->coin_count, alloc_balance, allocatedCoins->tab.effective_amount);
+    printf("[%d]\tAmt: %lld, Wallet[%d]: %lld\t\tALLOC[%d]: [%lld\t%lld]\n",i, transaction_amount, wallet->num_coins, wallet_balance, allocatedCoins->coin_count, alloc_balance, allocatedCoins->tab.effective_amount);
 }
 
 void close_json_array_file(FILE *file_handle) {
@@ -78,6 +78,7 @@ void add_coins_to_array(Coin *coins, int num_coins, cJSON *json) {
     for(int i = 0; i < num_coins; i++) {
         cJSON *coin_json = cJSON_CreateObject();
         cJSON_AddNumberToObject(coin_json, "value", coins[i].amount);
+        cJSON_AddNumberToObject(coin_json, "denomination", coins[i].denomination.amount);
         cJSON_AddItemToArray(json, coin_json);
     }
     
@@ -198,9 +199,10 @@ void simulate_user_actions(int user_index, User user,
     save_wallet_state(user.wallet, -1, -1, coins_log_fp);
 
     for (int i = 0; i < num_actions; i++) {
+        printf("time %lld  %s\n", user.actions[i].time, OperationNames[user.actions[i].operation]);
 
-        printf("\n");
-        printf("STEP %i: %i\n", i, user.wallet.num_coins);
+        // printf("\n");
+        // printf("STEP %i: %i\n", i, user.wallet.num_coins);
       // printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
       
       // STEP Refresh old coins
@@ -219,7 +221,7 @@ void simulate_user_actions(int user_index, User user,
         // printf("REFRESH: +%i\n", num_renew_coins);
         total_fee += renew_fee;
 
-        printf("RENEWING ~%i\t=%i\n", num_renew_coins, user.wallet.num_coins);
+        // printf("RENEWING ~%i\t=%i\n", num_renew_coins, user.wallet.num_coins);
       }
 
       long long fee_for_action = 0;
@@ -254,12 +256,12 @@ void simulate_user_actions(int user_index, User user,
 
           total_fee += fee_for_action;
           add_coins_to_wallet(&user.wallet, generatedCoins, generatedCoinCount);
-        printf("WITHDRAWING +%i\t=%i\n", generatedCoinCount, user.wallet.num_coins);
+        // printf("WITHDRAWING +%i\t=%i\n", generatedCoinCount, user.wallet.num_coins);
         }else {
             printf("NO CS returned\n");
         }
       } else if (user.actions[i].operation == DEPOSIT_OP) {
-          // printf("DEPOSIT %lld as %u STRAT %u\n", transaction_amount, user.type, strategy);
+          printf("DEPOSIT %lld as %u STRAT %u\n", transaction_amount, user.type, strategy);
         // Simulate withdrawal
 
         start(&timer);
@@ -267,7 +269,7 @@ void simulate_user_actions(int user_index, User user,
             user.wallet, transaction_amount, strategy, user.actions[i].time, denomination_wallet);
         pause_timer(&timer);
 
-        // print_deposit_status(i, transaction_amount, &user.wallet, &allocatedCoins);
+        print_deposit_status(i, transaction_amount, &user.wallet, &allocatedCoins);
 
         if (!allocatedCoins.coins) {
           char error[1024];
@@ -276,7 +278,6 @@ void simulate_user_actions(int user_index, User user,
                   user.wallet.num_coins, transaction_amount,
                   StrategyNames[strategy]);
         } else {
-
           fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
                   user.actions[i].time, transaction_amount,
                   OperationNames[user.actions[i].operation], allocatedCoins.tab.deposit_fee_sum,
@@ -291,7 +292,9 @@ void simulate_user_actions(int user_index, User user,
 
           refresh_dirty_coins(&user.wallet, denomination_wallet, user.actions[i].time);
           // printf("Remove after deposit\n");
-          remove_selected_coins(&user.wallet, allocatedCoins.coins, allocatedCoins.coin_count);
+        printf("After: %lld\n", coins_balance(user.wallet.coins, user.wallet.num_coins));
+          // remove_selected_coins(&user.wallet, allocatedCoins.coins, allocatedCoins.coin_count);
+
 
           printf("DEPOSIT -%i\t=%i\n", allocatedCoins.coin_count, user.wallet.num_coins);
           // long long changeAmount = allocatedCoins.tab.effective_amount - transaction_amount;
