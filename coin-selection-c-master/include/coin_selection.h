@@ -40,8 +40,10 @@ long long calculate_total_fee(Coin* coins, int num_coins, operation_type operati
 
 Coin* refresh_old_coins(Wallet wallet, long long time, int* num_renewed_coins, long long *total_fee);
 
-Coin* generate_withdraw_coins(long long amount, long long time, Wallet default_wallet, int *num_coins);
+Coin* generate_withdraw_coins(long long amount, long long time, Wallet default_wallet, int *num_coins, int charge_fees);
 
 void pprint(Coin* coin, int nr);
+
+void spend_coin_selection(Coin* coins, int num_coins, Wallet *wallet);
 
 #endif //COIN_SELECTION_H
