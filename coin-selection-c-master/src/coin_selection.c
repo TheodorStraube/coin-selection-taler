@@ -1271,12 +1271,11 @@ Coin *allocate_coins_greedy_min_to_max(Wallet wallet, long long amount,
     for (int i = 0; i < wallet.num_coins; i++) {
       if (selectedFlags[i] == 0) {
         if (first) {
-          closestAmount = wallet.coins[i].denomination.amount;
+          closestAmount = effective_amount(&wallet.coins[i]);
           closestIndex = i;
           first = 0;
         }
-        long long tempAmount =
-            amount_collected + wallet.coins[i].denomination.amount;
+        long long tempAmount = amount_collected + effective_amount(&wallet.coins[i]);
         if (tempAmount <= amount && tempAmount > closestAmount) {
           closestAmount = tempAmount;
           closestIndex = i;
@@ -1317,12 +1316,17 @@ Coin *allocate_coins_greedy_min_to_max(Wallet wallet, long long amount,
     Coin *coin_k = &selectedCoins[k];
     effective = effective_amount(coin_k);
     if (amount_collected + effective > amount) {
-      partial_amount =
+        partial_amount =
           amount - amount_collected +
           coin_k->denomination.rules.fees.deposit_fee.fee_satoshis +
           coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
+        if (selectedCount != 0 && k != selectedCount - 1) {
+            printf("ERROR: Assumption violated in allocate_greedy_min_to_max\n");
+            exit(1);
+        }
     } else {
       partial_amount = coin_k->denomination.amount;
+      amount_collected += partial_amount - coin_k->denomination.rules.fees.deposit_fee.fee_satoshis;
     }
     coin_k->amount = partial_amount;
     finalSelectedCoins[k] = *coin_k;
@@ -1805,7 +1809,7 @@ void verify_partial_coin(Coin *coin) {
 }
 
 long long effective_refresh_fee(Coin *coin) {
-  if (coin->amount == coin->denomination.amount) {
+  if (coin->amount == coin->denomination.amount || coin->amount == 0) {
     return 0;
   }
   return coin->denomination.rules.fees.refresh_fee.fee_satoshis;
@@ -1813,28 +1817,28 @@ long long effective_refresh_fee(Coin *coin) {
 
 FeeTab fees_for_selection(long long amount, Coin *selection, int *num_coins) {
   // TODO: allowance
-  long long allocated_amount_sum = 0;
+  long long effective_amount_sum = 0;
   long long deposit_fee_sum = 0;
   long long refresh_fee_sum = 0;
 
   for (int i = 0; i < *num_coins; i++) {
     Coin *coin_k = &selection[i];
 
-    // printf("%lld\t%lld\n", coin_k->amount, coin_k->denomination.amount);
-
     verify_partial_coin(coin_k);
 
-    allocated_amount_sum += coin_k->amount;
+    effective_amount_sum += coin_k->amount;
     deposit_fee_sum += coin_k->denomination.rules.fees.deposit_fee.fee_satoshis;
     refresh_fee_sum += effective_refresh_fee(coin_k);
+
+    // printf("%lld\t%lld\t%lld\t%lld\n", coin_k->amount, coin_k->denomination.amount, deposit_fee_sum, refresh_fee_sum);
   }
 
-  long long effective_amount =
-      allocated_amount_sum + deposit_fee_sum + refresh_fee_sum;
-  int allocation_sufficient = effective_amount >= amount;
+  int allocation_sufficient = effective_amount_sum >= amount;
+
+  printf("%lld %lld %lld %lld\n", effective_amount_sum, effective_amount_sum, deposit_fee_sum, refresh_fee_sum);
 
   FeeTab tab = {.instructed_amount = amount,
-                .effective_amount = effective_amount,
+                .effective_amount = effective_amount_sum,
                 .refresh_fee_sum = refresh_fee_sum,
                 .deposit_fee_sum = deposit_fee_sum,
                 .valid = allocation_sufficient};
@@ -1939,7 +1943,7 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
   FeeTab tab =
       fees_for_selection(amount, allocated_coins, &num_allocated_coins);
 
-    printf("TAB: target: %lld, instructed %lld, payed: %lld\n", amount, tab.instructed_amount, tab.effective_amount);
+    printf("TAB: target: %lld, instructed %lld, payed: %lld, D: %lld, R: %lld\n", amount, tab.instructed_amount, tab.effective_amount, tab.deposit_fee_sum, tab.refresh_fee_sum);
     for (int i = 0; i<num_allocated_coins; i++) {
         printf("\tpaying: %lld/%lld\n", allocated_coins[i].amount, allocated_coins[i].denomination.amount);
     }
@@ -1950,8 +1954,6 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
       total += allocated_coins[i].amount;
     }
 
-
-
     // This may happen when the generated Steps attempt to overspend
     // printf("Invalid Selection: %d Coins pay for Amount: %lld/%lld\t Wallet
     // has %lld\n", num_allocated_coins, tab.effective_amount, amount, total);
@@ -1960,6 +1962,10 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
     return (CoinSelectionResult){
         .coins = NULL, .coin_count = 0, .tab = (FeeTab){0}};
   }
+    printf("Wallet:\n");
+    pprint(wallet.coins, wallet.num_coins);
+    printf("Spending:\n");
+    pprint(allocated_coins, num_allocated_coins);
 
   return (CoinSelectionResult){
       .coins = allocated_coins, .coin_count = num_allocated_coins, .tab = tab};
@@ -1991,8 +1997,9 @@ int compare_denomination_desc(const void *a, const void *b) {
  * @param num_coins Pointer to store the number of generated coins.
  * @return An array of generated coins.
  */
+// TODO: Consider: This may generate withdraw coins even though their withdraw fee is higher/equal value.
 Coin *generate_withdraw_coins(long long amount, long long time,
-                              Wallet default_wallet, int *num_coins) {
+                              Wallet default_wallet, int *num_coins, int charge_fees) {
   if (!amount || !default_wallet.num_coins) { // if amount is 0, return
     return NULL;
   }
@@ -2024,15 +2031,21 @@ Coin *generate_withdraw_coins(long long amount, long long time,
   int generatedCount = 0;
   long long remainingAmount = amount;
   for (int i = 0; i < numUnique && remainingAmount > 0; i++) {
-    while (remainingAmount >= uniqueDenominations[i]->denomination.amount) {
+      long long amount_including_fee = uniqueDenominations[i]->denomination.amount;
+      if (charge_fees) {
+          amount_including_fee += uniqueDenominations[i]->denomination.rules.fees.withdraw_fee.fee_satoshis;
+          // exchange wont bill fee on remaining amount to avoid not beeing able to withdraw at all
+          // this could lead to unexpected outcomes for different fee structures than the intended 1 satoshi
+      }
+    while (remainingAmount >= amount_including_fee) {
         // printf("generatedCount: %i of denom: \n", generatedCount);
       // Create a coin of this denomination
       generatedCoins[generatedCount] = *(uniqueDenominations[i]);
       generatedCoins[generatedCount].creation_timestamp = time;
       generatedCoins[generatedCount].uniqueId = nextUniqueId++;
-      generatedCoins[generatedCount].amount =
-          uniqueDenominations[i]->denomination.amount;
-      remainingAmount -= uniqueDenominations[i]->denomination.amount;
+      generatedCoins[generatedCount].amount = uniqueDenominations[i]->denomination.amount;
+      printf("remaining: %lld, adding: %lld/%lld\n", remainingAmount, uniqueDenominations[i]->denomination.amount, amount_including_fee);
+      remainingAmount -= amount_including_fee;
       generatedCount++;
     }
   }
@@ -2291,7 +2304,6 @@ void pprint(Coin *coins, int nr) {
 
 /**
  * @brief Melt partially spent coins in wallet and add refreshed coins to it
- * this will NOT remove them from the wallet or free *coins. You're supposed to call remove_coins_from_wallet after
  *
  * @param wallet
  * @param coins Coins to be checked
@@ -2312,13 +2324,13 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
   for (int i = 0; i < wallet->num_coins; i++){
         if (wallet->coins[i].amount == wallet->coins[i].denomination.amount) {
             // spent_coins[num_spent_coins] = coins[i];
-        }else if (0 < wallet->coins[i].amount && wallet->coins[i].amount < wallet->coins[i].denomination.amount) {
+        }else if (0 <= wallet->coins[i].amount && wallet->coins[i].amount < wallet->coins[i].denomination.amount) {
             dirty_coins[num_dirty_coins] = wallet->coins[i];
             num_dirty_coins ++;
             amount_dirty += wallet->coins[i].amount;
-            printf("\t melting %lld / %lld sum of change: %lld\n", wallet->coins->amount, wallet->coins->denomination.amount, amount_dirty);
+            printf("\t melting %lld / %lld sum of change: %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount, amount_dirty);
         } else {
-            printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount);
+            // printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount);
             // exit(1);
         }
       
@@ -2331,12 +2343,21 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
   remove_selected_coins(wallet, dirty_coins, num_dirty_coins);
   int num_withdrawn = 0;
   // printf("withdraw from refresh: %lld\n", amount_dirty);
-  Coin *withdrawn_coins = generate_withdraw_coins(amount_dirty, time, denomination_wallet, &num_withdrawn);
+  Coin *withdrawn_coins = generate_withdraw_coins(amount_dirty, time, denomination_wallet, &num_withdrawn, FALSE);
   add_coins_to_wallet(wallet, withdrawn_coins, num_withdrawn);
 
-  printf("RDC: -%i / +%i \t=%i\n", num_dirty_coins, num_withdrawn, wallet->num_coins);
+  printf("RefreshDirtyCoins: -%i / +%i \t=%i\n", num_dirty_coins, num_withdrawn, wallet->num_coins);
 }
 
+void spend_coin_selection(Coin* coins, int num_coins, Wallet *wallet) {
+    for (int i = 0; i < num_coins; i++) {
+        for (int j = 0; j < wallet->num_coins; j++) {
+            if(coins[i].uniqueId == wallet->coins[j].uniqueId) {
+                wallet->coins[j].amount -= coins[i].amount;
+            } 
+        }
+    }    
+}
 
 
 // should return list of new + remaining coins and the refresh fee to be paid?

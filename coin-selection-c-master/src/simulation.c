@@ -191,25 +191,25 @@ void simulate_user_actions(int user_index, User user,
 
   user.wallet.num_coins = 0;
 
-  long long total_fee = 0;
-
   if (user.actions != NULL && num_actions > 0) {
     fprintf(fp, "%s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
+    printf("Starting sim: %s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
 
     save_wallet_state(user.wallet, -1, -1, coins_log_fp);
 
     for (int i = 0; i < num_actions; i++) {
-        printf("time %lld  %s\n", user.actions[i].time, OperationNames[user.actions[i].operation]);
-
-        // printf("\n");
-        // printf("STEP %i: %i\n", i, user.wallet.num_coins);
-      // printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
+        printf("\n");
+        printf("STEP %i: %i, Wallet Balance: %lld\n", i, user.wallet.num_coins, coins_balance(user.wallet.coins, user.wallet.num_coins));
+        printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
       
       // STEP Refresh old coins
 
         long long renew_fee = 0;
         int num_renew_coins = 0;
         Coin *fresh_coins = refresh_old_coins(user.wallet, user.actions[i].time, &num_renew_coins, &renew_fee);
+        if(fresh_coins != NULL) {
+            printf("DID REFRESH COINS\n");
+        }
       if (renew_fee > 0) {
         fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
                 user.actions[i].time, 0ll, OperationNames[REFRESH_OP],
@@ -219,9 +219,8 @@ void simulate_user_actions(int user_index, User user,
         save_action(i, user.actions[i].time, 0ll, REFRESH_OP, renew_fee, fresh_coins, num_renew_coins, action_log_fp);
         // printf("Remove after refresh\n");
         // printf("REFRESH: +%i\n", num_renew_coins);
-        total_fee += renew_fee;
 
-        // printf("RENEWING ~%i\t=%i\n", num_renew_coins, user.wallet.num_coins);
+        printf("RENEWING ~%i\t=%i\n", num_renew_coins, user.wallet.num_coins);
       }
 
       long long fee_for_action = 0;
@@ -242,7 +241,7 @@ void simulate_user_actions(int user_index, User user,
         int generatedCoinCount = 0;
         Coin *generatedCoins =
             generate_withdraw_coins(transaction_amount, user.actions[i].time,
-                                    denomination_wallet, &generatedCoinCount);
+                                    denomination_wallet, &generatedCoinCount, TRUE);
         if (generatedCoins) {
           fee_for_action = calculate_total_fee(
               generatedCoins, generatedCoinCount, user.actions[i].operation);
@@ -254,9 +253,8 @@ void simulate_user_actions(int user_index, User user,
 
         save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, fee_for_action, generatedCoins, generatedCoinCount, action_log_fp);
 
-          total_fee += fee_for_action;
           add_coins_to_wallet(&user.wallet, generatedCoins, generatedCoinCount);
-        // printf("WITHDRAWING +%i\t=%i\n", generatedCoinCount, user.wallet.num_coins);
+        printf("WITHDRAWING +%i\t=%i\n", generatedCoinCount, user.wallet.num_coins);
         }else {
             printf("NO CS returned\n");
         }
@@ -269,7 +267,7 @@ void simulate_user_actions(int user_index, User user,
             user.wallet, transaction_amount, strategy, user.actions[i].time, denomination_wallet);
         pause_timer(&timer);
 
-        print_deposit_status(i, transaction_amount, &user.wallet, &allocatedCoins);
+        // print_deposit_status(i, transaction_amount, &user.wallet, &allocatedCoins);
 
         if (!allocatedCoins.coins) {
           char error[1024];
@@ -283,19 +281,19 @@ void simulate_user_actions(int user_index, User user,
                   OperationNames[user.actions[i].operation], allocatedCoins.tab.deposit_fee_sum,
                   user.wallet.num_coins);
 
-          save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, fee_for_action, allocatedCoins.coins, allocatedCoins.coin_count, action_log_fp);
+          save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, allocatedCoins.tab.deposit_fee_sum + allocatedCoins.tab.refresh_fee_sum, allocatedCoins.coins, allocatedCoins.coin_count, action_log_fp);
 
           // printf("Before: %d coins\t\t\n", user.wallet.num_coins);
           // remove_selected_coins(&user.wallet, allocatedCoins.coins,
           //                       allocatedCoins.coin_count);
           // printf("After: %d coins\n", user.wallet.num_coins);
-
+          spend_coin_selection(allocatedCoins.coins, allocatedCoins.coin_count, &user.wallet);
           refresh_dirty_coins(&user.wallet, denomination_wallet, user.actions[i].time);
           // printf("Remove after deposit\n");
-        printf("After: %lld\n", coins_balance(user.wallet.coins, user.wallet.num_coins));
           // remove_selected_coins(&user.wallet, allocatedCoins.coins, allocatedCoins.coin_count);
 
 
+          printf("After: %lld\n", coins_balance(user.wallet.coins, user.wallet.num_coins));
           printf("DEPOSIT -%i\t=%i\n", allocatedCoins.coin_count, user.wallet.num_coins);
           // long long changeAmount = allocatedCoins.tab.effective_amount - transaction_amount;
           //
@@ -321,7 +319,6 @@ void simulate_user_actions(int user_index, User user,
           //     printf("Error for allocation of change coins\n");
           //   }  
           // }
-          total_fee += allocatedCoins.tab.refresh_fee_sum + allocatedCoins.tab.deposit_fee_sum;
         }
       }
 // printf("[%s][%lld] finished.\n", StrategyNames[strategy], user.actions[i].time);
