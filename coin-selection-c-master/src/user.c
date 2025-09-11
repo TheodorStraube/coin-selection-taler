@@ -4,6 +4,7 @@
 
 // user.c
 #include "user.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -488,6 +489,7 @@ void generate_actions_for_teacher(Action **actions, int *size, int days) {
     }
 }
 
+
 /**
  * @brief Generate actions for an artist user type.
  *
@@ -540,3 +542,76 @@ void generate_actions_for_artist(Action **actions, int *size, int days) {
 }
 
 
+/**
+ * @brief Generate actions for an artist user type.
+ *
+ * @param actions Pointer to the array of actions to be generated.
+ * @param size Pointer to the size of the actions array.
+ * @param days The number of days to simulate actions for.
+ */
+void generate_actions_for_b_artist(Action **actions, int *size, int days) {
+    long long currentTimestamp;
+    const long long secondsPerDay = 86400;
+    long long accountBalance = 0;
+
+    *actions = (Action *)malloc(sizeof(Action) * days * 6); // Allocate memory for actions, considering irregular income and expenses
+    *size = 0;
+
+    long long initial_balance = 100000;
+    (*actions)[(*size)++] = (Action){.amount = initial_balance, .operation = WITHDRAW_OP, .time = 0};
+    accountBalance = initial_balance;
+
+    long inc = 0;
+    int inc_cnt = 0;
+    long dexp = 0;
+    int dexp_cnt = 0;
+    long lexp = 0;
+    int lexp_cnt = 0;
+    long grnt = 0;
+    int grnt_cnt = 0;
+
+    for (int day = 1; day <= days; day++) {
+        currentTimestamp = (day - 1) * secondsPerDay;
+
+        // Irregular income from sales or commissions
+        if (rand_range(1, 3) == 1) { // Roughly once a few days
+            // long long incomeAmount = rand_range_long(6000, 16000); // Varied income amounts
+            long long incomeAmount = rand_range_long(30000, 50000); // Varied income amounts
+            (*actions)[(*size)++] = (Action){.amount = incomeAmount, .operation = WITHDRAW_OP, .time = currentTimestamp};
+            accountBalance += incomeAmount;
+            inc += incomeAmount;
+            inc_cnt++;
+        }
+
+        // Regular daily expenses for art supplies
+        long long dailyExpense = generate_normal_ll(20000, 5000); // Regular daily expenses
+        if (accountBalance - dailyExpense < 0) dailyExpense = accountBalance;
+        (*actions)[(*size)++] = (Action){.amount = dailyExpense, .operation = DEPOSIT_OP, .time = currentTimestamp};
+        accountBalance -= dailyExpense;
+        dexp += dailyExpense;
+        dexp_cnt++;
+
+        // Occasional large expenses for exhibitions or materials
+        if (rand_range(1, 90) == 1) { // Roughly once every three months
+            long long largeExpense = generate_normal_ll(300000, 100000); // Large expense amount
+            if (accountBalance - largeExpense < 0) largeExpense = accountBalance;
+            (*actions)[(*size)++] = (Action){.amount = largeExpense, .operation = DEPOSIT_OP, .time = currentTimestamp};
+            accountBalance -= largeExpense;
+            lexp += largeExpense;
+            lexp_cnt++;
+        }
+
+        // Potential grants or awards
+        if (rand_range(1, 60) == 1) { // Once a couple of months
+            long long grantAmount = rand_range_long(500000, 1000000); // Grant or award amount
+            (*actions)[(*size)++] = (Action){.amount = grantAmount, .operation = WITHDRAW_OP, .time = currentTimestamp};
+            accountBalance += grantAmount;
+            grnt += grantAmount;
+            grnt_cnt++;
+        }
+
+        // Ensure account balance never drops below zero
+        if (accountBalance < 0) accountBalance = 0;
+    }
+    printf("AVG\ninc: %ld\ndexp: %ld\nlexp: %ld\ngrant: %ld\n", inc / *size, dexp / *size, lexp / *size, grnt / *size);
+}

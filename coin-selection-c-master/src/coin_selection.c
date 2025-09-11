@@ -69,6 +69,8 @@ int checkOrLoadPython() {
   return 0;
 }
 
+
+
 /**
  * @brief Calculate the score of a coin based on its expiration time and
  * denomination.
@@ -238,6 +240,23 @@ long long amount_using_this(long long amount, Coin *coin) {
 long long effective_amount(Coin *coin) {
   return coin->denomination.amount -
          coin->denomination.rules.fees.deposit_fee.fee_satoshis;
+}
+
+long long total_spending_amount(Wallet *wallet) {
+    long long total = 0;
+
+    for (int i = 0; i < wallet->num_coins; i++) {
+        total += effective_amount(&wallet->coins[i]);
+    }
+    return total;
+}   
+
+void check_for_dirty_coins(Wallet *wallet) {
+    for (int i = 0; i < wallet->num_coins; i++) {
+        if(wallet->coins[i].amount != wallet->coins[i].denomination.amount) {
+            printf("Dirty Coin found: %lld/%lld", wallet->coins[i].amount, wallet->coins[i].denomination.amount);
+        }
+    }
 }
 
 /**
@@ -1197,6 +1216,8 @@ Coin *allocate_coins_greedy_min_to_max(Wallet wallet, long long amount,
   qsort(wallet.coins, wallet.num_coins, sizeof(Coin),
         compare_creation_time_asc);
 
+  qsort(wallet.coins, wallet.num_coins, sizeof(Coin), compare_coins_desc);
+
   // Allocate memory for the 2D array
   int num_denominations = denomination_wallet.num_coins;
   long long **denom_array = malloc(2 * sizeof(long long *));
@@ -1346,8 +1367,8 @@ Coin *allocate_coins_greedy_min_to_max_fix(Wallet wallet, long long amount,
                                            int *num_allocated_coins,
                                            Wallet denomination_wallet) {
   // Sort coins in the wallet by their creation timestamp in ascending order
-  qsort(wallet.coins, wallet.num_coins, sizeof(Coin),
-        compare_creation_time_asc);
+  qsort(wallet.coins, wallet.num_coins, sizeof(Coin), compare_creation_time_asc);
+  qsort(wallet.coins, wallet.num_coins, sizeof(Coin), compare_coins_desc);
 
   // Allocate memory for the 2D array
   int num_denominations = denomination_wallet.num_coins;
@@ -1423,12 +1444,11 @@ Coin *allocate_coins_greedy_min_to_max_fix(Wallet wallet, long long amount,
     for (int i = 0; i < wallet.num_coins; i++) {
       if (selectedFlags[i] == 0) {
         if (first) {
-          closestAmount = wallet.coins[i].denomination.amount;
+          closestAmount = effective_amount(&wallet.coins[i]);
           closestIndex = i;
           first = 0;
         }
-        long long tempAmount =
-            amount_collected + wallet.coins[i].denomination.amount;
+        long long tempAmount = amount_collected + effective_amount(&wallet.coins[i]);
         if (tempAmount > closestAmount) {
           closestAmount = tempAmount;
           closestIndex = i;
@@ -1888,6 +1908,8 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
 
   unsigned int seed = 0;
 
+  // check_for_dirty_coins(&wallet);
+
   switch (strategy) {
   case MAX_BILLS:
     allocated_coins = allocate_max_bills(wallet, amount, &num_allocated_coins);
@@ -1950,14 +1972,17 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
 
   if (!tab.valid) {
     long long total = 0;
-    for (int i = 0; i < num_allocated_coins; ++i) {
-      total += allocated_coins[i].amount;
+    for (int i = 0; i < wallet.num_coins; i++) {
+      total += wallet.coins[i].amount;
     }
-
-    // This may happen when the generated Steps attempt to overspend
-    // printf("Invalid Selection: %d Coins pay for Amount: %lld/%lld\t Wallet
-    // has %lld\n", num_allocated_coins, tab.effective_amount, amount, total);
-    // pprint(allocated_coins, num_allocated_coins);
+  
+    long long able_to_spend = total_spending_amount(&wallet);
+    if (able_to_spend >= amount) {
+        // This may happen when the generated Steps attempt to overspend
+        printf("Invalid Selection: %d Coins pay for Amount: %lld/%lld\t Wallet has %lld\n", num_allocated_coins, tab.effective_amount, amount, able_to_spend);
+        pprint(wallet.coins, wallet.num_coins);
+        pprint(allocated_coins, num_allocated_coins);
+    }
 
     return (CoinSelectionResult){
         .coins = NULL, .coin_count = 0, .tab = (FeeTab){0}};
@@ -2036,6 +2061,10 @@ Coin *generate_withdraw_coins(long long amount, long long time,
           amount_including_fee += uniqueDenominations[i]->denomination.rules.fees.withdraw_fee.fee_satoshis;
           // exchange wont bill fee on remaining amount to avoid not beeing able to withdraw at all
           // this could lead to unexpected outcomes for different fee structures than the intended 1 satoshi
+          if(i == numUnique - 1) {
+              printf("giving 1, %lld\n", uniqueDenominations[i]->denomination.amount);
+              amount_including_fee -= uniqueDenominations[i]->denomination.rules.fees.withdraw_fee.fee_satoshis;
+          }
       }
     while (remainingAmount >= amount_including_fee) {
         // printf("generatedCount: %i of denom: \n", generatedCount);
@@ -2049,7 +2078,7 @@ Coin *generate_withdraw_coins(long long amount, long long time,
       generatedCount++;
     }
   }
-  // printf("done.\n");
+  printf("done. %lld, %i\n", remainingAmount, generatedCount);
 
   free(uniqueDenominations);
 
@@ -2378,3 +2407,5 @@ void spend_coin_selection(Coin* coins, int num_coins, Wallet *wallet) {
 //         }
 //     }
 // }
+//
+//

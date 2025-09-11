@@ -18,6 +18,7 @@ typedef enum{
     FREELANCER,
     TEACHER,
     ARTIST,
+    B_ARTIST,
     NUMBER_OF_USERS
 } Type;
 
@@ -36,6 +37,8 @@ void generate_actions_for_family(Action **actions, int *size, int days);
 void generate_actions_for_freelancer(Action **actions, int *size, int days);
 void generate_actions_for_teacher(Action **actions, int *size, int days);
 void generate_actions_for_artist(Action **actions, int *size, int days);
+
+void generate_actions_for_b_artist(Action **actions, int *size, int days);
 
 
 #endif // USER_H

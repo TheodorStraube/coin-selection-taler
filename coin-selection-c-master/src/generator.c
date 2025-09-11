@@ -60,6 +60,9 @@ void generate_actions_for_user(User user, Action **actions, int *size) {
         case ARTIST:
             generate_actions_for_artist(actions, size, daysIn3Years);
             break;
+        case B_ARTIST:
+            generate_actions_for_b_artist(actions, size, daysIn3Years);
+            break;
         default:
             *size = 0;
             *actions = NULL;
@@ -79,9 +82,11 @@ void generate_and_save_actions(const char *base_dir, int num_users) {
         char user_name[50];
         snprintf(user_name, sizeof(user_name), "user%d", user_i);
         user.name = user_name;
-        user.type = rand() % NUMBER_OF_USERS;
+        // user.type = rand() % NUMBER_OF_USERS;
+        user.type = ARTIST;
         user.actions = NULL;
         int num_actions = 0;
+        printf("%i __________________________________________________ \n", user.type);
         generate_actions_for_user(user, &user.actions, &num_actions);
 
         for (int strategy_i = 0; strategy_i < NUMBER_OF_STRATEGIES; strategy_i++) {
