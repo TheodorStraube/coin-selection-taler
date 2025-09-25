@@ -557,7 +557,7 @@ void generate_actions_for_b_artist(Action **actions, int *size, int days) {
     *actions = (Action *)malloc(sizeof(Action) * days * 6); // Allocate memory for actions, considering irregular income and expenses
     *size = 0;
 
-    long long initial_balance = 100000;
+    long long initial_balance = 1000000;
     (*actions)[(*size)++] = (Action){.amount = initial_balance, .operation = WITHDRAW_OP, .time = 0};
     accountBalance = initial_balance;
 
@@ -576,7 +576,7 @@ void generate_actions_for_b_artist(Action **actions, int *size, int days) {
         // Irregular income from sales or commissions
         if (rand_range(1, 3) == 1) { // Roughly once a few days
             // long long incomeAmount = rand_range_long(6000, 16000); // Varied income amounts
-            long long incomeAmount = rand_range_long(30000, 50000); // Varied income amounts
+            long long incomeAmount = rand_range_long(40000, 45000); // Varied income amounts
             (*actions)[(*size)++] = (Action){.amount = incomeAmount, .operation = WITHDRAW_OP, .time = currentTimestamp};
             accountBalance += incomeAmount;
             inc += incomeAmount;
@@ -593,7 +593,7 @@ void generate_actions_for_b_artist(Action **actions, int *size, int days) {
 
         // Occasional large expenses for exhibitions or materials
         if (rand_range(1, 90) == 1) { // Roughly once every three months
-            long long largeExpense = generate_normal_ll(300000, 100000); // Large expense amount
+            long long largeExpense = generate_normal_ll(250000, 100000); // Large expense amount
             if (accountBalance - largeExpense < 0) largeExpense = accountBalance;
             (*actions)[(*size)++] = (Action){.amount = largeExpense, .operation = DEPOSIT_OP, .time = currentTimestamp};
             accountBalance -= largeExpense;

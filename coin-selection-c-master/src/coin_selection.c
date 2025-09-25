@@ -1218,6 +1218,7 @@ Coin *allocate_coins_greedy_min_to_max(Wallet wallet, long long amount,
 
   qsort(wallet.coins, wallet.num_coins, sizeof(Coin), compare_coins_desc);
 
+
   // Allocate memory for the 2D array
   int num_denominations = denomination_wallet.num_coins;
   long long **denom_array = malloc(2 * sizeof(long long *));
@@ -1495,6 +1496,7 @@ Coin *allocate_coins_greedy_min_to_max_fix(Wallet wallet, long long amount,
           coin_k->denomination.rules.fees.refresh_fee.fee_satoshis;
     } else {
       partial_amount = coin_k->denomination.amount;
+      amount_collected += effective;
     }
     coin_k->amount = partial_amount;
     finalSelectedCoins[k] = *coin_k;
@@ -1965,10 +1967,10 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
   FeeTab tab =
       fees_for_selection(amount, allocated_coins, &num_allocated_coins);
 
-    printf("TAB: target: %lld, instructed %lld, payed: %lld, D: %lld, R: %lld\n", amount, tab.instructed_amount, tab.effective_amount, tab.deposit_fee_sum, tab.refresh_fee_sum);
-    for (int i = 0; i<num_allocated_coins; i++) {
-        printf("\tpaying: %lld/%lld\n", allocated_coins[i].amount, allocated_coins[i].denomination.amount);
-    }
+     printf("TAB: target: %lld, instructed %lld, payed: %lld, D: %lld, R: %lld\n", amount, tab.instructed_amount, tab.effective_amount, tab.deposit_fee_sum, tab.refresh_fee_sum);
+     for (int i = 0; i<num_allocated_coins; i++) {
+         printf("\tpaying: %lld/%lld\n", allocated_coins[i].amount, allocated_coins[i].denomination.amount);
+     }
 
   if (!tab.valid) {
     long long total = 0;
@@ -1987,9 +1989,9 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
     return (CoinSelectionResult){
         .coins = NULL, .coin_count = 0, .tab = (FeeTab){0}};
   }
-    printf("Wallet:\n");
-    pprint(wallet.coins, wallet.num_coins);
-    printf("Spending:\n");
+     printf("Wallet:\n");
+     pprint(wallet.coins, wallet.num_coins);
+     printf("Spending:\n");
     pprint(allocated_coins, num_allocated_coins);
 
   return (CoinSelectionResult){
@@ -2024,7 +2026,7 @@ int compare_denomination_desc(const void *a, const void *b) {
  */
 // TODO: Consider: This may generate withdraw coins even though their withdraw fee is higher/equal value.
 Coin *generate_withdraw_coins(long long amount, long long time,
-                              Wallet default_wallet, int *num_coins, int charge_fees) {
+                              Wallet default_wallet, int *num_coins, long long *withdraw_fee,  int charge_fees) {
   if (!amount || !default_wallet.num_coins) { // if amount is 0, return
     return NULL;
   }
@@ -2061,24 +2063,24 @@ Coin *generate_withdraw_coins(long long amount, long long time,
           amount_including_fee += uniqueDenominations[i]->denomination.rules.fees.withdraw_fee.fee_satoshis;
           // exchange wont bill fee on remaining amount to avoid not beeing able to withdraw at all
           // this could lead to unexpected outcomes for different fee structures than the intended 1 satoshi
-          if(i == numUnique - 1) {
-              printf("giving 1, %lld\n", uniqueDenominations[i]->denomination.amount);
+          if(i == numUnique - 1 && uniqueDenominations[i]->amount == uniqueDenominations[i]->denomination.rules.fees.withdraw_fee.fee_satoshis) {
               amount_including_fee -= uniqueDenominations[i]->denomination.rules.fees.withdraw_fee.fee_satoshis;
           }
       }
     while (remainingAmount >= amount_including_fee) {
         // printf("generatedCount: %i of denom: \n", generatedCount);
       // Create a coin of this denomination
+      if(charge_fees){
+        *withdraw_fee += amount_including_fee - uniqueDenominations[i]->denomination.amount;
+      }
       generatedCoins[generatedCount] = *(uniqueDenominations[i]);
       generatedCoins[generatedCount].creation_timestamp = time;
       generatedCoins[generatedCount].uniqueId = nextUniqueId++;
       generatedCoins[generatedCount].amount = uniqueDenominations[i]->denomination.amount;
-      printf("remaining: %lld, adding: %lld/%lld\n", remainingAmount, uniqueDenominations[i]->denomination.amount, amount_including_fee);
       remainingAmount -= amount_including_fee;
       generatedCount++;
     }
   }
-  printf("done. %lld, %i\n", remainingAmount, generatedCount);
 
   free(uniqueDenominations);
 
@@ -2357,7 +2359,7 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
             dirty_coins[num_dirty_coins] = wallet->coins[i];
             num_dirty_coins ++;
             amount_dirty += wallet->coins[i].amount;
-            printf("\t melting %lld / %lld sum of change: %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount, amount_dirty);
+            // printf("\t melting %lld / %lld sum of change: %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount, amount_dirty);
         } else {
             // printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount);
             // exit(1);
@@ -2372,10 +2374,9 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
   remove_selected_coins(wallet, dirty_coins, num_dirty_coins);
   int num_withdrawn = 0;
   // printf("withdraw from refresh: %lld\n", amount_dirty);
-  Coin *withdrawn_coins = generate_withdraw_coins(amount_dirty, time, denomination_wallet, &num_withdrawn, FALSE);
+  Coin *withdrawn_coins = generate_withdraw_coins(amount_dirty, time, denomination_wallet, &num_withdrawn, NULL, FALSE);
   add_coins_to_wallet(wallet, withdrawn_coins, num_withdrawn);
 
-  printf("RefreshDirtyCoins: -%i / +%i \t=%i\n", num_dirty_coins, num_withdrawn, wallet->num_coins);
 }
 
 void spend_coin_selection(Coin* coins, int num_coins, Wallet *wallet) {

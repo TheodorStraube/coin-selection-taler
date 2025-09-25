@@ -136,7 +136,7 @@ void simulate_user_actions(int user_index, User user,
                            strategy strategy) {
   const char *TypeNames[] = {"STUDENT", "STUDENT_STATIC", "BUSINESS_OWNER",
                              "RETIRED", "FAMILY",         "FREELANCER",
-                             "TEACHER", "ARTIST"};
+                             "TEACHER", "ARTIST", "BALANCED_ARTIST"};
   const char *StrategyNames[] = {"MAX_BILLS",
                                  "MIN_BILLS",
                                  "CLOSEST_TO_EXPIRE_MIN_BILLS",
@@ -193,23 +193,21 @@ void simulate_user_actions(int user_index, User user,
 
   if (user.actions != NULL && num_actions > 0) {
     fprintf(fp, "%s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
-    printf("Starting sim: %s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
+    // printf("Starting sim: %s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
 
     save_wallet_state(user.wallet, -1, -1, coins_log_fp);
 
     for (int i = 0; i < num_actions; i++) {
-        printf("\n");
-        printf("STEP %i: %i, Wallet Balance: %lld\n", i, user.wallet.num_coins, coins_balance(user.wallet.coins, user.wallet.num_coins));
-        printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
+        // printf("\n");
+        // printf("STEP %i: %i, Wallet Balance: %lld\n", i, user.wallet.num_coins, coins_balance(user.wallet.coins, user.wallet.num_coins));
+        // printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
       
       // STEP Refresh old coins
 
         long long renew_fee = 0;
         int num_renew_coins = 0;
         Coin *fresh_coins = refresh_old_coins(user.wallet, user.actions[i].time, &num_renew_coins, &renew_fee);
-        if(fresh_coins != NULL) {
-            printf("DID REFRESH COINS\n");
-        }
+
       if (renew_fee > 0) {
         fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
                 user.actions[i].time, 0ll, OperationNames[REFRESH_OP],
@@ -220,7 +218,7 @@ void simulate_user_actions(int user_index, User user,
         // printf("Remove after refresh\n");
         // printf("REFRESH: +%i\n", num_renew_coins);
 
-        printf("RENEWING ~%i\t=%i\n", num_renew_coins, user.wallet.num_coins);
+        // printf("RENEWING ~%i\t=%i\n", num_renew_coins, user.wallet.num_coins);
       }
 
       long long fee_for_action = 0;
@@ -239,27 +237,25 @@ void simulate_user_actions(int user_index, User user,
           user.actions[i].operation == REFUND_OP) {
         // Simulate deposit or refund
         int generatedCoinCount = 0;
+        long long withdraw_fee = 0;
         Coin *generatedCoins =
             generate_withdraw_coins(transaction_amount, user.actions[i].time,
-                                    denomination_wallet, &generatedCoinCount, TRUE);
+                                    denomination_wallet, &generatedCoinCount, &withdraw_fee, TRUE);
         if (generatedCoins) {
-          fee_for_action = calculate_total_fee(
-              generatedCoins, generatedCoinCount, user.actions[i].operation);
-
         fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
                   user.actions[i].time, transaction_amount,
-                  OperationNames[user.actions[i].operation], fee_for_action,
+                  OperationNames[user.actions[i].operation], withdraw_fee,
                   user.wallet.num_coins);
 
         save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, fee_for_action, generatedCoins, generatedCoinCount, action_log_fp);
 
           add_coins_to_wallet(&user.wallet, generatedCoins, generatedCoinCount);
-        printf("WITHDRAWING +%i\t=%i\n", generatedCoinCount, user.wallet.num_coins);
+        // printf("WITHDRAWING +%i\t=%i\n", generatedCoinCount, user.wallet.num_coins);
         }else {
             printf("NO CS returned\n");
         }
       } else if (user.actions[i].operation == DEPOSIT_OP) {
-          printf("DEPOSIT %lld as %u STRAT %u\n", transaction_amount, user.type, strategy);
+          // printf("DEPOSIT %lld as %u STRAT %u\n", transaction_amount, user.type, strategy);
         // Simulate withdrawal
 
         start(&timer);
@@ -293,8 +289,8 @@ void simulate_user_actions(int user_index, User user,
           // remove_selected_coins(&user.wallet, allocatedCoins.coins, allocatedCoins.coin_count);
 
 
-          printf("After: %lld\n", coins_balance(user.wallet.coins, user.wallet.num_coins));
-          printf("DEPOSIT -%i\t=%i\n", allocatedCoins.coin_count, user.wallet.num_coins);
+          // printf("After: %lld\n", coins_balance(user.wallet.coins, user.wallet.num_coins));
+          // printf("DEPOSIT -%i\t=%i\n", allocatedCoins.coin_count, user.wallet.num_coins);
           // long long changeAmount = allocatedCoins.tab.effective_amount - transaction_amount;
           //
           // if (changeAmount > 0){          
@@ -302,11 +298,11 @@ void simulate_user_actions(int user_index, User user,
           //   Coin *changeCoins =
           //       generate_withdraw_coins(changeAmount, user.actions[i].time,
           //                               denomination_wallet, &changeCoinCount);
-            //
-            // fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
-            //         user.actions[i].time, transaction_amount,
-            //         OperationNames[REFRESH_OP], allocatedCoins.tab.refresh_fee_sum,
-            //         user.wallet.num_coins);
+
+            fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
+                    user.actions[i].time, 0l,
+                    OperationNames[REFRESH_OP], allocatedCoins.tab.refresh_fee_sum,
+                    user.wallet.num_coins);
             //
             // fprintf(fp, "%d_%d, %lld, %lld, DEPOSIT_REFRESH_OP, %lld, %d\n",
             //         user_index, i, user.actions[i].time, transaction_amount,
@@ -328,7 +324,7 @@ void simulate_user_actions(int user_index, User user,
   } else {
     printf("No actions generated for the user.\n");
   }
-   printf("Timer: %f\n", read_timer(&timer));
+   // printf("Timer: %f\n", read_timer(&timer));
     fprintf(stat_log_fp, "%s,%s,%f\n", TypeNames[user_index], StrategyNames[strategy], read_timer(&timer));
     fclose(fp);
 

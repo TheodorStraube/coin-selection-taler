@@ -1,0 +1,840 @@
+desc: (none)
+cmd: build/coin_selection_c
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=1738288
+mem_heap_B=161179
+mem_heap_extra_B=69
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=3748117
+mem_heap_B=161179
+mem_heap_extra_B=69
+mem_stacks_B=0
+heap_tree=peak
+n3: 161179 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 155520 0x400C10A: generate_actions_for_artist (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+  n1: 155520 0x40045EE: generate_and_save_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 155520 0x4002771: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+ n1: 5120 0x4F9FB55: _IO_file_doallocate (filedoalloc.c:101)
+  n1: 5120 0x4FB1042: _IO_doallocbuf (genops.c:373)
+   n1: 5120 0x4FAE838: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:746)
+    n1: 5120 0x4FAF363: _IO_new_file_xsputn (fileops.c:1245)
+     n1: 5120 0x4FAF363: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1198)
+      n1: 5120 0x4F79D8E: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
+       n1: 5120 0x4F79D8E: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
+        n2: 5120 0x4F85569: __vfprintf_internal (vfprintf-internal.c:1545)
+         n1: 4096 0x4F78621: fprintf (fprintf.c:32)
+          n1: 4096 0x4004657: generate_and_save_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+           n0: 4096 0x4002771: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+         n0: 1024 in 1 place, below massif's threshold (1.00%)
+ n0: 539 in 3 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=3
+#-----------
+time=5763070
+mem_heap_B=161179
+mem_heap_extra_B=69
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=7775075
+mem_heap_B=161179
+mem_heap_extra_B=69
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=9787089
+mem_heap_B=161179
+mem_heap_extra_B=69
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=11799098
+mem_heap_B=161179
+mem_heap_extra_B=69
+mem_stacks_B=0
+heap_tree=detailed
+n3: 161179 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 155520 0x400C10A: generate_actions_for_artist (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+  n1: 155520 0x40045EE: generate_and_save_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 155520 0x4002771: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+ n1: 5120 0x4F9FB55: _IO_file_doallocate (filedoalloc.c:101)
+  n1: 5120 0x4FB1042: _IO_doallocbuf (genops.c:373)
+   n1: 5120 0x4FAE838: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:746)
+    n1: 5120 0x4FAF363: _IO_new_file_xsputn (fileops.c:1245)
+     n1: 5120 0x4FAF363: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1198)
+      n1: 5120 0x4F79D8E: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
+       n1: 5120 0x4F79D8E: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
+        n2: 5120 0x4F85569: __vfprintf_internal (vfprintf-internal.c:1545)
+         n1: 4096 0x4F78621: fprintf (fprintf.c:32)
+          n1: 4096 0x4004657: generate_and_save_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+           n0: 4096 0x4002771: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+         n0: 1024 in 1 place, below massif's threshold (1.00%)
+ n0: 539 in 3 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=7
+#-----------
+time=13811103
+mem_heap_B=161179
+mem_heap_extra_B=69
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=15823108
+mem_heap_B=161179
+mem_heap_extra_B=69
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=17835113
+mem_heap_B=161179
+mem_heap_extra_B=69
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=19847118
+mem_heap_B=161179
+mem_heap_extra_B=69
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=21856177
+mem_heap_B=157083
+mem_heap_extra_B=61
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=23868173
+mem_heap_B=157083
+mem_heap_extra_B=61
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=26152393
+mem_heap_B=75051
+mem_heap_extra_B=333
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=29644859
+mem_heap_B=70955
+mem_heap_extra_B=325
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=31401983
+mem_heap_B=84967
+mem_heap_extra_B=713
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=33494650
+mem_heap_B=84967
+mem_heap_extra_B=713
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=34892652
+mem_heap_B=84968
+mem_heap_extra_B=712
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=36814147
+mem_heap_B=79583
+mem_heap_extra_B=337
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=40306353
+mem_heap_B=75537
+mem_heap_extra_B=351
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=43054414
+mem_heap_B=89549
+mem_heap_extra_B=739
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=45149228
+mem_heap_B=89550
+mem_heap_extra_B=738
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=47465735
+mem_heap_B=84151
+mem_heap_extra_B=361
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=50957972
+mem_heap_B=80105
+mem_heap_extra_B=375
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=52148974
+mem_heap_B=94117
+mem_heap_extra_B=763
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=54474623
+mem_heap_B=94117
+mem_heap_extra_B=763
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=56810755
+mem_heap_B=94118
+mem_heap_extra_B=762
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=58117291
+mem_heap_B=88712
+mem_heap_extra_B=376
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=61609497
+mem_heap_B=84666
+mem_heap_extra_B=390
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=63341375
+mem_heap_B=98678
+mem_heap_extra_B=778
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=65199974
+mem_heap_B=98678
+mem_heap_extra_B=778
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=67069432
+mem_heap_B=98679
+mem_heap_extra_B=777
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=68768829
+mem_heap_B=93280
+mem_heap_extra_B=400
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=72261040
+mem_heap_B=89234
+mem_heap_extra_B=414
+mem_stacks_B=0
+heap_tree=detailed
+n5: 89234 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 35448 0x4002AF3: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+  n1: 35448 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 35448 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+ n1: 32816 0x5005FF5: __alloc_dir (opendir.c:115)
+  n1: 32816 0x5005FF5: opendir_tail (opendir.c:63)
+   n2: 32816 0x5005FF5: opendir (opendir.c:86)
+    n1: 32816 0x4002E36: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n0: 32816 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 17408 0x4F9FB55: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 17408 0x4FB1042: _IO_doallocbuf (genops.c:373)
+   n2: 17408 0x4FAE838: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:746)
+    n1: 17408 0x4FAF363: _IO_new_file_xsputn (fileops.c:1245)
+     n1: 17408 0x4FAF363: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1198)
+      n1: 17408 0x4F79D8E: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
+       n1: 17408 0x4F79D8E: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
+        n2: 17408 0x4F85569: __vfprintf_internal (vfprintf-internal.c:1545)
+         n2: 16384 0x4F78621: fprintf (fprintf.c:32)
+          n1: 16384 0x400A2E2: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+           n1: 16384 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+            n1: 16384 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+             n0: 16384 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+          n0: 0 in 2 places, all below massif's threshold (1.00%)
+         n1: 1024 0x4F79236: printf (printf.c:33)
+          n0: 1024 0x40026FE: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 2360 0x4FA089E: __fopen_internal (iofopen.c:65)
+  n2: 2360 0x4FA089E: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+   n1: 1888 0x4009DE0: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n1: 1888 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n1: 1888 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+      n0: 1888 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 472 in 6 places, all below massif's threshold (1.00%)
+ n0: 1202 in 15 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=34
+#-----------
+time=74067490
+mem_heap_B=103246
+mem_heap_extra_B=802
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=75926834
+mem_heap_B=103246
+mem_heap_extra_B=802
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=77796548
+mem_heap_B=103247
+mem_heap_extra_B=801
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=79420384
+mem_heap_B=97845
+mem_heap_extra_B=427
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=82912590
+mem_heap_B=93799
+mem_heap_extra_B=441
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=84794357
+mem_heap_B=107811
+mem_heap_extra_B=829
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=86654446
+mem_heap_B=107811
+mem_heap_extra_B=829
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=88522926
+mem_heap_B=107812
+mem_heap_extra_B=828
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=90071925
+mem_heap_B=102417
+mem_heap_extra_B=447
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=93564136
+mem_heap_B=98371
+mem_heap_extra_B=461
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=96131905
+mem_heap_B=112139
+mem_heap_extra_B=541
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=98700955
+mem_heap_B=112384
+mem_heap_extra_B=848
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=100723439
+mem_heap_B=106973
+mem_heap_extra_B=483
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=104215643
+mem_heap_B=102927
+mem_heap_extra_B=497
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=106084227
+mem_heap_B=116939
+mem_heap_extra_B=885
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=107249192
+mem_heap_B=116797
+mem_heap_extra_B=811
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=108414338
+mem_heap_B=116936
+mem_heap_extra_B=864
+mem_stacks_B=0
+heap_tree=detailed
+n5: 116936 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 41984 0x4F9FB55: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 41984 0x4FB1042: _IO_doallocbuf (genops.c:373)
+   n3: 41984 0x4FAE838: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:746)
+    n1: 33792 0x4FAF363: _IO_new_file_xsputn (fileops.c:1245)
+     n1: 33792 0x4FAF363: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1198)
+      n1: 33792 0x4F79D8E: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
+       n1: 33792 0x4F79D8E: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
+        n2: 33792 0x4F85569: __vfprintf_internal (vfprintf-internal.c:1545)
+         n3: 32768 0x4F78621: fprintf (fprintf.c:32)
+          n1: 28672 0x400A2E2: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+           n1: 28672 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+            n1: 28672 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+             n0: 28672 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+          n1: 4096 0x4009E73: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+           n1: 4096 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+            n1: 4096 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+             n0: 4096 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+          n0: 0 in 1 place, below massif's threshold (1.00%)
+         n0: 1024 in 1 place, below massif's threshold (1.00%)
+    n1: 4096 0x4009D7A: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n1: 4096 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+      n1: 4096 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+       n0: 4096 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n1: 4096 0x4009DB2: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n1: 4096 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+      n1: 4096 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+       n0: 4096 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 35448 0x4002AF3: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+  n1: 35448 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 35448 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+ n1: 32816 0x5005FF5: __alloc_dir (opendir.c:115)
+  n1: 32816 0x5005FF5: opendir_tail (opendir.c:63)
+   n2: 32816 0x5005FF5: opendir (opendir.c:86)
+    n1: 32816 0x4002E36: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n0: 32816 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 5192 0x4FA089E: __fopen_internal (iofopen.c:65)
+  n2: 5192 0x4FA089E: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+   n1: 3776 0x4009DE0: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n1: 3776 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n1: 3776 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+      n0: 3776 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 1416 in 6 places, all below massif's threshold (1.00%)
+ n0: 1496 in 15 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=51
+#-----------
+time=109579414
+mem_heap_B=116940
+mem_heap_extra_B=884
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=110744991
+mem_heap_B=116695
+mem_heap_extra_B=577
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=114869421
+mem_heap_B=107519
+mem_heap_extra_B=513
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=116035806
+mem_heap_B=121287
+mem_heap_extra_B=593
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=117201110
+mem_heap_B=121528
+mem_heap_extra_B=896
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=118366094
+mem_heap_B=121749
+mem_heap_extra_B=699
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=119531062
+mem_heap_B=121223
+mem_heap_extra_B=585
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=120698014
+mem_heap_B=121532
+mem_heap_extra_B=916
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=122038604
+mem_heap_B=116109
+mem_heap_extra_B=531
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=125530810
+mem_heap_B=112063
+mem_heap_extra_B=545
+mem_stacks_B=0
+heap_tree=detailed
+n5: 112063 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 37888 0x4F9FB55: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 37888 0x4FB1042: _IO_doallocbuf (genops.c:373)
+   n2: 37888 0x4FAE838: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:746)
+    n1: 37888 0x4FAF363: _IO_new_file_xsputn (fileops.c:1245)
+     n1: 37888 0x4FAF363: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1198)
+      n1: 37888 0x4F79D8E: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
+       n1: 37888 0x4F79D8E: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
+        n2: 37888 0x4F85569: __vfprintf_internal (vfprintf-internal.c:1545)
+         n2: 36864 0x4F78621: fprintf (fprintf.c:32)
+          n1: 36864 0x400A2E2: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+           n1: 36864 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+            n1: 36864 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+             n0: 36864 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+          n0: 0 in 2 places, all below massif's threshold (1.00%)
+         n0: 1024 in 1 place, below massif's threshold (1.00%)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 35448 0x4002AF3: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+  n1: 35448 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 35448 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+ n1: 32816 0x5005FF5: __alloc_dir (opendir.c:115)
+  n1: 32816 0x5005FF5: opendir_tail (opendir.c:63)
+   n2: 32816 0x5005FF5: opendir (opendir.c:86)
+    n1: 32816 0x4002E36: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n0: 32816 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 4720 0x4FA089E: __fopen_internal (iofopen.c:65)
+  n2: 4720 0x4FA089E: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+   n1: 4248 0x4009DE0: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n1: 4248 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n1: 4248 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+      n0: 4248 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 472 in 6 places, all below massif's threshold (1.00%)
+ n0: 1191 in 15 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=61
+#-----------
+time=126695896
+mem_heap_B=125831
+mem_heap_extra_B=625
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=127861573
+mem_heap_B=125831
+mem_heap_extra_B=625
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=129027128
+mem_heap_B=125831
+mem_heap_extra_B=625
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=64
+#-----------
+time=130192123
+mem_heap_B=125767
+mem_heap_extra_B=617
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=131357775
+mem_heap_B=126076
+mem_heap_extra_B=932
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=132692331
+mem_heap_B=120674
+mem_heap_extra_B=542
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=67
+#-----------
+time=136184542
+mem_heap_B=116628
+mem_heap_extra_B=556
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=137350021
+mem_heap_B=130396
+mem_heap_extra_B=636
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=138516072
+mem_heap_B=130396
+mem_heap_extra_B=636
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=70
+#-----------
+time=139681061
+mem_heap_B=130637
+mem_heap_extra_B=923
+mem_stacks_B=0
+heap_tree=detailed
+n5: 130637 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 54272 0x4F9FB55: _IO_file_doallocate (filedoalloc.c:101)
+  n2: 54272 0x4FB1042: _IO_doallocbuf (genops.c:373)
+   n3: 54272 0x4FAE838: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:746)
+    n1: 46080 0x4FAF363: _IO_new_file_xsputn (fileops.c:1245)
+     n1: 46080 0x4FAF363: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1198)
+      n1: 46080 0x4F79D8E: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
+       n1: 46080 0x4F79D8E: __printf_buffer_to_file_done (printf_buffer_to_file.c:120)
+        n2: 46080 0x4F85569: __vfprintf_internal (vfprintf-internal.c:1545)
+         n3: 45056 0x4F78621: fprintf (fprintf.c:32)
+          n1: 40960 0x400A2E2: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+           n1: 40960 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+            n1: 40960 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+             n0: 40960 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+          n1: 4096 0x4009E73: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+           n1: 4096 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+            n1: 4096 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+             n0: 4096 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+          n0: 0 in 1 place, below massif's threshold (1.00%)
+         n0: 1024 in 1 place, below massif's threshold (1.00%)
+    n1: 4096 0x4009D7A: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n1: 4096 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+      n1: 4096 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+       n0: 4096 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n1: 4096 0x4009DB2: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n1: 4096 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+      n1: 4096 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+       n0: 4096 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 35448 0x4002AF3: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+  n1: 35448 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 35448 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+ n1: 32816 0x5005FF5: __alloc_dir (opendir.c:115)
+  n1: 32816 0x5005FF5: opendir_tail (opendir.c:63)
+   n2: 32816 0x5005FF5: opendir (opendir.c:86)
+    n1: 32816 0x4002E36: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n0: 32816 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n0: 0 in 2 places, all below massif's threshold (1.00%)
+ n1: 6608 0x4FA089E: __fopen_internal (iofopen.c:65)
+  n2: 6608 0x4FA089E: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+   n1: 5192 0x4009DE0: simulate_user_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+    n1: 5192 0x4002C42: simulate_actions_from_file (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+     n1: 5192 0x4002F30: load_and_simulate_actions (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+      n0: 5192 0x40027A3: main (in /home/theo/Documents/Uni/Taler/coin-selection-taler/coin-selection-c-master/build/coin_selection_c)
+   n0: 1416 in 6 places, all below massif's threshold (1.00%)
+ n0: 1493 in 15 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=71
+#-----------
+time=140846733
+mem_heap_B=130640
+mem_heap_extra_B=944
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=72
+#-----------
+time=142013386
+mem_heap_B=130641
+mem_heap_extra_B=943
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=143348268
+mem_heap_B=125247
+mem_heap_extra_B=577
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=74
+#-----------
+time=146840522
+mem_heap_B=121201
+mem_heap_extra_B=591
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=75
+#-----------
+time=148005616
+mem_heap_B=134969
+mem_heap_extra_B=671
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=149171293
+mem_heap_B=134969
+mem_heap_extra_B=671
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=77
+#-----------
+time=150336848
+mem_heap_B=134969
+mem_heap_extra_B=671
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=78
+#-----------
+time=151501843
+mem_heap_B=134905
+mem_heap_extra_B=663
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=79
+#-----------
+time=152667495
+mem_heap_B=135214
+mem_heap_extra_B=978
+mem_stacks_B=0
+heap_tree=empty
