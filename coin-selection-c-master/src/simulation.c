@@ -147,6 +147,7 @@ void simulate_user_actions(int user_index, User user,
                                  "EVEN_FROM_MAX_TO_MIN",
                                  "GREEDY_MIN_TO_MAX",
                                  "GREEDY_MIN_TO_MAX_FIX",
+                                 "GREEDY_MAX_TO_MIN_FIX",
                                  "CALL_EXTERNAL",
                                  "WALLET_CORE"};
   const char *OperationNames[] = {"DEPOSIT_OP", "WITHDRAW_OP", "REFUND_OP",
@@ -195,11 +196,11 @@ void simulate_user_actions(int user_index, User user,
     fprintf(fp, "%s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
     // printf("Starting sim: %s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
 
-    save_wallet_state(user.wallet, -1, -1, coins_log_fp);
+    // save_wallet_state(user.wallet, -1, -1, coins_log_fp);
 
     for (int i = 0; i < num_actions; i++) {
         // printf("\n");
-        // printf("STEP %i: %i, Wallet Balance: %lld\n", i, user.wallet.num_coins, coins_balance(user.wallet.coins, user.wallet.num_coins));
+        // printf("STEP %i: Wallet Balance: %lld\n", i, coins_balance(user.wallet.coins, user.wallet.num_coins));
         // printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
       
       // STEP Refresh old coins
@@ -214,7 +215,7 @@ void simulate_user_actions(int user_index, User user,
                 renew_fee, user.wallet.num_coins);
 
         refresh_dirty_coins(&user.wallet, denomination_wallet, user.actions[i].time);
-        save_action(i, user.actions[i].time, 0ll, REFRESH_OP, renew_fee, fresh_coins, num_renew_coins, action_log_fp);
+        // save_action(i, user.actions[i].time, 0ll, REFRESH_OP, renew_fee, fresh_coins, num_renew_coins, action_log_fp);
         // printf("Remove after refresh\n");
         // printf("REFRESH: +%i\n", num_renew_coins);
 
@@ -247,7 +248,7 @@ void simulate_user_actions(int user_index, User user,
                   OperationNames[user.actions[i].operation], withdraw_fee,
                   user.wallet.num_coins);
 
-        save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, fee_for_action, generatedCoins, generatedCoinCount, action_log_fp);
+        // save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, fee_for_action, generatedCoins, generatedCoinCount, action_log_fp);
 
           add_coins_to_wallet(&user.wallet, generatedCoins, generatedCoinCount);
         // printf("WITHDRAWING +%i\t=%i\n", generatedCoinCount, user.wallet.num_coins);
@@ -273,11 +274,11 @@ void simulate_user_actions(int user_index, User user,
                   StrategyNames[strategy]);
         } else {
           fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
-                  user.actions[i].time, transaction_amount,
+                  user.actions[i].time, allocatedCoins.tab.effective_amount,
                   OperationNames[user.actions[i].operation], allocatedCoins.tab.deposit_fee_sum,
                   user.wallet.num_coins);
 
-          save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, allocatedCoins.tab.deposit_fee_sum + allocatedCoins.tab.refresh_fee_sum, allocatedCoins.coins, allocatedCoins.coin_count, action_log_fp);
+          // save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, allocatedCoins.tab.deposit_fee_sum + allocatedCoins.tab.refresh_fee_sum, allocatedCoins.coins, allocatedCoins.coin_count, action_log_fp);
 
           // printf("Before: %d coins\t\t\n", user.wallet.num_coins);
           // remove_selected_coins(&user.wallet, allocatedCoins.coins,
@@ -319,7 +320,7 @@ void simulate_user_actions(int user_index, User user,
       }
 // printf("[%s][%lld] finished.\n", StrategyNames[strategy], user.actions[i].time);
     
-    save_wallet_state(user.wallet, i, user.actions[i].time, coins_log_fp);
+    // save_wallet_state(user.wallet, i, user.actions[i].time, coins_log_fp);
     }
   } else {
     printf("No actions generated for the user.\n");

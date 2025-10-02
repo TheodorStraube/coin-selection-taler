@@ -1,5 +1,4 @@
-from os import WNOHANG
-from pulp import LpVariable, lpSum, LpProblem, LpMinimize, PULP_CBC_CMD
+from pulp import LpVariable, lpSum, LpProblem, LpStatus, LpMinimize, PULP_CBC_CMD
 from pulp.constants import LpStatusOptimal
 
 from dataclasses import dataclass, field
@@ -241,12 +240,24 @@ def select_closest(amount, wallet_data):
     )
     solve_result = prob.solve(PULP_CBC_CMD(msg=False))
 
+    # selectedCoins = [k for k, v in selection.items() if v]
+
+    # print("Spending: ", [coin.denomination.amount for i, coin in enumerate(wallet.coins) if i in selectedCoins])
+    # print("returning", [(i, wallet.coins[i].denomination.amount) for i, (k, v) in enumerate(selection.items()) if v])
+    #
+    # print("Status:", LpStatus[prob.status])
+
+    # for v in prob.variables():
+    #     print(v.name, "=", v.varValue)
+    
     if solve_result != LpStatusOptimal:
         return solve_result, []
+    
+    amounts = [(i, wallet.coins[i].amount) for i, v in selection.items() if v]
 
-    selectedCoins = [k for k, v in selection.items() if v]
+    if ueberschreitung.varValue:
+        index, amount = amounts[-1]
+        amounts[-1] = index, int(amount - ueberschreitung.varValue) - wallet.coins[index].denomination.rules.fees.refresh_fee
 
-    print("Spending: ", sum([coin.denomination.amount for i, coin in enumerate(wallet.coins) if i in selectedCoins]))
-    print("returning", [(i, wallet.coins[i].denomination.amount) for i, (k, v) in enumerate(selection.items()) if v])
 
-    return solve_result, [i for i, v in selection.items() if v]
+    return solve_result, amounts 

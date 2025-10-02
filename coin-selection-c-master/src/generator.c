@@ -20,6 +20,7 @@ const char* StrategyNames[] = {
         "EVEN_FROM_MAX_TO_MIN",
         "GREEDY_MIN_TO_MAX",
         "GREEDY_MIN_TO_MAX_FIX",
+        "GREEDY_MAX_TO_MIN_FIX",
         "CALL_EXTERNAL",
         "WALLET_CORE"
 };
@@ -83,7 +84,7 @@ void generate_and_save_actions(const char *base_dir, int num_users) {
         snprintf(user_name, sizeof(user_name), "user%d", user_i);
         user.name = user_name;
         // user.type = rand() % NUMBER_OF_USERS;
-        user.type = B_ARTIST;
+        user.type = user_i % NUMBER_OF_USERS;
         user.actions = NULL;
         int num_actions = 0;
         printf("%i __________________________________________________ \n", user.type);

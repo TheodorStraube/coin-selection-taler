@@ -152,6 +152,7 @@ void simulate_actions_from_file(const char *filepath, Wallet denomination_wallet
     }
 
     fclose(file);
+    printf("read file %s\n", filepath);
 
     user.actions = actions;
     simulate_user_actions(user_index, user, denomination_wallet, num_actions, strategy);
@@ -263,7 +264,7 @@ void check_and_prepare_directory(const char *dir_path) {
 
 
 int main(int argc, char *argv[]) {
-    int num_users = 1;
+    int num_users = NUMBER_OF_USERS;
     int strategy = -1;
 
     if (argc > 1) {
