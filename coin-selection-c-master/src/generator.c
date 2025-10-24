@@ -9,22 +9,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-const char* StrategyNames[] = {
-        "MAX_BILLS",
-        "MIN_BILLS",
-        "CLOSEST_TO_EXPIRE_MIN_BILLS",
-        "CLOSEST_TO_EXPIRE_MAX_BILLS",
-        "MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED",
-        "RANDOM",
-        "EVEN_FROM_MIN_TO_MAX",
-        "EVEN_FROM_MAX_TO_MIN",
-        "GREEDY_MIN_TO_MAX",
-        "GREEDY_MIN_TO_MAX_FIX",
-        "GREEDY_MAX_TO_MIN_FIX",
-        "CALL_EXTERNAL",
-        "WALLET_CORE"
-};
-
 /**
  * @brief Generate actions for a given user based on their type.
  *

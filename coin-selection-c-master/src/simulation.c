@@ -14,6 +14,11 @@
 #include "fee.h"
 #include "simulation.h"
 
+const char *TypeNames[] = {"STUDENT", "STUDENT_STATIC", "BUSINESS_OWNER",
+                         "RETIRED", "FAMILY",         "FREELANCER",
+                         "TEACHER", "ARTIST", "BALANCED_ARTIST"};
+const char *OperationNames[] = {"DEPOSIT_OP", "WITHDRAW_OP", "REFUND_OP",
+                              "REFRESH_OP", "WIRE_OP",     "CLOSE_OP"};
 
 void init(CPUTimer *self) {
     self->accum = 0;
@@ -121,6 +126,55 @@ void save_action(int i, long long time, long transaction_amount, int operation, 
     free(json_str);
 }
 
+int compare_long(const void *a, const void *b) {
+    long diff = *(long*)a - *(long*)b;
+    return (diff > 0) - (diff < 0);
+}
+
+void save_csv(FILE* fp, User *user, int i, long long fee, operation_type operation, long long *denoms, int num_denoms){
+    fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d", (int) user->type, i, user->actions[i].time, user->actions[i].amount, OperationNames[operation], fee, user->wallet.num_coins);
+
+    long long *counts = calloc(num_denoms, sizeof(long long));
+
+    for (int c = 0; c < user->wallet.num_coins ; c++) {
+        long long denom_amount = user->wallet.coins[c].denomination.amount;
+        // printf("Coin: %lld\n", denom_amount);
+        long long *found = bsearch(&denom_amount, denoms, num_denoms, sizeof(long long), compare_long);
+        int index = 1 + (int)(found - denoms);
+
+        // printf("indexung %d, %lld\n", index, denom_amount);
+        counts[index]++;
+    }
+
+    for (int index = 0; index < num_denoms; index++){ 
+        fprintf(fp, ", %lld, %lld", counts[index], denoms[index]);
+        // printf("%lld\t%lld\n", denoms[denom], counts[denom]);
+    }
+    fprintf(fp, "\n");
+
+    free(counts);
+}
+
+
+long long *sorted_denominations(Wallet *wallet) {
+    long long *denoms = malloc(sizeof(long long) * wallet->num_coins);
+
+    if(denoms == NULL) {
+        printf("Malloc failed\n");
+        exit(1);
+    }
+    
+    for (int i = 0; i < wallet->num_coins; i++) {
+        denoms[i] = wallet->coins[i].denomination.amount;
+    }
+
+    qsort(denoms, wallet->num_coins, sizeof(long long), compare_long);
+
+    return denoms;
+}
+
+
+
 
 /**
  * @brief Simulate user actions and write results to a file.
@@ -134,24 +188,7 @@ void save_action(int i, long long time, long transaction_amount, int operation, 
 void simulate_user_actions(int user_index, User user,
                            Wallet denomination_wallet, int num_actions,
                            strategy strategy) {
-  const char *TypeNames[] = {"STUDENT", "STUDENT_STATIC", "BUSINESS_OWNER",
-                             "RETIRED", "FAMILY",         "FREELANCER",
-                             "TEACHER", "ARTIST", "BALANCED_ARTIST"};
-  const char *StrategyNames[] = {"MAX_BILLS",
-                                 "MIN_BILLS",
-                                 "CLOSEST_TO_EXPIRE_MIN_BILLS",
-                                 "CLOSEST_TO_EXPIRE_MAX_BILLS",
-                                 "MAX_BILLS_TIME_TO_EXPIRE_WEIGHTED",
-                                 "RANDOM",
-                                 "EVEN_FROM_MIN_TO_MAX",
-                                 "EVEN_FROM_MAX_TO_MIN",
-                                 "GREEDY_MIN_TO_MAX",
-                                 "GREEDY_MIN_TO_MAX_FIX",
-                                 "GREEDY_MAX_TO_MIN_FIX",
-                                 "CALL_EXTERNAL",
-                                 "WALLET_CORE"};
-  const char *OperationNames[] = {"DEPOSIT_OP", "WITHDRAW_OP", "REFUND_OP",
-                                  "REFRESH_OP", "WIRE_OP",     "CLOSE_OP"};
+
   const int generation_scale = 7;
   long long wallet_scale = 0;
 
@@ -161,6 +198,8 @@ void simulate_user_actions(int user_index, User user,
   }
 
   wallet_scale = get_scale(wallet_scale);
+
+  long long *sorted_denom_values = sorted_denominations(&denomination_wallet);
 
   char coins_log_fname[256];
   sprintf(coins_log_fname, "../simulation/results/coins_user_%d_strategy_%s.json", user_index, StrategyNames[strategy]);
@@ -203,23 +242,17 @@ void simulate_user_actions(int user_index, User user,
         // printf("STEP %i: Wallet Balance: %lld\n", i, coins_balance(user.wallet.coins, user.wallet.num_coins));
         // printf("[%s][%lld]\t%s [%lld]\n", StrategyNames[strategy], user.actions[i].time, OperationNames[user.actions[i].operation], user.actions[i].amount);
       
-      // STEP Refresh old coins
+      // STEP Refresh old coin
 
         long long renew_fee = 0;
         int num_renew_coins = 0;
         Coin *fresh_coins = refresh_old_coins(user.wallet, user.actions[i].time, &num_renew_coins, &renew_fee);
 
       if (renew_fee > 0) {
-        fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
-                user.actions[i].time, 0ll, OperationNames[REFRESH_OP],
-                renew_fee, user.wallet.num_coins);
+         save_csv(fp, &user, i, 0ll, REFRESH_OP, sorted_denom_values, denomination_wallet.num_coins);
 
         refresh_dirty_coins(&user.wallet, denomination_wallet, user.actions[i].time);
         // save_action(i, user.actions[i].time, 0ll, REFRESH_OP, renew_fee, fresh_coins, num_renew_coins, action_log_fp);
-        // printf("Remove after refresh\n");
-        // printf("REFRESH: +%i\n", num_renew_coins);
-
-        // printf("RENEWING ~%i\t=%i\n", num_renew_coins, user.wallet.num_coins);
       }
 
       long long fee_for_action = 0;
@@ -243,10 +276,7 @@ void simulate_user_actions(int user_index, User user,
             generate_withdraw_coins(transaction_amount, user.actions[i].time,
                                     denomination_wallet, &generatedCoinCount, &withdraw_fee, TRUE);
         if (generatedCoins) {
-        fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
-                  user.actions[i].time, transaction_amount,
-                  OperationNames[user.actions[i].operation], withdraw_fee,
-                  user.wallet.num_coins);
+            save_csv(fp, &user, i, withdraw_fee, user.actions[i].operation, sorted_denom_values, denomination_wallet.num_coins);
 
         // save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, fee_for_action, generatedCoins, generatedCoinCount, action_log_fp);
 
@@ -273,10 +303,11 @@ void simulate_user_actions(int user_index, User user,
                   user.wallet.num_coins, transaction_amount,
                   StrategyNames[strategy]);
         } else {
-          fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
-                  user.actions[i].time, allocatedCoins.tab.effective_amount,
-                  OperationNames[user.actions[i].operation], allocatedCoins.tab.deposit_fee_sum,
-                  user.wallet.num_coins);
+            save_csv(fp, &user, i, allocatedCoins.tab.deposit_fee_sum, DEPOSIT_OP, sorted_denom_values, denomination_wallet.num_coins);
+          // fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
+          //         user.actions[i].time, allocatedCoins.tab.effective_amount,
+          //         OperationNames[user.actions[i].operation], allocatedCoins.tab.deposit_fee_sum,
+          //         user.wallet.num_coins);
 
           // save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, allocatedCoins.tab.deposit_fee_sum + allocatedCoins.tab.refresh_fee_sum, allocatedCoins.coins, allocatedCoins.coin_count, action_log_fp);
 
@@ -300,10 +331,11 @@ void simulate_user_actions(int user_index, User user,
           //       generate_withdraw_coins(changeAmount, user.actions[i].time,
           //                               denomination_wallet, &changeCoinCount);
 
-            fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
-                    user.actions[i].time, 0l,
-                    OperationNames[REFRESH_OP], allocatedCoins.tab.refresh_fee_sum,
-                    user.wallet.num_coins);
+          save_csv(fp, &user, i, allocatedCoins.tab.refresh_fee_sum, REFRESH_OP, sorted_denom_values, denomination_wallet.num_coins);
+            // fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d\n", user_index, i,
+            //         user.actions[i].time, 0l,
+            //         OperationNames[REFRESH_OP], allocatedCoins.tab.refresh_fee_sum,
+            //         user.wallet.num_coins);
             //
             // fprintf(fp, "%d_%d, %lld, %lld, DEPOSIT_REFRESH_OP, %lld, %d\n",
             //         user_index, i, user.actions[i].time, transaction_amount,
@@ -336,6 +368,7 @@ void simulate_user_actions(int user_index, User user,
       // free(user.wallet.coins);
   }
   free(user.actions);
+  free(sorted_denom_values);
 }
 
 

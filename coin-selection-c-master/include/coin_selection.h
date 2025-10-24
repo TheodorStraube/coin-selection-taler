@@ -9,6 +9,8 @@
 #include "common.h"
 #include "fee.h"
 
+extern const char* StrategyNames[];
+
 typedef enum {
     MAX_BILLS,
     MIN_BILLS,
@@ -30,6 +32,8 @@ typedef struct {
     Coin *coin;
     double score;
 } coin_wrapper;
+
+int compare_coins_desc(const void *a, const void *b);
 
 CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount, strategy strategy, long long time, Wallet denomination_wallet);
 
