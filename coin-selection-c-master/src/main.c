@@ -1,3 +1,4 @@
+#include <time.h>
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
@@ -307,13 +308,10 @@ int main(int argc, char *argv[]) {
 
     if (denomination_wallet.num_coins > 0) {
         printf("Loaded %d coins from configuration.\n", denomination_wallet.num_coins);
-        // for (int i = 0; i < denomination_wallet.num_coins; i++) {
-        //     printf("Coin %d: %s\n", i+1, denomination_wallet.coins[i].denomination.name);
-        //     printf("Amount: %lld satoshis\n", denomination_wallet.coins[i].denomination.amount);
-        //     printf("Withdraw Fee: %lld satoshis\n", denomination_wallet.coins[i].denomination.rules.fees.withdraw_fee.fee_satoshis);
-        //     printf("Refresh Fee: %lld satoshis\n", denomination_wallet.coins[i].denomination.rules.fees.refresh_fee.fee_satoshis);
-        //     printf("Deposit Fee: %lld satoshis\n", denomination_wallet.coins[i].denomination.rules.fees.deposit_fee.fee_satoshis);
-        // }
+        for (int i = 0; i < denomination_wallet.num_coins; i++) {
+            printf("Coin %d: %s\n", i+1, denomination_wallet.coins[i].denomination.name);
+            printf("Amount: %lld satoshis\n", denomination_wallet.coins[i].denomination.amount);
+        }
     } else {
         printf("No coins were loaded from the configuration file.\n");
     }

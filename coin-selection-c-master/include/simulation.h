@@ -20,7 +20,7 @@ void pause_timer(CPUTimer *timer);
 float read_timer(CPUTimer *timer);
 
 void simulate_user_actions(int user_index, User user, Wallet denomination_wallet, int num_actions, strategy strategy);
-void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long time);
+void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long time, int save_for_recoup);
 
 #define FALSE  0
 #define TRUE  1

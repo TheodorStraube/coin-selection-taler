@@ -6,6 +6,7 @@
 #include "common.h"
 #include <sched.h>
 #include <stddef.h>
+#include <unistd.h>
 
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
@@ -1920,10 +1921,10 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
   FeeTab tab =
       fees_for_selection(amount, allocated_coins, &num_allocated_coins);
 
-     printf("TAB: target: %lld, instructed %lld, payed: %lld, D: %lld, R: %lld\n", amount, tab.instructed_amount, tab.effective_amount, tab.deposit_fee_sum, tab.refresh_fee_sum);
-     for (int i = 0; i<num_allocated_coins; i++) {
-         printf("\tpaying: %lld/%lld\n", allocated_coins[i].amount, allocated_coins[i].denomination.amount);
-     }
+     // printf("TAB: target: %lld, instructed %lld, payed: %lld, D: %lld, R: %lld\n", amount, tab.instructed_amount, tab.effective_amount, tab.deposit_fee_sum, tab.refresh_fee_sum);
+     // for (int i = 0; i<num_allocated_coins; i++) {
+     //     printf("\tpaying: %lld/%lld\n", allocated_coins[i].amount, allocated_coins[i].denomination.amount);
+     // }
 
   if (!tab.valid) {
     long long total = 0;
@@ -1943,10 +1944,10 @@ CoinSelectionResult allocate_coins_for_deposit(Wallet wallet, long long amount,
     return (CoinSelectionResult){
         .coins = NULL, .coin_count = 0, .tab = (FeeTab){0}};
   }
-     printf("Wallet:\n");
-     pprint(wallet.coins, wallet.num_coins);
-     printf("Spending %u:\n", strategy);
-    pprint(allocated_coins, num_allocated_coins);
+    //  printf("Wallet:\n");
+    //  pprint(wallet.coins, wallet.num_coins);
+    //  printf("Spending %u:\n", strategy);
+    // pprint(allocated_coins, num_allocated_coins);
 
   return (CoinSelectionResult){
       .coins = allocated_coins, .coin_count = num_allocated_coins, .tab = tab};
@@ -2031,6 +2032,7 @@ Coin *generate_withdraw_coins(long long amount, long long time,
       generatedCoins[generatedCount].creation_timestamp = time;
       generatedCoins[generatedCount].uniqueId = nextUniqueId++;
       generatedCoins[generatedCount].amount = uniqueDenominations[i]->denomination.amount;
+      generatedCoins[generatedCount].latest_recoup_time = 0l;
       remainingAmount -= amount_including_fee;
       generatedCount++;
     }
@@ -2144,15 +2146,17 @@ void remove_selected_coins(Wallet *wallet, Coin *coins, int num_coins) {
       remainingCoins[remainingCount++] = wallet->coins[i];
     }
   }
+
+  free(coins);
+
+  if(remainingCount == 0) {
+      return;
+  }
+
   // Free the old coins array (if any)
   if (wallet->coins != NULL) {
     free(wallet->coins);
   }
-
-  free(coins);
-  coins = NULL;
-
-  // printf("_______________________________________  %i - %i = %i\n", wallet->num_coins, num_coins, remainingCount);
 
   remainingCoins = realloc(remainingCoins, sizeof(Coin) * remainingCount);
   // Update the wallet with the remaining coins
@@ -2232,18 +2236,17 @@ long long calculate_total_fee_part(Coin *coins, int num_coins,
  * @param time The current time in seconds.
  * @return The total renew fee for the wallet.
  */
-Coin *refresh_old_coins(Wallet wallet, long long time, int* num_renewed_coins, long long *total_fee) {
+void refresh_old_coins(Wallet wallet, long long time, int* num_renewed_coins, long long *total_fee) {
     *num_renewed_coins = 0;
     *total_fee = 0;
 
     if(wallet.num_coins == 0){
-        return NULL;
+        return;
     }
 
-    Coin *renew_coins = malloc(sizeof(Coin) * wallet.num_coins);
+    // Coin *renew_coins = malloc(sizeof(Coin) * wallet.num_coins);
     for (int i = 0; i < wallet.num_coins; i++) {
-        long long timeDifference = time - wallet.coins[i].creation_timestamp;
-        if (timeDifference > wallet.coins[i].denomination.rules.durations.legal.time) {
+        if (time > wallet.coins[i].denomination.rules.durations.deposit.time + wallet.coins[i].creation_timestamp) {
             long long renewFee = calculate_fee(wallet.coins[i], REFRESH_OP);
             // wallet.coins[i].creation_timestamp = time;
             if(wallet.coins[i].amount < renewFee){
@@ -2253,19 +2256,17 @@ Coin *refresh_old_coins(Wallet wallet, long long time, int* num_renewed_coins, l
                 wallet.coins[i].amount -= renewFee;
                 *total_fee += renewFee;
             }
-            renew_coins[*num_renewed_coins] = wallet.coins[i];
             (*num_renewed_coins)++;
         }
     }
 
-  if(!*num_renewed_coins) {
-      free(renew_coins);
-      return NULL;
-  }
+  // if(!*num_renewed_coins) {
+  //     free(renew_coins);
+  //     return NULL;
+  // }
   
-  renew_coins = realloc(renew_coins, sizeof(Coin) * *num_renewed_coins);
+  // renew_coins = realloc(renew_coins, sizeof(Coin) * *num_renewed_coins);
 
-  return renew_coins;
 }
 
 int is_dirty(Coin coin) { return coin.amount != coin.denomination.amount; }
@@ -2295,7 +2296,7 @@ void pprint(Coin *coins, int nr) {
  * @param num_coins Number of coins in coins
  * @return
  */
-void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long time) {
+void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long time, int save_for_recoup) {
   if (wallet == NULL) {
     return; // No operation if the input is invalid
   }
@@ -2306,6 +2307,8 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
   // Coin *spent_coins = (Coin *)malloc(sizeof(Coin*) * num_coins);
   Coin *dirty_coins = malloc(sizeof(Coin) * wallet->num_coins);
 
+  long latest_deposit_expire = 0;
+
   for (int i = 0; i < wallet->num_coins; i++){
         if (wallet->coins[i].amount == wallet->coins[i].denomination.amount) {
             // spent_coins[num_spent_coins] = coins[i];
@@ -2313,7 +2316,12 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
             dirty_coins[num_dirty_coins] = wallet->coins[i];
             num_dirty_coins ++;
             amount_dirty += wallet->coins[i].amount;
-            // printf("\t melting %lld / %lld sum of change: %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount, amount_dirty);
+
+    
+            if(save_for_recoup) {
+                latest_deposit_expire = max(latest_deposit_expire, wallet->coins[i].denomination.rules.durations.deposit.time);
+            }
+               // printf("\t melting %lld / %lld sum of change: %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount, amount_dirty);
         } else {
             // printf("ERROR: Coin has invalid amount %lld for denomination %lld\n", wallet->coins[i].amount, wallet->coins[i].denomination.amount);
             // exit(1);
@@ -2329,8 +2337,14 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
   int num_withdrawn = 0;
   // printf("withdraw from refresh: %lld\n", amount_dirty);
   Coin *withdrawn_coins = generate_withdraw_coins(amount_dirty, time, denomination_wallet, &num_withdrawn, NULL, FALSE);
-  add_coins_to_wallet(wallet, withdrawn_coins, num_withdrawn);
 
+  if(save_for_recoup) {
+      for(int i = 0; i < num_withdrawn; i++) {
+          withdrawn_coins[i].latest_recoup_time = latest_deposit_expire;
+      }
+  }
+
+  add_coins_to_wallet(wallet, withdrawn_coins, num_withdrawn);
 }
 
 void spend_coin_selection(Coin* coins, int num_coins, Wallet *wallet) {
