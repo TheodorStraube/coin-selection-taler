@@ -434,7 +434,7 @@ void generate_actions_for_freelancer(Action **actions, int *size, int days) {
             accountBalance += paymentAmount;
         }
 
-        // Daily expenses, much lower than income events
+        // Daily expenses, much lower than income eventsuser
         long long expenseAmount = generate_normal_ll(20000, 5000); // Smaller daily living expenses
         if (accountBalance - expenseAmount < 0) expenseAmount = accountBalance;
         (*actions)[(*size)++] = (Action){.amount = expenseAmount, .operation = DEPOSIT_OP, .time = currentTimestamp};

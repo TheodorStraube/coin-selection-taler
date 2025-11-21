@@ -2116,6 +2116,7 @@ void add_coins_to_wallet(Wallet *wallet, Coin *coins, int num_coins) {
 void remove_selected_coins(Wallet *wallet, Coin *coins, int num_coins) {
   if (wallet == NULL || wallet->num_coins == 0 || coins == NULL ||
       num_coins == 0) {
+      printf("Error: remove_selected_coins called with invalid args\n");
     return; // No operation if the input is invalid
   }
 
@@ -2139,6 +2140,13 @@ void remove_selected_coins(Wallet *wallet, Coin *coins, int num_coins) {
         break;
       }
     }
+    
+    // if(num_coins > 100){
+    //   printf("\t\tremove coin: %lld: %d\n", wallet->coins[i].uniqueId, isRemoved);
+    //   for(int i = 0; i < num_coins;i++){
+    //     printf("%lld\n", wallet->coins[i].uniqueId);
+    //   }
+    // }
 
     // If the coin is not in the list of coins to be removed, add it to the
     // remaining coins
@@ -2150,6 +2158,11 @@ void remove_selected_coins(Wallet *wallet, Coin *coins, int num_coins) {
   free(coins);
 
   if(remainingCount == 0) {
+      if(wallet->coins != NULL) {
+        free(wallet->coins);
+      }
+      wallet->coins = NULL;
+      wallet->num_coins = 0;
       return;
   }
 
@@ -2157,11 +2170,13 @@ void remove_selected_coins(Wallet *wallet, Coin *coins, int num_coins) {
   if (wallet->coins != NULL) {
     free(wallet->coins);
   }
+    printf("remove_selected: called for %d coins, %d -> %d\n", num_coins, wallet->num_coins, remainingCount);
 
   remainingCoins = realloc(remainingCoins, sizeof(Coin) * remainingCount);
   // Update the wallet with the remaining coins
   wallet->coins = remainingCoins;
   wallet->num_coins = remainingCount;
+
 }
 
 /**
@@ -2247,6 +2262,7 @@ void refresh_old_coins(Wallet wallet, long long time, int* num_renewed_coins, lo
     // Coin *renew_coins = malloc(sizeof(Coin) * wallet.num_coins);
     for (int i = 0; i < wallet.num_coins; i++) {
         if (time > wallet.coins[i].denomination.rules.durations.deposit.time + wallet.coins[i].creation_timestamp) {
+            long long value_before = wallet.coins[i].amount;
             long long renewFee = calculate_fee(wallet.coins[i], REFRESH_OP);
             // wallet.coins[i].creation_timestamp = time;
             if(wallet.coins[i].amount < renewFee){
@@ -2257,6 +2273,7 @@ void refresh_old_coins(Wallet wallet, long long time, int* num_renewed_coins, lo
                 *total_fee += renewFee;
             }
             (*num_renewed_coins)++;
+            printf("refresh_old: %lld -> %lld\n", value_before, wallet.coins[i].amount);
         }
     }
 
@@ -2328,15 +2345,19 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
         }
       
   }
+
+
+
   // spent_coins = realloc(spent_coins, num_spent_coins);
   // dirty_coins = realloc(dirty_coins, num_dirty_coins);
-
+  int num_before = wallet->num_coins;
   // melt_selected_coins(wallet, dirty_coins, num_dirty_coins);
   dirty_coins = realloc(dirty_coins, sizeof(Coin) * num_dirty_coins);
   remove_selected_coins(wallet, dirty_coins, num_dirty_coins);
   int num_withdrawn = 0;
   // printf("withdraw from refresh: %lld\n", amount_dirty);
   Coin *withdrawn_coins = generate_withdraw_coins(amount_dirty, time, denomination_wallet, &num_withdrawn, NULL, FALSE);
+
 
   if(save_for_recoup) {
       for(int i = 0; i < num_withdrawn; i++) {
@@ -2345,16 +2366,29 @@ void refresh_dirty_coins(Wallet *wallet, Wallet denomination_wallet, long long t
   }
 
   add_coins_to_wallet(wallet, withdrawn_coins, num_withdrawn);
+
+  printf("\t[%lld]     NUM DIRTY COINS: %d, NUM WITHDRAWN: %d, NUM BEFORE: %d, NUM AFTER: %d\n", time, num_dirty_coins, num_withdrawn, num_before, wallet->num_coins);
+  if (num_before - num_dirty_coins + num_withdrawn != wallet->num_coins){
+      printf(" Error: Mismatch\n");
+  }
 }
 
 void spend_coin_selection(Coin* coins, int num_coins, Wallet *wallet) {
+    int num_matched = 0;
     for (int i = 0; i < num_coins; i++) {
         for (int j = 0; j < wallet->num_coins; j++) {
             if(coins[i].uniqueId == wallet->coins[j].uniqueId) {
+                printf("Spending: %lld with this coin[%lld]: %lld/%lld =>", coins[i].amount, coins[i].uniqueId, wallet->coins[j].amount, wallet->coins[j].denomination.amount);
                 wallet->coins[j].amount -= coins[i].amount;
+                printf("%lld\n", wallet->coins[j].amount);
+                num_matched++;
             } 
         }
     }    
+
+    if(num_matched != num_coins) {
+        printf("Error: coins to spend could not be matched\n");
+    }
 }
 
 

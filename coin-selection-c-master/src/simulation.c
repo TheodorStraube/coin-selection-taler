@@ -69,7 +69,7 @@ void print_deposit_status(int i, long long transaction_amount, Wallet* wallet, C
     //assert(alloc_balance <= wallet_balance);
     //assert(alloc_balance >= transaction_amount);
 
-    printf("[%d]\tAmt: %lld, Wallet[%d]: %lld\t\tALLOC[%d]: [%lld\t%lld]\n",i, transaction_amount, wallet->num_coins, wallet_balance, allocatedCoins->coin_count, alloc_balance, allocatedCoins->tab.effective_amount);
+    printf("[%d]\tWStatus DEPOSIT - Amount: %lld, Wallet[#%d]: %lld\t\tAllocated Balance: [%d]: [%lld\t%lld]\n",i, transaction_amount, wallet->num_coins, wallet_balance, allocatedCoins->coin_count, alloc_balance, allocatedCoins->tab.effective_amount);
 }
 
 void close_json_array_file(FILE *file_handle) {
@@ -131,7 +131,7 @@ int compare_long(const void *a, const void *b) {
     return (diff > 0) - (diff < 0);
 }
 
-void save_csv(FILE* fp, User *user, int i, long long fee, operation_type operation, long long *denoms, int num_denoms){
+void save_csv(FILE* fp, User *user, int i, long long fee, operation_type operation, long long *denoms, int num_denoms, long long balance){
 
     long long *counts = calloc(num_denoms, sizeof(long long));
     int num_saving_refresh = 0;
@@ -144,7 +144,8 @@ void save_csv(FILE* fp, User *user, int i, long long fee, operation_type operati
         if(user->wallet.coins[c].latest_recoup_time > 0 && user->actions[i].time < user->wallet.coins[c].latest_recoup_time) { num_saving_refresh++; }
     }
 
-    fprintf(fp, "%d_%d, %lld, %lld, %s, %lld, %d, %d", (int) user->type, i, user->actions[i].time, user->actions[i].amount, OperationNames[operation], fee, user->wallet.num_coins, num_saving_refresh);
+    fprintf(fp, "%d_%d, %lld, %lld, %lld, %s, %lld, %d, %d", (int) user->type, i, user->actions[i].time, balance, user->actions[i].amount,
+            OperationNames[operation], fee, user->wallet.num_coins, num_saving_refresh);
 
     for (int index = 0; index < num_denoms; index++){ 
         fprintf(fp, ", %lld, %lld", counts[index], denoms[index]);
@@ -230,20 +231,49 @@ void simulate_user_actions(int user_index, User user,
 
   user.wallet.num_coins = 0;
 
+  long long c_balance = 0;
+  int negative = 0;
+  int zero = 0;
+
   if (user.actions != NULL && num_actions > 0) {
     fprintf(fp, "%s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
     // printf("Starting sim: %s, %s\n", TypeNames[user.type], StrategyNames[strategy]);
 
     // save_wallet_state(user.wallet, -1, -1, coins_log_fp);
 
-    for (int i = 0; i < num_actions; i++) {
+
+    for (int i = 0; i < num_actions; i++) {    
+        printf("[%d][%lld] START\n", i, user.actions[i].time);
+        long long calculated_balance = 0;
+
+        for(int i = 0;i < user.wallet.num_coins; i++){
+            calculated_balance += user.wallet.coins[i].amount;
+        } 
+
         long long renew_fee = 0;
         int num_renew_coins = 0;
+
+            c_balance = 0;
+            negative = 0;
+
+            for(int i = 0;i < user.wallet.num_coins; i++){
+                c_balance += user.wallet.coins[i].amount;
+                if(user.wallet.coins[i].amount < 0){negative++;}
+            } 
+            printf("[%lld] Balance: %lld, negative count: %d\n", user.actions[i].time, c_balance, negative);
+
         refresh_old_coins(user.wallet, user.actions[i].time, &num_renew_coins, &renew_fee);
 
-      if (renew_fee > 0) {
-         save_csv(fp, &user, i, 0ll, REFRESH_OP, sorted_denom_values, denomination_wallet.num_coins);
+            c_balance = 0;
 
+            for(int i = 0;i < user.wallet.num_coins; i++){
+                c_balance += user.wallet.coins[i].amount;
+            } 
+            printf("[%lld] Balance: %lld\n", user.actions[i].time, c_balance);
+
+      if (renew_fee > 0) {
+         save_csv(fp, &user, i, 0ll, REFRESH_OP, sorted_denom_values, denomination_wallet.num_coins, calculated_balance);
+        printf("TIME REFRESH %s\n", user.name);
         refresh_dirty_coins(&user.wallet, denomination_wallet, user.actions[i].time, FALSE);
         // save_action(i, user.actions[i].time, 0ll, REFRESH_OP, renew_fee, fresh_coins, num_renew_coins, action_log_fp);
       }
@@ -267,7 +297,7 @@ void simulate_user_actions(int user_index, User user,
             generate_withdraw_coins(transaction_amount, user.actions[i].time,
                                     denomination_wallet, &generatedCoinCount, &withdraw_fee, TRUE);
         if (generatedCoins) {
-            save_csv(fp, &user, i, withdraw_fee, user.actions[i].operation, sorted_denom_values, denomination_wallet.num_coins);
+            save_csv(fp, &user, i, withdraw_fee, user.actions[i].operation, sorted_denom_values, denomination_wallet.num_coins, calculated_balance);
 
         // save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, fee_for_action, generatedCoins, generatedCoinCount, action_log_fp);
 
@@ -284,7 +314,7 @@ void simulate_user_actions(int user_index, User user,
             user.wallet, transaction_amount, strategy, user.actions[i].time, denomination_wallet);
         pause_timer(&timer);
 
-        // print_deposit_status(i, transaction_amount, &user.wallet, &allocatedCoins);
+        print_deposit_status(i, transaction_amount, &user.wallet, &allocatedCoins);
 
         if (!allocatedCoins.coins) {
           char error[1024];
@@ -293,21 +323,67 @@ void simulate_user_actions(int user_index, User user,
                   user.wallet.num_coins, transaction_amount,
                   StrategyNames[strategy]);
         } else {
-            save_csv(fp, &user, i, allocatedCoins.tab.deposit_fee_sum, DEPOSIT_OP, sorted_denom_values, denomination_wallet.num_coins);
+            printf("deposit\n");
+            save_csv(fp, &user, i, allocatedCoins.tab.deposit_fee_sum, DEPOSIT_OP, sorted_denom_values, denomination_wallet.num_coins, calculated_balance);
 
-          // save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, allocatedCoins.tab.deposit_fee_sum + allocatedCoins.tab.refresh_fee_sum, allocatedCoins.coins, allocatedCoins.coin_count, action_log_fp);
+            c_balance = 0;
+            negative = 0;
+            zero = 0;
+
+            for(int i = 0;i < user.wallet.num_coins; i++){
+                c_balance += user.wallet.coins[i].amount;
+                if(user.wallet.coins[i].amount < 0){negative++;}
+                if(user.wallet.coins[i].amount == 0){zero++;}
+            } 
+            printf("[%lld] Balance: %lld, negative count: %d, zero count: %d\n", user.actions[i].time, c_balance, negative, zero);
+
+
+          // save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, allocatedCoins.tab.deposit_fee_sum + allocatedCoins.tab.refresh_fee_sum, allocatedCoins.coins, allocatedCoins.coin_count, action_log_fp); 
 
           spend_coin_selection(allocatedCoins.coins, allocatedCoins.coin_count, &user.wallet);
+            c_balance = 0;
+            negative = 0;
+            zero = 0;
+
+            for(int i = 0;i < user.wallet.num_coins; i++){
+                c_balance += user.wallet.coins[i].amount;
+                if(user.wallet.coins[i].amount < 0){negative++;}
+                if(user.wallet.coins[i].amount == 0){zero++;}
+            } 
+            printf("[%lld] Balance: %lld, negative count: %d, zero count: %d\n", user.actions[i].time, c_balance, negative, zero);
+            printf("refresh dirty\n");
           refresh_dirty_coins(&user.wallet, denomination_wallet, user.actions[i].time, TRUE);
+
+
+            c_balance = 0;
+            negative = 0;
+            zero = 0;
+
+            printf("[%lld] Balance: %lld, negative count: %d, zero count: %d\n", user.actions[i].time, c_balance, negative, zero);
         }
       }
+
+      // After every action
+      for(int i = 0;i < user.wallet.num_coins; i++){
+        if(user.wallet.coins[i].amount != user.wallet.coins[i].denomination.amount){
+            printf("Error: Dirty Coins at End\n");
+            exit(1);
+        }
+      } 
+
+
     }
   } else {
     printf("No actions generated for the user.\n");
   }
    // printf("Timer: %f\n", read_timer(&timer));
     fprintf(stat_log_fp, "%s,%s,%f\n", TypeNames[user_index], StrategyNames[strategy], read_timer(&timer));
-    fclose(fp);
+    fclose(fp);    
+    long long calculated_balance = 0;
+
+    for(int i = 0;i < user.wallet.num_coins; i++){
+        calculated_balance += user.wallet.coins[i].amount;
+    } 
 
    close_json_array_file(coins_log_fp);
    close_json_array_file(action_log_fp);
