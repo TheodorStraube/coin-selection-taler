@@ -297,11 +297,12 @@ void simulate_user_actions(int user_index, User user,
             generate_withdraw_coins(transaction_amount, user.actions[i].time,
                                     denomination_wallet, &generatedCoinCount, &withdraw_fee, TRUE);
         if (generatedCoins) {
-            save_csv(fp, &user, i, withdraw_fee, user.actions[i].operation, sorted_denom_values, denomination_wallet.num_coins, calculated_balance);
 
         // save_action(i, user.actions[i].time, transaction_amount, user.actions[i].operation, fee_for_action, generatedCoins, generatedCoinCount, action_log_fp);
 
           add_coins_to_wallet(&user.wallet, generatedCoins, generatedCoinCount);
+        
+          save_csv(fp, &user, i, withdraw_fee, user.actions[i].operation, sorted_denom_values, denomination_wallet.num_coins, calculated_balance);
         }else {
             printf("NO CS returned\n");
         }
@@ -324,7 +325,6 @@ void simulate_user_actions(int user_index, User user,
                   StrategyNames[strategy]);
         } else {
             printf("deposit\n");
-            save_csv(fp, &user, i, allocatedCoins.tab.deposit_fee_sum, DEPOSIT_OP, sorted_denom_values, denomination_wallet.num_coins, calculated_balance);
 
             c_balance = 0;
             negative = 0;
@@ -354,6 +354,8 @@ void simulate_user_actions(int user_index, User user,
             printf("refresh dirty\n");
           refresh_dirty_coins(&user.wallet, denomination_wallet, user.actions[i].time, TRUE);
 
+            save_csv(fp, &user, i, allocatedCoins.tab.refresh_fee_sum, REFRESH_OP, sorted_denom_values, denomination_wallet.num_coins, calculated_balance);
+            save_csv(fp, &user, i, allocatedCoins.tab.deposit_fee_sum, DEPOSIT_OP, sorted_denom_values, denomination_wallet.num_coins, calculated_balance);
 
             c_balance = 0;
             negative = 0;
